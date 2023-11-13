@@ -18,6 +18,9 @@ switch ($controller) {
   case "profile":
     include_once './Controllers/client/ProfileController.php';
     break;
+  case "forget_pass":
+    include_once './View/client/page/forget_password.php';
+    break;
   case "logout":
     unset($_SESSION['user']);
     header("location: index.php");

@@ -67,3 +67,28 @@ function resetDetailModalWrapper(id) {
   var modal = document.getElementById(id); // Lấy ra phần tử modal cụ thể
   resetModal(modal);
 }
+//popover
+const popoverTriggerList = document.querySelectorAll(
+  '[data-bs-toggle="popover"]'
+);
+const popoverList = [...popoverTriggerList].map(
+  (popoverTriggerEl) => new bootstrap.Popover(popoverTriggerEl)
+);
+
+//gender seclect
+if (window.location.pathname === "/login.html") {
+  const radioBtn1 = document.querySelector("#flexRadioDefault1");
+  const radioBtn2 = document.querySelector("#flexRadioDefault2");
+  const radioBtn3 = document.querySelector("#flexRadioDefault3");
+  const genderSelect = document.querySelector("#genderSelect");
+
+  radioBtn1.addEventListener("change", () => {
+    genderSelect.classList.add("d-none");
+  });
+  radioBtn2.addEventListener("change", () => {
+    genderSelect.classList.add("d-none");
+  });
+  radioBtn3.addEventListener("change", () => {
+    genderSelect.classList.remove("d-none");
+  });
+}
