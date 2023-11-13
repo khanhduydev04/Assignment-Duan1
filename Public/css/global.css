@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+:root {
+  --gray-color: #f0f2f5;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -52,4 +56,16 @@ body {
 .container {
   max-width: 1030px;
   width: 100%;
+}
+
+.bg-gray {
+  background-color: var(--gray-color);
+}
+
+.fs-0 {
+  font-size: 4rem;
+}
+
+.fs-7 {
+  font-size: 0.8rem;
 }
