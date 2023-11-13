@@ -1,4 +1,4 @@
-/* --header-- */
+/* -- header -- */
 #search-input:focus {
   box-shadow: none;
   background-color: #f0f2f5;
@@ -84,4 +84,54 @@
   overflow: auto !important;
 }
 
-/* --end header-- */
+/* -- end header -- */
+/* -- profile -- */
+.profile {
+  max-width: 1095px;
+  width: 100%;
+}
+
+.profile-cover {
+  max-height: 420px;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-desc {
+  display: none;
+  transition: all .2s linear;
+}
+
+.preview {
+  display: none;
+  transition: all .2s linear;
+}
+
+#imagePreview {
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.main-container {
+  max-width: 1062px;
+  width: 100%;
+}
+
+#avatar {
+  border: 5px solid white;
+}
+
+.profile-img {
+  width: calc((100% / 3) - (8px / 3));
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+.friend-item {
+  width: calc((100% / 3) - (16px / 3));
+  min-height: 140px;
+}
+
+.friend-image {
+  aspect-ratio: 1/1;
+}
