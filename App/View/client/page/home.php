@@ -1,4 +1,5 @@
-<main class="bg-gray postion-relative">
+
+  <main class="bg-gray postion-relative">
     <!-- ================= Main ================= -->
     <div class="container-fluid">
       <div class="row justify-content-evenly">
@@ -576,6 +577,25 @@
                             <i class="fas fa-comment-alt me-3"></i>
                             <p class="m-0">Comment</p>
                           </div>
+                          <div
+                          class="
+                            dropdown-item
+                            rounded
+                            d-flex
+                            justify-content-center
+                            align-items-center
+                            pointer
+                            text-muted
+                            p-1
+                          "
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapsePost2"
+                          aria-expanded="false"
+                          aria-controls="collapsePost2"
+                        >
+                          <i class="fa-solid fa-share me-3"></i>
+                          <p class="m-0">Chia sẻ</p>
+                          </div>
                         </div>
                         <!-- comment expand -->
                         
@@ -744,6 +764,25 @@
                           >
                             <i class="fas fa-comment-alt me-3"></i>
                             <p class="m-0">Comment</p>
+                          </div>
+                          <div
+                          class="
+                            dropdown-item
+                            rounded
+                            d-flex
+                            justify-content-center
+                            align-items-center
+                            pointer
+                            text-muted
+                            p-1
+                          "
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapsePost2"
+                          aria-expanded="false"
+                          aria-controls="collapsePost2"
+                        >
+                          <i class="fa-solid fa-share me-3"></i>
+                          <p class="m-0">Chia sẻ</p>
                           </div>
                         </div>
                         <!-- comment expand -->
@@ -923,6 +962,25 @@
                           >
                             <i class="fas fa-comment-alt me-3"></i>
                             <p class="m-0">Comment</p>
+                          </div>
+                          <div
+                          class="
+                            dropdown-item
+                            rounded
+                            d-flex
+                            justify-content-center
+                            align-items-center
+                            pointer
+                            text-muted
+                            p-1
+                          "
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapsePost2"
+                          aria-expanded="false"
+                          aria-controls="collapsePost2"
+                        >
+                          <i class="fa-solid fa-share me-3"></i>
+                          <p class="m-0">Chia sẻ</p>
                           </div>
                         </div>
                         <!-- comment expand -->
@@ -1109,6 +1167,199 @@
                           >
                             <i class="fas fa-comment-alt me-3"></i>
                             <p class="m-0">Comment</p>
+                          </div>
+                          <div
+                          class="
+                            dropdown-item
+                            rounded
+                            d-flex
+                            justify-content-center
+                            align-items-center
+                            pointer
+                            text-muted
+                            p-1
+                          "
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapsePost2"
+                          aria-expanded="false"
+                          aria-controls="collapsePost2"
+                        >
+                          <i class="fa-solid fa-share me-3"></i>
+                          <p class="m-0">Chia sẻ</p>
+                          </div>
+                        </div>
+                        <!-- comment expand -->
+                        
+                      </div>
+                    </div>
+                    <!-- end -->
+                  </div>
+                </div>
+              </div>
+
+               <!-- posts-->
+               <div class="bg-white p-4 rounded shadow mt-3" style="width: 100%;">
+                <!-- author -->
+                <div class="d-flex justify-content-between">
+                  <!-- avatar -->
+                  <div class="d-flex">
+                    <img
+                      src="./images/avatar.png"
+                      alt="avatar"
+                      class="rounded-circle me-2"
+                      style="width: 38px; height: 38px; object-fit: cover"
+                    />
+                    <div>
+                      <p class="m-0 fw-bold">Hồ Dư Mai Trân</p>
+                      <span class="text-muted fs-7">18 giờ</span>
+                    </div>
+                  </div>
+                  <!-- edit -->
+                  <i
+                    class="fas fa-ellipsis-h"
+                    type="button"
+                    id="post1Menu"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></i>
+                  <!-- edit menu -->
+                  <ul
+                    class="dropdown-menu border-0 shadow"
+                    aria-labelledby="post1Menu"
+                  >
+                    <li class="d-flex align-items-center">
+                      <a
+                        class="
+                          dropdown-item
+                          d-flex
+                          justify-content-around
+                          align-items-center
+                          fs-7
+                        "
+                        href="#"
+                      >
+                        Chỉnh sửa bài viết</a
+                      >
+                    </li>
+                    <li class="d-flex align-items-center">
+                      <a
+                        class="
+                          dropdown-item
+                          d-flex
+                          justify-content-around
+                          align-items-center
+                          fs-7
+                        "
+                        href="#"
+                      >
+                        Xóa bài viết</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <!-- post content -->
+                <div class="mt-3" style="width: 100%;">
+                  <!-- content -->
+                  <div>
+                    <p>
+                      Ngày ấy ta tìm thấy anh giữa biển người
+                      Hôm nay em trả anh về với biển người ấy
+                    </p>
+                  </div>
+                  <!-- likes & comments -->
+                  <div class="post__comment mt-3 position-relative">
+                    <!-- likes -->
+                    <div
+                      class="
+                        d-flex
+                        align-items-center
+                        top-0
+                        start-0
+                        position-absolute
+                      "
+                      style="height: 50px; z-index: 5"
+                    >
+                      <div class="me-2">
+                        <i class="text-primary fas fa-thumbs-up"></i>
+                      </div>
+                      <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 others</p>
+                    </div>
+                    <!-- comments start-->
+                    <div class="accordion" id="accordionExample">
+                      <div class="accordion-item border-0">
+                        <!-- comment collapse -->
+                        <h2 class="accordion-header" id="headingTwo">
+                          <div
+                            class="
+                              accordion-button
+                              collapsed
+                              pointer
+                              d-flex
+                              justify-content-end
+                            "
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapsePost2"
+                            aria-expanded="false"
+                            aria-controls="collapsePost2"
+                          >
+                            <p class="m-0">2 Comments</p>
+                          </div>
+                        </h2>
+                        <hr />
+                        <!-- comment & like bar -->
+                        <div class="d-flex justify-content-around">
+                          <div
+                            class="
+                              dropdown-item
+                              rounded
+                              d-flex
+                              justify-content-center
+                              align-items-center
+                              pointer
+                              text-muted
+                              p-1
+                            "
+                          >
+                            <i class="fas fa-thumbs-up me-3"></i>
+                            <p class="m-0">Like</p>
+                          </div>
+                          <div
+                            class="
+                              dropdown-item
+                              rounded
+                              d-flex
+                              justify-content-center
+                              align-items-center
+                              pointer
+                              text-muted
+                              p-1
+                            "
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapsePost2"
+                            aria-expanded="false"
+                            aria-controls="collapsePost2"
+                          >
+                            <i class="fas fa-comment-alt me-3"></i>
+                            <p class="m-0">Comment</p>
+                          </div>
+                          <div
+                          class="
+                            dropdown-item
+                            rounded
+                            d-flex
+                            justify-content-center
+                            align-items-center
+                            pointer
+                            text-muted
+                            p-1
+                          "
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapsePost2"
+                          aria-expanded="false"
+                          aria-controls="collapsePost2"
+                        >
+                          <i class="fa-solid fa-share me-3"></i>
+                          <p class="m-0">Chia sẻ</p>
                           </div>
                         </div>
                         <!-- comment expand -->
@@ -1534,6 +1785,7 @@
       integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
       crossorigin="anonymous"
     ></script>
-    <script src="../Public/js/main.js"></script>
-    <script src="../Public/js/stories.js"></script>
+    <script src="./main.js"></script>
+    <script src="./stories.js"></script>
 </main>
+
