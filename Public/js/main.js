@@ -92,3 +92,63 @@ if (window.location.pathname === "/login.html") {
     genderSelect.classList.remove("d-none");
   });
 }
+
+
+
+//Friend and follow
+function showFriend() {
+  document.getElementById("friend").style.display = "block";
+  document.getElementById("follow").style.display = "none";
+
+  document.getElementById("friend_hr").style.display = "block";
+  document.getElementById("follow_hr").style.display = "none";
+}
+
+function showFollow() {
+  document.getElementById("friend").style.display = "none";
+  document.getElementById("follow").style.display = "block";
+
+  document.getElementById("friend_hr").style.display = "none";
+  document.getElementById("follow_hr").style.display = "block";
+}
+
+//Picture
+
+function showPicture() {
+  document.getElementById("Picture").style.display = "block";
+  document.getElementById("Avatar").style.display = "none";
+  document.getElementById("Cover").style.display = "none";
+
+  document.getElementById("Picture_hr").style.display = "block";
+  document.getElementById("Avatar_hr").style.display = "none";
+  document.getElementById("Cover_hr").style.display = "none";
+}
+
+function showAvatar() {
+  document.getElementById("Picture").style.display = "none";
+  document.getElementById("Avatar").style.display = "block";
+  document.getElementById("Cover").style.display = "none";
+
+  document.getElementById("Picture_hr").style.display = "none";
+  document.getElementById("Avatar_hr").style.display = "block";
+  document.getElementById("Cover_hr").style.display = "none";
+}
+
+function showCover() {
+  document.getElementById("Picture").style.display = "none";
+  document.getElementById("Avatar").style.display = "none";
+  document.getElementById("Cover").style.display = "block";
+
+  document.getElementById("Picture_hr").style.display = "none";
+  document.getElementById("Avatar_hr").style.display = "none";
+  document.getElementById("Cover_hr").style.display = "block";
+}
+
+//modal picture
+var myModal = new bootstrap.Modal(document.getElementById('imageModal'));
+
+  document.querySelectorAll('.img-thumbnail').forEach(item => {
+      item.addEventListener('click', event => {
+          myModal.show();
+      });
+  });
