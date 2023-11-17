@@ -22,18 +22,24 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 <body>
 
   <?php
-  if (isset($_SESSION['user']) && ($_SESSION['user']['role'] == 0)) {
-    @include_once './App/View/client/index.php';
-  } elseif (isset($_SESSION['user']) && ($_SESSION['user']['role'] == 1)) {
-    @include_once './App/View/admin/index.php';
+  if (isset($_GET['ctrl']) && $_GET['ctrl'] == 'forgetpassword') {
+    include_once './App/View/client/page/forget_password.php';
   } else {
-    include_once './App/View/client/layout/signin.php';
+    if (isset($_SESSION['user']) && ($_SESSION['user']['role'] == 'user')) {
+      @include_once './App/View/client/index.php';
+    } elseif (isset($_SESSION['user']) && ($_SESSION['user']['role'] == 'admin')) {
+      @include_once './App/View/admin/index.php';
+    } else {
+      include_once './App/View/client/index.php';
+    }
   }
+  // ./App/View/client/layout/signin.php
   ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="./Public/js/main.js?v=<?php echo time(); ?>"></script>
+  <script src="./Public/js/stories.js?v=<?php echo time(); ?>"></script>
 </body>
 
 </html>

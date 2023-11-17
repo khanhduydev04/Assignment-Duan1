@@ -10,16 +10,16 @@ switch ($controller) {
     include_once './App/View/client/page/home.php';
     break;
   case "stories":
-    include_once './Controllers/client/StoriesController.php';
+    include_once './App/Controllers/client/StoriesController.php';
     break;
   case "friends":
-    include_once './Controllers/client/FriendController.php';
+    include_once './App/View/client/page/friend.php';
     break;
   case "profile":
-    include_once './Controllers/client/ProfileController.php';
+    include_once './App/View/client/page/profile.php';
     break;
-  case "forget_pass":
-    include_once './View/client/page/forget_password.php';
+  case "information":
+    include_once './App/View/client/page/setting.php';
     break;
   case "logout":
     unset($_SESSION['user']);
@@ -27,6 +27,6 @@ switch ($controller) {
     exit;
     break;
   default:
-    include_once './index.php';
+    include_once './App/View/client/page/home.php';
     break;
 }

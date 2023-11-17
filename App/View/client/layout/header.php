@@ -5,7 +5,7 @@
       <!-- search -->
       <div class="col d-flex align-items-center">
         <!-- header logo -->
-        <a href="#"><i class="fab fa-facebook text-primary" style="font-size: 2.5rem"></i></a>
+        <a href="index.php"><i class="fab fa-facebook text-primary" style="font-size: 2.5rem"></i></a>
         <!-- search bar -->
         <div class="input-group ms-2" type="button">
           <!-- mobile -->
@@ -58,7 +58,7 @@
       <nav class="col d-none d-xl-flex justify-content-center">
         <!-- home -->
         <div class="mx-1 nav__btn nav__btn-active">
-          <a href="#" class="btn px-5">
+          <a href="index.php" class="btn px-5">
             <i class="fas fa-home text-muted fs-4"></i>
           </a>
         </div>
@@ -70,7 +70,7 @@
         </div>
         <!-- account -->
         <div class="mx-1 nav__btn">
-          <a href="#" class="btn px-5">
+          <a href="index.php?ctrl=profile" class="btn px-5">
             <i class="fa-solid fa-circle-user text-muted fs-4"></i>
           </a>
         </div>

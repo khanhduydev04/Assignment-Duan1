@@ -5,7 +5,7 @@ class connect
 
   function pdo_get_connection()
   {
-    $dburl = "mysql:host=localhost;dbname=duan;charset=utf8";
+    $dburl = "mysql:host=localhost;dbname=beebook;charset=utf8";
     $username = 'root';
     $password = 'mysql';
     $conn = new PDO($dburl, $username, $password);
