@@ -441,3 +441,54 @@
   background-color: rgb(231, 241, 251);
   color: rgb(65, 113, 194);
 }
+
+/* Friend */
+.bg-main {
+  background-color: white;
+  height: 100%;
+}
+
+.timeline {
+  height: 100%;
+  width: 100%;
+}
+
+.text-p {
+  font-size: 23px;
+}
+
+.text-blue {
+  font-size: 17px;
+  color: blue;
+  cursor: pointer;
+}
+
+.btn-delete {
+  background-color: rgb(225, 225, 225);
+}
+
+.fb-1 {
+  height: 135px;
+  background-color: white;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.img {
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  height: 220px;
+}
+
+.btn-bg {
+  cursor: pointer;
+}
+
+.btn-bg.active {
+  background-color: rgb(218, 218, 218);
+}
+
+.btn-greenest {
+  background-color: rgb(231, 241, 251);
+  color: rgb(65, 113, 194);
+}
