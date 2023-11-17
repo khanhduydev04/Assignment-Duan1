@@ -441,3 +441,40 @@
   background-color: rgb(231, 241, 251);
   color: rgb(65, 113, 194);
 }
+
+
+/* friends */
+.search-friend{
+  position:relative;
+}
+
+.search-friend-icon{
+  position:absolute;
+  top: 30%;
+  left: 10px;
+  color:#7f7f7f;
+}
+
+.search-friend-form{
+  border: none;
+  height: 35px;
+  width: 200px;
+  padding-left: 35px;
+  background-color: #e3e3e3;
+  border-radius: 20px;
+}
+
+/* Picture */
+.position-picture{
+  position:relative;
+}
+
+.position-picture-icon{
+  position:absolute;
+  top: 5%;
+  right: 5%;
+}
+
+.transparent-bg {
+  background-color: rgba(0, 0, 0, 0.4); 
+}
