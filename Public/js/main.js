@@ -152,3 +152,87 @@ var myModal = new bootstrap.Modal(document.getElementById('imageModal'));
           myModal.show();
       });
   });
+
+
+  
+//Rep comment 
+function showComment(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm(commentNumber) {
+  const form = document.getElementById(`repcomment${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+
+function showComment1(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment1${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm1(commentNumber) {
+  const form = document.getElementById(`repcomment1${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+
+function showComment2(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment2${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm2(commentNumber) {
+  const form = document.getElementById(`repcomment2${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function showComment3(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment3${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm3(commentNumber) {
+  const form = document.getElementById(`repcomment3${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function showComment4(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment4${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm4(commentNumber) {
+  const form = document.getElementById(`repcomment4${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+
+function showComment5(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment5${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm5(commentNumber) {
+  const form = document.getElementById(`repcomment5${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}

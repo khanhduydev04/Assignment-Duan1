@@ -200,8 +200,8 @@
               </div>
             </div>
           </div>
-          <!-- posts-->
-          <div class="bg-white p-4 rounded shadow-sm mt-3">
+         <!-- posts -->
+         <div class="bg-white p-4 rounded shadow-sm mt-3">
             <!-- author -->
             <div class="d-flex justify-content-between">
               <!-- avatar -->
@@ -246,10 +246,9 @@
                   Ngày ấy ta tìm thấy anh giữa biển người
                   Hôm nay em trả anh về với biển người ấy
                 </p>
-                <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid rounded" />
               </div>
               <!-- likes & comments -->
-              <div class="post__comment mt-3 position-relative">
+              <div class="post__comment position-relative">
                 <!-- likes -->
                 <div class="
                         d-flex
@@ -258,27 +257,31 @@
                         start-0
                         position-absolute
                       " style="height: 50px; z-index: 5">
-                  <div class="me-2">
-                    <i class="text-primary fas fa-thumbs-up"></i>
-                  </div>
-                  <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 others</p>
+                    <div class="me-2">
+                      <i class="fa-solid fa-heart text-danger"></i>
+                    </div>
+                    <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 người khác</p>
+                    
                 </div>
                 <!-- comments start-->
                 <div class="accordion" id="accordionExample">
                   <div class="accordion-item border-0">
                     <!-- comment collapse -->
-                    <h2 class="accordion-header" id="headingTwo">
+                    <h2 class="accordion-header" id="heading">
                       <div class="
                               accordion-button
                               collapsed
                               pointer
                               d-flex
                               justify-content-end
-                            " data-bs-toggle="collapse" data-bs-target="#collapsePost1" aria-expanded="false" aria-controls="collapsePost1">
-                        <p class="m-0">2 Comments</p>
-                      </div>
+                            " >
+                        <p class="m-0 fs-7" data-bs-toggle="collapse" data-bs-target="#collapsePost" aria-expanded="false" aria-controls="collapsePost">2 bình luận</p>
+                        <p class="m-0 ms-2 fs-7">4 lượt chia sẻ</p>
+                      </div>    
                     </h2>
-                    <hr />
+                    <hr class="mt-0 mb-3"/>
+                    
+                    
                     <!-- comment & like bar -->
                     <div class="d-flex justify-content-around">
                       <div class="
@@ -289,11 +292,14 @@
                               align-items-center
                               pointer
                               text-muted
-                              p-1
+                              hover_like
                             ">
-                        <i class="fas fa-thumbs-up me-3"></i>
-                        <p class="m-0">Like</p>
+                            <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted hover_like p-2" >
+                                <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                                <p class="m-0">Yêu thích</p>
+                            </div>
                       </div>
+                      
                       <div class="
                               dropdown-item
                               rounded
@@ -302,10 +308,14 @@
                               align-items-center
                               pointer
                               text-muted
-                              p-1
-                            " data-bs-toggle="collapse" data-bs-target="#collapsePost1" aria-expanded="false" aria-controls="collapsePost1">
-                        <i class="fas fa-comment-alt me-3"></i>
-                        <p class="m-0">Comment</p>
+                            "
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapsePost"
+                          aria-expanded="false"
+                          aria-controls="collapsePost"> 
+
+                        <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                        <p class="m-0">Bình luận</p>
                       </div>
                       <div class="
                             dropdown-item
@@ -315,14 +325,240 @@
                             align-items-center
                             pointer
                             text-muted
-                            p-1
-                          " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <i class="fa-solid fa-share me-3"></i>
+                         
+                          ">
+                        <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
                         <p class="m-0">Chia sẻ</p>
                       </div>
                     </div>
-                    <!-- comment expand -->
 
+
+                    <!-- comment model -->
+                      <div
+                        id="collapsePost"
+                        class="accordion-collapse collapse"
+                        aria-labelledby="heading"
+                        data-bs-parent="#accordionExample">
+                        <hr/>
+                        <div class="accordion-body">
+                          <!-- comment 1 -->
+                          <div class="comment-container">
+                            <div class="">
+                              <div class="d-flex" onclick="showComment(1)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                  />
+                                <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4 bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo ugyftdreeeeeeeeeeeeeeeeeeeeeegggggggggggggggggggggggggggggrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row ">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm(1)" style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+                                  </div>
+                              </div>
+                              <!--repcomment comments 1-->
+                              <div class="mb-3" id="repcomment1" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse ms-1 me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            </div>
+
+                            <!--comments 2-->
+                            <div class="ms-5">
+                              <div class="d-flex my-1 " onclick="showComment(2)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2 mt-1"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                />
+                                <!-- comment text -->
+                                <div class="">
+                                  <div class="p-2 rounded-4 bg-gray">
+                                    <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                    <p class="m-0 fs-7">
+                                      Khánh Duy ngáoooo
+                                    </p>
+                                  </div>
+
+                                  <div class="d-flex flex-row">
+                                    <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                    <div class="p-2 m-0 fs-7 text-secondary fw-bold " onclick="toggleReplyForm(2)" style="cursor: pointer;" >Phản hồi</div>
+                                  </div>
+                                </div>
+                              </div>
+
+                               <!--repcomment comments 2-->
+                                <div class="mb-3" id="repcomment2" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            
+
+                              <!--comments 3-->
+                              <div class=" ms-5">
+                                <div class="d-flex my-1" onclick="showComment(3)">
+                                  <!-- avatar -->
+                                  <img
+                                    src="https://source.unsplash.com/collection/happy-people"
+                                    alt="avatar"
+                                    class="rounded-circle me-2 mt-1"
+                                    style="
+                                      width: 38px;
+                                      height: 38px;
+                                      object-fit: cover;
+                                    "
+                                  />
+                                  <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4  bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm(3)"style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+
+                                  </div>
+                                </div>
+
+                                <!--repcomment comments 3-->
+                                <div class=" mb-3" id="repcomment3" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                              
+                            </div>
+                          </div>
+                          
+                          <!-- create comment -->
+                          <form class="d-flex my-1">
+                            <!-- avatar -->
+                            <div>
+                              <img
+                                src="https://source.unsplash.com/collection/happy-people"
+                                alt="avatar"
+                                class="rounded-circle me-2"
+                                style="
+                                  width: 38px;
+                                  height: 38px;
+                                  object-fit: cover;
+                                "
+                              />
+                            </div>
+                            <!-- input -->
+                            <input
+                              type="text"
+                              class="form-control border-0 rounded-pill bg-gray"
+                              placeholder="Write a comment"
+                            />
+                          </form>
+                          <!-- end -->
+                        </div>
+                      </div>
                   </div>
                 </div>
                 <!-- end -->
@@ -330,10 +566,10 @@
             </div>
           </div>
 
-          <!-- posts 2-->
-          <div class="bg-white p-4 rounded shadow-sm mt-3" style="width: 100%;">
+          <!-- posts 1-->
+          <div class="bg-white rounded shadow-sm mt-3 ">
             <!-- author -->
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between pe-4 ps-4 pt-4">
               <!-- avatar -->
               <div class="d-flex">
                 <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
@@ -369,20 +605,17 @@
               </ul>
             </div>
             <!-- post content -->
-            <div class="mt-3" style="width: 100%;">
+            <div class="mt-3">
               <!-- content -->
               <div>
-                <p>
+                <p class="pe-4 ps-4">
                   Ngày ấy ta tìm thấy anh giữa biển người
                   Hôm nay em trả anh về với biển người ấy
                 </p>
-                <div class="d-flex justify-content-center" style="width: 100%;">
-                  <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid rounded me-1" style="width: 50%" />
-                  <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid rounded" style="width: 50%" />
-                </div>
+                <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid" style="width: 100%;"/>
               </div>
               <!-- likes & comments -->
-              <div class="post__comment mt-3 position-relative">
+              <div class="post__comment position-relative">
                 <!-- likes -->
                 <div class="
                         d-flex
@@ -390,11 +623,390 @@
                         top-0
                         start-0
                         position-absolute
+                        pe-4 ps-4
                       " style="height: 50px; z-index: 5">
-                  <div class="me-2">
-                    <i class="text-primary fas fa-thumbs-up"></i>
+                    <div class="me-2">
+                      <i class="fa-solid fa-heart text-danger"></i>
+                    </div>
+                    <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 người khác</p>
+                    
+                </div>
+                <!-- comments start-->
+                <div class="accordion" id="accordionExample">
+                  <div class="accordion-item border-0">
+                    <!-- comment collapse -->
+                    <h2 class="accordion-header" id="headingOne">
+                      <div class="
+                              accordion-button
+                              collapsed
+                              pointer
+                              d-flex
+                              justify-content-end
+                            " >
+                        <p class="m-0 fs-7" data-bs-toggle="collapse" data-bs-target="#collapsePost1" aria-expanded="false" aria-controls="collapsePost1">2 bình luận</p>
+                        <p class="m-0 ms-2 fs-7">4 lượt chia sẻ</p>
+                      </div>    
+                    </h2>
+                    <hr class="mt-0 mb-3"/>
+                    
+                    
+                    <!-- comment & like bar -->
+                    <div class="d-flex justify-content-around mb-4">
+                      <div class="
+                              dropdown-item
+                              rounded
+                              d-flex
+                              justify-content-center
+                              align-items-center
+                              pointer
+                              text-muted
+                              
+                            ">
+                        <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted hover_like p-2" >
+                            <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                            <p class="m-0">Yêu thích</p>
+                        </div>
+                      </div>
+                      <div class="
+                              dropdown-item
+                              rounded
+                              d-flex
+                              justify-content-center
+                              align-items-center
+                              pointer
+                              text-muted
+                            "
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapsePost1"
+                          aria-expanded="false"
+                          aria-controls="collapsePost1"> 
+
+                        <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                        <p class="m-0">Bình luận</p>
+                      </div>
+                      <div class="
+                            dropdown-item
+                            rounded
+                            d-flex
+                            justify-content-center
+                            align-items-center
+                            pointer
+                            text-muted
+                         
+                          ">
+                        <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                        <p class="m-0">Chia sẻ</p>
+                      </div>
+                    </div>
+
+
+                    <!-- comment model -->
+                      <div
+                        id="collapsePost1"
+                        class="accordion-collapse collapse"
+                        aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample">
+                        <hr/>
+                        <div class="accordion-body">
+                          <!-- comment 1 -->
+                          <div class="comment-container">
+                            <div class="">
+                              <div class="d-flex" onclick="showComment1(1)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                  />
+                                <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4 bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo ugyftdreeeeeeeeeeeeeeeeeeeeeegggggggggggggggggggggggggggggrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row ">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm1(1)" style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+                                  </div>
+                              </div>
+                              <!--repcomment comments 1-->
+                              <div class="mb-3" id="repcomment11" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse ms-1 me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            </div>
+
+                            <!--comments 2-->
+                            <div class="ms-5">
+                              <div class="d-flex my-1 " onclick="showComment1(2)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2 mt-1"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                />
+                                <!-- comment text -->
+                                <div class="">
+                                  <div class="p-2 rounded-4 bg-gray">
+                                    <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                    <p class="m-0 fs-7">
+                                      Khánh Duy ngáoooo
+                                    </p>
+                                  </div>
+
+                                  <div class="d-flex flex-row">
+                                    <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                    <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm1(2)"style="cursor: pointer;" >Phản hồi</div>
+                                  </div>
+                                </div>
+                              </div>
+
+                               <!--repcomment comments 2-->
+                                <div class="mb-3" id="repcomment12" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            
+
+                              <!--comments 3-->
+                              <div class=" ms-5">
+                                <div class="d-flex my-1" onclick="showComment1(3)">
+                                  <!-- avatar -->
+                                  <img
+                                    src="https://source.unsplash.com/collection/happy-people"
+                                    alt="avatar"
+                                    class="rounded-circle me-2 mt-1"
+                                    style="
+                                      width: 38px;
+                                      height: 38px;
+                                      object-fit: cover;
+                                    "
+                                  />
+                                  <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4  bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm1(3)"style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+
+                                  </div>
+                                </div>
+
+                                <!--repcomment comments 3-->
+                                <div class=" mb-3" id="repcomment13" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                              
+                            </div>
+                          </div>
+                          
+                          <!-- create comment -->
+                          <form class="d-flex my-1">
+                            <!-- avatar -->
+                            <div>
+                              <img
+                                src="https://source.unsplash.com/collection/happy-people"
+                                alt="avatar"
+                                class="rounded-circle me-2"
+                                style="
+                                  width: 38px;
+                                  height: 38px;
+                                  object-fit: cover;
+                                "
+                              />
+                            </div>
+                            <!-- input -->
+                            <input
+                              type="text"
+                              class="form-control border-0 rounded-pill bg-gray"
+                              placeholder="Write a comment"
+                            />
+                          </form>
+                          <!-- end -->
+                        </div>
+                      </div>
                   </div>
-                  <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 others</p>
+                </div>
+                <!-- end -->
+              </div>
+            </div>
+          </div>
+          
+           <!-- posts 2 -->
+          <div class="bg-white rounded shadow-sm mt-3 ">
+            <!-- author -->
+            <div class="d-flex justify-content-between pe-4 ps-4 pt-4">
+              <!-- avatar -->
+              <div class="d-flex ">
+                <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                <div>
+                  <p class="m-0 fw-bold ">Hồ Dư Mai Trân</p>
+                  <span class="text-muted fs-7">18 giờ</span>
+                </div>
+              </div>
+              <!-- edit -->
+              <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+              <!-- edit menu -->
+              <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                <li class="d-flex align-items-center">
+                  <a class="
+                          dropdown-item
+                          d-flex
+                          justify-content-around
+                          align-items-center
+                          fs-7
+                        " href="#">
+                    Chỉnh sửa bài viết</a>
+                </li>
+                <li class="d-flex align-items-center">
+                  <a class="
+                          dropdown-item
+                          d-flex
+                          justify-content-around
+                          align-items-center
+                          fs-7
+                        " href="#">
+                    Xóa bài viết</a>
+                </li>
+              </ul>
+            </div>
+            <!-- post content -->
+            <div class="mt-3">
+              <!-- content -->
+              <div>
+                <p class="ps-4 pe-4">
+                  Ngày ấy ta tìm thấy anh giữa biển người
+                  Hôm nay em trả anh về với biển người ấy
+                </p>
+
+                <div class="container m-0 g-0">
+                  <div class="row g-1">
+                    <div class="col">
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid" style="width: 100%;"/>
+                    </div>
+                    <div class="col">
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid" style="width: 100%;"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- likes & comments -->
+              <div class="post__comment position-relative">
+                <!-- likes -->
+                <div class="
+                        d-flex
+                        align-items-center
+                        top-0
+                        start-0
+                        position-absolute
+                        ms-4
+                      " style="height: 50px; z-index: 5">
+                    <div class="me-2">
+                      <i class="fa-solid fa-heart text-danger"></i>
+                    </div>
+                    <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 người khác</p>
+                    
                 </div>
                 <!-- comments start-->
                 <div class="accordion" id="accordionExample">
@@ -407,13 +1019,16 @@
                               pointer
                               d-flex
                               justify-content-end
-                            " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <p class="m-0">2 Comments</p>
-                      </div>
+                            " >
+                        <p class="m-0 fs-7" data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">2 bình luận</p>
+                        <p class="m-0 ms-2 fs-7">4 lượt chia sẻ</p>
+                      </div>    
                     </h2>
-                    <hr />
+                    <hr class="mt-0 mb-3"/>
+                    
+                    
                     <!-- comment & like bar -->
-                    <div class="d-flex justify-content-around">
+                    <div class="d-flex justify-content-around mb-4">
                       <div class="
                               dropdown-item
                               rounded
@@ -422,10 +1037,12 @@
                               align-items-center
                               pointer
                               text-muted
-                              p-1
+                              
                             ">
-                        <i class="fas fa-thumbs-up me-3"></i>
-                        <p class="m-0">Like</p>
+                        <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted hover_like p-2" >
+                                <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                                <p class="m-0">Yêu thích</p>
+                            </div>
                       </div>
                       <div class="
                               dropdown-item
@@ -435,10 +1052,14 @@
                               align-items-center
                               pointer
                               text-muted
-                              p-1
-                            " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <i class="fas fa-comment-alt me-3"></i>
-                        <p class="m-0">Comment</p>
+                            "
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapsePost2"
+                          aria-expanded="false"
+                          aria-controls="collapsePost2"> 
+
+                        <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                        <p class="m-0">Bình luận</p>
                       </div>
                       <div class="
                             dropdown-item
@@ -448,25 +1069,251 @@
                             align-items-center
                             pointer
                             text-muted
-                            p-1
-                          " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <i class="fa-solid fa-share me-3"></i>
+                         
+                          ">
+                        <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
                         <p class="m-0">Chia sẻ</p>
                       </div>
                     </div>
-                    <!-- comment expand -->
 
+
+                    <!-- comment model -->
+                      <div
+                        id="collapsePost2"
+                        class="accordion-collapse collapse"
+                        aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionExample">
+                        <hr/>
+                        <div class="accordion-body">
+                          <!-- comment 1 -->
+                          <div class="comment-container">
+                            <div class="">
+                              <div class="d-flex" onclick="showComment2(1)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                  />
+                                <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4 bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo ugyftdreeeeeeeeeeeeeeeeeeeeeegggggggggggggggggggggggggggggrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row ">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm2(1)" style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+                                  </div>
+                              </div>
+                              <!--repcomment comments 1-->
+                              <div class="mb-3" id="repcomment21" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse ms-1 me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            </div>
+
+                            <!--comments 2-->
+                            <div class="ms-5">
+                              <div class="d-flex my-1 " onclick="showComment2(2)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2 mt-1"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                />
+                                <!-- comment text -->
+                                <div class="">
+                                  <div class="p-2 rounded-4 bg-gray">
+                                    <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                    <p class="m-0 fs-7">
+                                      Khánh Duy ngáoooo
+                                    </p>
+                                  </div>
+
+                                  <div class="d-flex flex-row">
+                                    <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                    <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm2(2)"style="cursor: pointer;" >Phản hồi</div>
+                                  </div>
+                                </div>
+                              </div>
+
+                               <!--repcomment comments 2-->
+                                <div class="mb-3" id="repcomment22" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            
+
+                              <!--comments 3-->
+                              <div class=" ms-5">
+                                <div class="d-flex my-1" onclick="showComment2(3)">
+                                  <!-- avatar -->
+                                  <img
+                                    src="https://source.unsplash.com/collection/happy-people"
+                                    alt="avatar"
+                                    class="rounded-circle me-2 mt-1"
+                                    style="
+                                      width: 38px;
+                                      height: 38px;
+                                      object-fit: cover;
+                                    "
+                                  />
+                                  <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4  bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm2(3)"style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+
+                                  </div>
+                                </div>
+
+                                <!--repcomment comments 3-->
+                                <div class=" mb-3" id="repcomment23" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                              
+                            </div>
+                          </div>
+                          
+                          <!-- create comment -->
+                          <form class="d-flex my-1">
+                            <!-- avatar -->
+                            <div>
+                              <img
+                                src="https://source.unsplash.com/collection/happy-people"
+                                alt="avatar"
+                                class="rounded-circle me-2"
+                                style="
+                                  width: 38px;
+                                  height: 38px;
+                                  object-fit: cover;
+                                "
+                              />
+                            </div>
+                            <!-- input -->
+                            <input
+                              type="text"
+                              class="form-control border-0 rounded-pill bg-gray"
+                              placeholder="Write a comment"
+                            />
+                          </form>
+                          <!-- end -->
+                        </div>
+                      </div>
                   </div>
                 </div>
                 <!-- end -->
               </div>
             </div>
           </div>
-
-          <!-- posts 3-->
-          <div class="bg-white p-4 rounded shadow-sm mt-3" style="width: 100%;">
+          
+          <!-- posts 3 -->
+          <div class="bg-white rounded shadow-sm mt-3">
             <!-- author -->
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between   pe-4 ps-4 pt-4">
               <!-- avatar -->
               <div class="d-flex">
                 <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
@@ -502,25 +1349,29 @@
               </ul>
             </div>
             <!-- post content -->
-            <div class="mt-3" style="width: 100%;">
+            <div class="mt-3">
               <!-- content -->
               <div>
-                <p>
+                <p class="me-4 ms-4">
                   Ngày ấy ta tìm thấy anh giữa biển người
                   Hôm nay em trả anh về với biển người ấy
                 </p>
-                <div class="d-flex justify-content-center" style="width: 100%; height: 500px;">
-                  <div class="me-1" style="width: 50%; height: 100%;">
-                    <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid rounded" style="width: 100%; height: 50%" />
-                    <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid rounded mt-1" style="width: 100%; height: 50%" />
-                  </div>
-                  <div class="" style="width: 50%;">
-                    <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid rounded " style="width: 100%; height: 100%" />
+
+                <div class="container m-0 g-0" style="width: 100%;">
+                  <div class="row g-1">
+                    <div class="col-8">
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid" style="width: 100%;"/>
+                    </div>
+                    <div class="col-4">
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid mb-1" style="height: 50%;"/>
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid" style="hieght: 50%;"/>
+                    </div>
                   </div>
                 </div>
+                
               </div>
               <!-- likes & comments -->
-              <div class="post__comment mt-3 position-relative">
+              <div class="post__comment position-relative">
                 <!-- likes -->
                 <div class="
                         d-flex
@@ -528,30 +1379,35 @@
                         top-0
                         start-0
                         position-absolute
+                        ms-4
                       " style="height: 50px; z-index: 5">
-                  <div class="me-2">
-                    <i class="text-primary fas fa-thumbs-up"></i>
-                  </div>
-                  <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 others</p>
+                    <div class="me-2">
+                      <i class="fa-solid fa-heart text-danger"></i>
+                    </div>
+                    <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 người khác</p>
+                    
                 </div>
                 <!-- comments start-->
                 <div class="accordion" id="accordionExample">
                   <div class="accordion-item border-0">
                     <!-- comment collapse -->
-                    <h2 class="accordion-header" id="headingTwo">
+                    <h2 class="accordion-header" id="headingThere">
                       <div class="
                               accordion-button
                               collapsed
                               pointer
                               d-flex
                               justify-content-end
-                            " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <p class="m-0">2 Comments</p>
-                      </div>
+                            " >
+                        <p class="m-0 fs-7" data-bs-toggle="collapse" data-bs-target="#collapsePost3" aria-expanded="false" aria-controls="collapsePost3">2 bình luận</p>
+                        <p class="m-0 ms-2 fs-7">4 lượt chia sẻ</p>
+                      </div>    
                     </h2>
-                    <hr />
+                    <hr class="mt-0 mb-3"/>
+                    
+                    
                     <!-- comment & like bar -->
-                    <div class="d-flex justify-content-around">
+                    <div class="d-flex justify-content-around pb-4">
                       <div class="
                               dropdown-item
                               rounded
@@ -560,10 +1416,12 @@
                               align-items-center
                               pointer
                               text-muted
-                              p-1
+                              
                             ">
-                        <i class="fas fa-thumbs-up me-3"></i>
-                        <p class="m-0">Like</p>
+                        <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted hover_like p-2" >
+                                <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                                <p class="m-0">Yêu thích</p>
+                            </div>
                       </div>
                       <div class="
                               dropdown-item
@@ -573,10 +1431,14 @@
                               align-items-center
                               pointer
                               text-muted
-                              p-1
-                            " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <i class="fas fa-comment-alt me-3"></i>
-                        <p class="m-0">Comment</p>
+                            "
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapsePost3"
+                          aria-expanded="false"
+                          aria-controls="collapsePost3"> 
+
+                        <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                        <p class="m-0">Bình luận</p>
                       </div>
                       <div class="
                             dropdown-item
@@ -586,14 +1448,240 @@
                             align-items-center
                             pointer
                             text-muted
-                            p-1
-                          " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <i class="fa-solid fa-share me-3"></i>
+                         
+                          ">
+                        <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
                         <p class="m-0">Chia sẻ</p>
                       </div>
                     </div>
-                    <!-- comment expand -->
 
+
+                    <!-- comment model -->
+                      <div
+                        id="collapsePost3"
+                        class="accordion-collapse collapse"
+                        aria-labelledby="headingThere"
+                        data-bs-parent="#accordionExample">
+                        <hr/>
+                        <div class="accordion-body">
+                          <!-- comment 1 -->
+                          <div class="comment-container">
+                            <div class="">
+                              <div class="d-flex" onclick="showComment3(1)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                  />
+                                <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4 bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo ugyftdreeeeeeeeeeeeeeeeeeeeeegggggggggggggggggggggggggggggrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row ">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm3(1)" style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+                                  </div>
+                              </div>
+                              <!--repcomment comments 1-->
+                              <div class="mb-3" id="repcomment31" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse ms-1 me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            </div>
+
+                            <!--comments 2-->
+                            <div class="ms-5">
+                              <div class="d-flex my-1 " onclick="showComment3(2)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2 mt-1"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                />
+                                <!-- comment text -->
+                                <div class="">
+                                  <div class="p-2 rounded-4 bg-gray">
+                                    <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                    <p class="m-0 fs-7">
+                                      Khánh Duy ngáoooo
+                                    </p>
+                                  </div>
+
+                                  <div class="d-flex flex-row">
+                                    <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                    <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm3(2)"style="cursor: pointer;" >Phản hồi</div>
+                                  </div>
+                                </div>
+                              </div>
+
+                               <!--repcomment comments 2-->
+                                <div class="mb-3" id="repcomment32" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            
+
+                              <!--comments 3-->
+                              <div class=" ms-5">
+                                <div class="d-flex my-1" onclick="showComment3(3)">
+                                  <!-- avatar -->
+                                  <img
+                                    src="https://source.unsplash.com/collection/happy-people"
+                                    alt="avatar"
+                                    class="rounded-circle me-2 mt-1"
+                                    style="
+                                      width: 38px;
+                                      height: 38px;
+                                      object-fit: cover;
+                                    "
+                                  />
+                                  <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4  bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm3(3)"style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+
+                                  </div>
+                                </div>
+
+                                <!--repcomment comments 3-->
+                                <div class=" mb-3" id="repcomment33" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                              
+                            </div>
+                          </div>
+                          
+                          <!-- create comment -->
+                          <form class="d-flex my-1">
+                            <!-- avatar -->
+                            <div>
+                              <img
+                                src="https://source.unsplash.com/collection/happy-people"
+                                alt="avatar"
+                                class="rounded-circle me-2"
+                                style="
+                                  width: 38px;
+                                  height: 38px;
+                                  object-fit: cover;
+                                "
+                              />
+                            </div>
+                            <!-- input -->
+                            <input
+                              type="text"
+                              class="form-control border-0 rounded-pill bg-gray"
+                              placeholder="Write a comment"
+                            />
+                          </form>
+                          <!-- end -->
+                        </div>
+                      </div>
                   </div>
                 </div>
                 <!-- end -->
@@ -601,10 +1689,10 @@
             </div>
           </div>
 
-          <!-- posts 4-->
-          <div class="bg-white p-4 rounded shadow-sm mt-3" style="width: 100%;">
+          <!-- posts 4 -->
+          <div class="bg-white rounded shadow-sm mt-3">
             <!-- author -->
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between   pe-4 ps-4 pt-4">
               <!-- avatar -->
               <div class="d-flex">
                 <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
@@ -640,27 +1728,30 @@
               </ul>
             </div>
             <!-- post content -->
-            <div class="mt-3" style="width: 100%;">
+            <div class="mt-3">
               <!-- content -->
               <div>
-                <p>
+                <p class="me-4 ms-4">
                   Ngày ấy ta tìm thấy anh giữa biển người
                   Hôm nay em trả anh về với biển người ấy
                 </p>
-                <div class="d-flex justify-content-center" style="width: 100%; height: 600px;">
-                  <div class="me-1" style="width: 50%; height: 100%;">
-                    <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid rounded" style="width: 100%; height: 50%" />
-                    <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid rounded mt-1" style="width: 100%; height: 50%" />
-                  </div>
 
-                  <div class="me-1" style="width: 50%; height: 100%;">
-                    <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid rounded" style="width: 100%; height: 50%" />
-                    <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid rounded mt-1" style="width: 100%; height: 50%" />
+                <div class="container m-0 g-0 mb-1" style="width: 100%;">
+                  <div class="row g-1">
+                    <div class="col">
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid mb-1" style="height: 50%;"/>
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid" style="hieght: 50%;"/>
+                    </div>
+                    <div class="col">
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid mb-1" style="height: 50%;"/>
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid" style="hieght: 50%;"/>
+                    </div>
                   </div>
                 </div>
+                
               </div>
               <!-- likes & comments -->
-              <div class="post__comment mt-3 position-relative">
+              <div class="post__comment position-relative">
                 <!-- likes -->
                 <div class="
                         d-flex
@@ -668,30 +1759,35 @@
                         top-0
                         start-0
                         position-absolute
+                        ms-4
                       " style="height: 50px; z-index: 5">
-                  <div class="me-2">
-                    <i class="text-primary fas fa-thumbs-up"></i>
-                  </div>
-                  <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 others</p>
+                    <div class="me-2">
+                      <i class="fa-solid fa-heart text-danger"></i>
+                    </div>
+                    <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 người khác</p>
+                    
                 </div>
                 <!-- comments start-->
                 <div class="accordion" id="accordionExample">
                   <div class="accordion-item border-0">
                     <!-- comment collapse -->
-                    <h2 class="accordion-header" id="headingTwo">
+                    <h2 class="accordion-header" id="headingFour">
                       <div class="
                               accordion-button
                               collapsed
                               pointer
                               d-flex
                               justify-content-end
-                            " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <p class="m-0">2 Comments</p>
-                      </div>
+                            " >
+                        <p class="m-0 fs-7" data-bs-toggle="collapse" data-bs-target="#collapsePost4" aria-expanded="false" aria-controls="collapsePost4">2 bình luận</p>
+                        <p class="m-0 ms-2 fs-7">4 lượt chia sẻ</p>
+                      </div>    
                     </h2>
-                    <hr />
+                    <hr class="mt-0 mb-3"/>
+                    
+                    
                     <!-- comment & like bar -->
-                    <div class="d-flex justify-content-around">
+                    <div class="d-flex justify-content-around pb-4">
                       <div class="
                               dropdown-item
                               rounded
@@ -700,10 +1796,12 @@
                               align-items-center
                               pointer
                               text-muted
-                              p-1
+                              
                             ">
-                        <i class="fas fa-thumbs-up me-3"></i>
-                        <p class="m-0">Like</p>
+                        <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted hover_like p-2" >
+                                <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                                <p class="m-0">Yêu thích</p>
+                            </div>
                       </div>
                       <div class="
                               dropdown-item
@@ -713,10 +1811,14 @@
                               align-items-center
                               pointer
                               text-muted
-                              p-1
-                            " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <i class="fas fa-comment-alt me-3"></i>
-                        <p class="m-0">Comment</p>
+                            "
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapsePost4"
+                          aria-expanded="false"
+                          aria-controls="collapsePost4"> 
+
+                        <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                        <p class="m-0">Bình luận</p>
                       </div>
                       <div class="
                             dropdown-item
@@ -726,14 +1828,240 @@
                             align-items-center
                             pointer
                             text-muted
-                            p-1
-                          " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <i class="fa-solid fa-share me-3"></i>
+                         
+                          ">
+                        <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
                         <p class="m-0">Chia sẻ</p>
                       </div>
                     </div>
-                    <!-- comment expand -->
 
+
+                    <!-- comment model -->
+                      <div
+                        id="collapsePost4"
+                        class="accordion-collapse collapse"
+                        aria-labelledby="headingFour"
+                        data-bs-parent="#accordionExample">
+                        <hr/>
+                        <div class="accordion-body">
+                          <!-- comment 1 -->
+                          <div class="comment-container">
+                            <div class="">
+                              <div class="d-flex" onclick="showComment4(1)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                  />
+                                <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4 bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo ugyftdreeeeeeeeeeeeeeeeeeeeeegggggggggggggggggggggggggggggrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row ">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm4(1)" style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+                                  </div>
+                              </div>
+                              <!--repcomment comments 1-->
+                              <div class="mb-3" id="repcomment41" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse ms-1 me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            </div>
+
+                            <!--comments 2-->
+                            <div class="ms-5">
+                              <div class="d-flex my-1 " onclick="showComment4(2)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2 mt-1"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                />
+                                <!-- comment text -->
+                                <div class="">
+                                  <div class="p-2 rounded-4 bg-gray">
+                                    <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                    <p class="m-0 fs-7">
+                                      Khánh Duy ngáoooo
+                                    </p>
+                                  </div>
+
+                                  <div class="d-flex flex-row">
+                                    <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                    <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm4(2)"style="cursor: pointer;" >Phản hồi</div>
+                                  </div>
+                                </div>
+                              </div>
+
+                               <!--repcomment comments 2-->
+                                <div class="mb-3" id="repcomment42" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            
+
+                              <!--comments 3-->
+                              <div class=" ms-5">
+                                <div class="d-flex my-1" onclick="showComment4(3)">
+                                  <!-- avatar -->
+                                  <img
+                                    src="https://source.unsplash.com/collection/happy-people"
+                                    alt="avatar"
+                                    class="rounded-circle me-2 mt-1"
+                                    style="
+                                      width: 38px;
+                                      height: 38px;
+                                      object-fit: cover;
+                                    "
+                                  />
+                                  <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4  bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm4(3)"style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+
+                                  </div>
+                                </div>
+
+                                <!--repcomment comments 3-->
+                                <div class=" mb-3" id="repcomment43" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                              
+                            </div>
+                          </div>
+                          
+                          <!-- create comment -->
+                          <form class="d-flex my-1">
+                            <!-- avatar -->
+                            <div>
+                              <img
+                                src="https://source.unsplash.com/collection/happy-people"
+                                alt="avatar"
+                                class="rounded-circle me-2"
+                                style="
+                                  width: 38px;
+                                  height: 38px;
+                                  object-fit: cover;
+                                "
+                              />
+                            </div>
+                            <!-- input -->
+                            <input
+                              type="text"
+                              class="form-control border-0 rounded-pill bg-gray"
+                              placeholder="Write a comment"
+                            />
+                          </form>
+                          <!-- end -->
+                        </div>
+                      </div>
                   </div>
                 </div>
                 <!-- end -->
@@ -741,10 +2069,10 @@
             </div>
           </div>
 
-          <!-- posts-->
-          <div class="bg-white p-4 rounded shadow-sm mt-3" style="width: 100%;">
+          <!-- posts 5 -->
+          <div class="bg-white rounded shadow-sm mt-3">
             <!-- author -->
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between   pe-4 ps-4 pt-4">
               <!-- avatar -->
               <div class="d-flex">
                 <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
@@ -780,16 +2108,35 @@
               </ul>
             </div>
             <!-- post content -->
-            <div class="mt-3" style="width: 100%;">
+            <div class="mt-3">
               <!-- content -->
               <div>
-                <p>
+                <p class="me-4 ms-4">
                   Ngày ấy ta tìm thấy anh giữa biển người
                   Hôm nay em trả anh về với biển người ấy
                 </p>
+
+                <div class="container m-0 g-0" style="width: 100%;">
+                  <div class="row g-1">
+                    <div class="col">
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid mb-1" style="height: 50%;"/>
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid" style="hieght: 50%;"/>
+                    </div>
+                    <div class="col ">
+                      <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid mb-1" style="height: 50%;"/>
+                      <div class="post_plus">
+                        <img src="./Public/images/avt.jpg" alt="post image" class="img-fluid " style="hieght: 50%;"/>
+                        <div class="overlay"></div>
+                        <i class="fa-solid fa-plus post_image_plus">2</i>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                
               </div>
               <!-- likes & comments -->
-              <div class="post__comment mt-3 position-relative">
+              <div class="post__comment position-relative">
                 <!-- likes -->
                 <div class="
                         d-flex
@@ -797,30 +2144,35 @@
                         top-0
                         start-0
                         position-absolute
+                        ms-4
                       " style="height: 50px; z-index: 5">
-                  <div class="me-2">
-                    <i class="text-primary fas fa-thumbs-up"></i>
-                  </div>
-                  <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 others</p>
+                    <div class="me-2">
+                      <i class="fa-solid fa-heart text-danger"></i>
+                    </div>
+                    <p class="m-0 text-muted fs-7">Phu, Tuan, and 3 người khác</p>
+                    
                 </div>
                 <!-- comments start-->
                 <div class="accordion" id="accordionExample">
                   <div class="accordion-item border-0">
                     <!-- comment collapse -->
-                    <h2 class="accordion-header" id="headingTwo">
+                    <h2 class="accordion-header" id="headingFive">
                       <div class="
                               accordion-button
                               collapsed
                               pointer
                               d-flex
                               justify-content-end
-                            " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <p class="m-0">2 Comments</p>
-                      </div>
+                            " >
+                        <p class="m-0 fs-7" data-bs-toggle="collapse" data-bs-target="#collapsePost5" aria-expanded="false" aria-controls="collapsePost5">2 bình luận</p>
+                        <p class="m-0 ms-2 fs-7">4 lượt chia sẻ</p>
+                      </div>    
                     </h2>
-                    <hr />
+                    <hr class="mt-0 mb-3"/>
+                    
+                    
                     <!-- comment & like bar -->
-                    <div class="d-flex justify-content-around">
+                    <div class="d-flex justify-content-around pb-4">
                       <div class="
                               dropdown-item
                               rounded
@@ -829,10 +2181,12 @@
                               align-items-center
                               pointer
                               text-muted
-                              p-1
+                              
                             ">
-                        <i class="fas fa-thumbs-up me-3"></i>
-                        <p class="m-0">Like</p>
+                        <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted hover_like p-2" >
+                                <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                                <p class="m-0">Yêu thích</p>
+                            </div>
                       </div>
                       <div class="
                               dropdown-item
@@ -842,10 +2196,14 @@
                               align-items-center
                               pointer
                               text-muted
-                              p-1
-                            " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <i class="fas fa-comment-alt me-3"></i>
-                        <p class="m-0">Comment</p>
+                            "
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapsePost5"
+                          aria-expanded="false"
+                          aria-controls="collapsePost5"> 
+
+                        <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                        <p class="m-0">Bình luận</p>
                       </div>
                       <div class="
                             dropdown-item
@@ -855,14 +2213,240 @@
                             align-items-center
                             pointer
                             text-muted
-                            p-1
-                          " data-bs-toggle="collapse" data-bs-target="#collapsePost2" aria-expanded="false" aria-controls="collapsePost2">
-                        <i class="fa-solid fa-share me-3"></i>
+                         
+                          ">
+                        <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
                         <p class="m-0">Chia sẻ</p>
                       </div>
                     </div>
-                    <!-- comment expand -->
 
+
+                    <!-- comment model -->
+                      <div
+                        id="collapsePost5"
+                        class="accordion-collapse collapse"
+                        aria-labelledby="headingFive"
+                        data-bs-parent="#accordionExample">
+                        <hr/>
+                        <div class="accordion-body">
+                          <!-- comment 1 -->
+                          <div class="comment-container">
+                            <div class="">
+                              <div class="d-flex" onclick="showComment5(1)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                  />
+                                <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4 bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo ugyftdreeeeeeeeeeeeeeeeeeeeeegggggggggggggggggggggggggggggrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row ">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm5(1)" style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+                                  </div>
+                              </div>
+                              <!--repcomment comments 1-->
+                              <div class="mb-3" id="repcomment51" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse ms-1 me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            </div>
+
+                            <!--comments 2-->
+                            <div class="ms-5">
+                              <div class="d-flex my-1 " onclick="showComment5(2)">
+                                <!-- avatar -->
+                                <img
+                                  src="https://source.unsplash.com/collection/happy-people"
+                                  alt="avatar"
+                                  class="rounded-circle me-2 mt-1"
+                                  style="
+                                    width: 38px;
+                                    height: 38px;
+                                    object-fit: cover;
+                                  "
+                                />
+                                <!-- comment text -->
+                                <div class="">
+                                  <div class="p-2 rounded-4 bg-gray">
+                                    <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                    <p class="m-0 fs-7">
+                                      Khánh Duy ngáoooo
+                                    </p>
+                                  </div>
+
+                                  <div class="d-flex flex-row">
+                                    <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                    <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm5(2)"style="cursor: pointer;" >Phản hồi</div>
+                                  </div>
+                                </div>
+                              </div>
+
+                               <!--repcomment comments 2-->
+                                <div class="mb-3" id="repcomment52" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            
+
+                              <!--comments 3-->
+                              <div class=" ms-5">
+                                <div class="d-flex my-1" onclick="showComment5(3)">
+                                  <!-- avatar -->
+                                  <img
+                                    src="https://source.unsplash.com/collection/happy-people"
+                                    alt="avatar"
+                                    class="rounded-circle me-2 mt-1"
+                                    style="
+                                      width: 38px;
+                                      height: 38px;
+                                      object-fit: cover;
+                                    "
+                                  />
+                                  <!-- comment text -->
+                                  <div class="">
+                                    <div class="p-2 rounded-4  bg-gray">
+                                      <p class="m-0 mb-1 fs-7 fw-bolder">Hồ Dư Mai Trân</p>
+                                      <p class="m-0 fs-7">
+                                        Khánh Duy ngáoooo
+                                      </p>
+                                    </div>
+
+                                    <div class="d-flex flex-row">
+                                      <div class="p-2 m-0 fs-7 text-secondary">12 giờ</div>
+                                      <div class="p-2 m-0 fs-7 text-secondary fw-bold" onclick="toggleReplyForm5(3)"style="cursor: pointer;" >Phản hồi</div>
+                                    </div>
+
+                                  </div>
+                                </div>
+
+                                <!--repcomment comments 3-->
+                                <div class=" mb-3" id="repcomment53" style="display:none">
+                                  <form class="d-flex my-1">
+                                    <!-- avatar -->
+                                    <div>
+                                      <img
+                                        src="https://source.unsplash.com/collection/happy-people"
+                                        alt="avatar"
+                                        class="rounded-circle me-2"
+                                        style="
+                                          width: 38px;
+                                          height: 38px;
+                                          object-fit: cover;
+                                        "
+                                      />
+                                    </div>
+                                    <!-- input -->
+                                    <div class="bg-gray p-1 rounded-4 d-flex align-items-center" style="width: 100%;">
+                                      <textarea
+                                          class="form-control border-0 rounded-pill bg-gray input search-input"
+                                          placeholder="Viết bình luận..."
+                                          autofocus
+                                          style="box-shadow: none; resize: vertical;"
+                                      ></textarea>
+
+                                      <div class="d-flex flex-row-reverse me-2">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                              
+                            </div>
+                          </div>
+                          
+                          <!-- create comment -->
+                          <form class="d-flex my-1">
+                            <!-- avatar -->
+                            <div>
+                              <img
+                                src="https://source.unsplash.com/collection/happy-people"
+                                alt="avatar"
+                                class="rounded-circle me-2"
+                                style="
+                                  width: 38px;
+                                  height: 38px;
+                                  object-fit: cover;
+                                "
+                              />
+                            </div>
+                            <!-- input -->
+                            <input
+                              type="text"
+                              class="form-control border-0 rounded-pill bg-gray"
+                              placeholder="Write a comment"
+                            />
+                          </form>
+                          <!-- end -->
+                        </div>
+                      </div>
                   </div>
                 </div>
                 <!-- end -->
