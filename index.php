@@ -1,1 +1,1 @@
-<?php @require_once './App/App.php';
+<?php @require_once './App/App.php'; ?>

@@ -1,44 +1,22 @@
 <?php
-$user = new User();
-$error = [];
-if (isset($_POST['register']) && $_POST['register']) {
+$register = new User();
+if (isset($_POST['id'])) {
+    $id = $_POST['id'];
+}
+if (isset($_POST['register']) && ($_POST['register'])) {
     $first_name = $_POST['firstname'];
     $last_name = $_POST['lastname'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $password = $_POST['password'];
     $gender = $_POST['gender'];
-
-    //Mã hóa mật khẩu 
-    $password = password_hash($password, PASSWORD_DEFAULT);
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error['email'] = 'Email chưa đúng định dạng';
-    }
-    if ($user->checkUserByEmail($email)) {
-        $error['email'] = 'Email đã tồn tại';
-    }
-
-    $fields = [
-        'first_name' => 'Tên',
-        'last_name' => 'Họ',
-        'email' => 'Email',
-        'phone' => 'Số điện thoại',
-        'password' => 'Mật khẩu',
-        'gender' => 'Giới tính không được để trống',
-    ];
-
-    foreach ($fields as $field => $label) {
-        if (empty($$field)) {
-            $error[$field] = $label . ' không được để trống';
-        }
-    }
-
-    if (empty($error)) {
-        if ($user->addUser($first_name, $last_name, $email, $phone, $password, $gender)) {
-            header("Location: index.php");
-        } else {
-            echo 'Lỗi';
-        }
+    // $password = password_hash($password, PASSWORD_DEFAULT);
+    echo $first_name;
+    if ($register->addUser($first_name, $last_name, $email, $phone, $password, $gender)) {
+        echo ("Thành công");
+        header("Location: index.php");
+    } else {
+        echo ("Thất bại");
     }
 }
 
@@ -46,12 +24,12 @@ if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    if ($check = $user->checkUser($email, $password)) {
-        $id = $user->getIdUser($email, $password);
+    if ($check = $register->checkUser($email, $password)) {
+        $id = $register->getIdUser($email, $password);
         $_SESSION['user'] = $id;
         header('Location: index.php');
-    } elseif ($check = $user->checkAdmin($email, $password)) {
-        $id = $user->getIdUser($email, $password);
+    } elseif ($check = $register->checkAdmin($email, $password)) {
+        $id = $register->getIdUser($email, $password);
         $_SESSION['user'] = $id;
         header('Location: index.php');
     } else {
@@ -74,9 +52,11 @@ if (isset($_POST['login'])) {
             </div>
             <!--form-->
             <div style="max-width: 28rem; width: 100%">
-                <form class="bg-white shadow rounded p-3 input-group-lg" method="post">
+                <form class="bg-white shadow rounded p-3 input-group-lg" method="POST" id="form-login">
                     <input type="email" name="email" id="email1" class="form-control my-3" placeholder="Email">
+                    <span class="text-danger" id="email_Span"></span>
                     <input type="password" name="password" id="password1" class="form-control my-3" placeholder="Mật khẩu">
+                    <span class="text-danger" id="password_Span"></span><br>
                     <input class="btn btn-primary w-100 my-3 fw-bold" type="submit" name="login" value="Đăng nhập">
                     <a href="index.php?ctrl=forgetpassword" class="text-decoration-none text-center">
                         <p class="">Quên mật khẩu?</p>
@@ -103,40 +83,25 @@ if (isset($_POST['login'])) {
                             </div>
                             <!--body register-->
                             <div class="modal-body">
-                                <form action="" method="post">
+                                <form action="" method="post" id="form-register">
                                     <!--name-->
                                     <div class="row">
                                         <div class="col">
                                             <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Họ">
+                                            <span class="text-danger mt-4" id="lastSpan"></span>
                                         </div>
-                                        <?php
-                                        echo (!empty($error['last_name'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['last_name'] . '</span>' : false;
-                                        $error['last_name'] = '';
-                                        ?>
                                         <div class="col">
                                             <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Tên">
+                                            <span class="text-danger" id="firstSpan"></span>
                                         </div>
-                                        <?php
-                                        echo (!empty($error['first_name'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['first_name'] . '</span>' : false;
-                                        $error['first_name'] = '';
-                                        ?>
                                     </div>
                                     <!--email and password-->
-                                    <input type="email" name="email" id="email" class="form-control my-3" placeholder="Email">
-                                    <?php
-                                    echo (!empty($error['email'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['email'] . '</span>' : false;
-                                    $error['email'] = '';
-                                    ?>
-                                    <input type="text" name="phone" id="phone" class="form-control my-3" placeholder="Số điện thoại">
-                                    <?php
-                                    echo (!empty($error['phone'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['phone'] . '</span>' : false;
-                                    $error['phone'] = '';
-                                    ?>
-                                    <input type="password" name="password" id="password" class="form-control my-3" placeholder="Mật khẩu">
-                                    <?php
-                                    echo (!empty($error['password'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['password'] . '</span>' : false;
-                                    $error['password'] = '';
-                                    ?>
+                                    <input type="email" name="email" id="email" class="form-control my-3" placeholder="Email" />
+                                    <span class="text-danger" id="emailText"></span>
+                                    <input type="text" name="phone" id="phone" class="form-control my-3" placeholder="Số điện thoại" />
+                                    <span class="text-danger" id="phoneText"></span>
+                                    <input type="password" name="password" id="password" class="form-control my-3" placeholder="Mật khẩu" />
+                                    <span class="text-danger" id="passText"></span>
                                     <!--gender-->
                                     <div class="row my-3">
                                         <span class="text-muted fs-7 mb-1">
@@ -161,21 +126,18 @@ if (isset($_POST['login'])) {
                                                 </label>
                                             </div>
                                         </div>
-                                        <?php
-                                        echo (!empty($error['gender'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['gender'] . '</span>' : false;
-                                        $error['gender'] = '';
-                                        ?>
+                                        <span class="text-danger" id="genderSpan"></span>
                                     </div>
                                     <!--disclaimer-->
-                                    <div>
+                                    <div class="">
                                         <span class="text-muted fs-7 mt-3">
-                                            Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin liên hệ của bạn lên Facebook. Tìm hiểu thêm.
+                                            Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin liên hệ
+                                            của bạn lên Facebook. Tìm hiểu thêm.
                                         </span>
                                     </div>
                                     <!--btn-->
                                     <div class="text-center my-4">
                                         <input type="submit" class="btn btn-success btn-lg" name="register" value="Đăng ký">
-                                        </input>
                                     </div>
                                 </form>
                             </div>
