@@ -1,3 +1,64 @@
+<?php
+$user = new User();
+$error = [];
+if (isset($_POST['register']) && $_POST['register']) {
+    $first_name = $_POST['firstname'];
+    $last_name = $_POST['lastname'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $password = $_POST['password'];
+    $gender = $_POST['gender'];
+
+    //Mã hóa mật khẩu 
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error['email'] = 'Email chưa đúng định dạng';
+    }
+    if ($user->checkUserByEmail($email)) {
+        $error['email'] = 'Email đã tồn tại';
+    }
+
+    $fields = [
+        'first_name' => 'Tên',
+        'last_name' => 'Họ',
+        'email' => 'Email',
+        'phone' => 'Số điện thoại',
+        'password' => 'Mật khẩu',
+        'gender' => 'Giới tính không được để trống',
+    ];
+
+    foreach ($fields as $field => $label) {
+        if (empty($$field)) {
+            $error[$field] = $label . ' không được để trống';
+        }
+    }
+
+    if (empty($error)) {
+        if ($user->addUser($first_name, $last_name, $email, $phone, $password, $gender)) {
+            header("Location: index.php");
+        } else {
+            echo 'Lỗi';
+        }
+    }
+}
+
+if (isset($_POST['login'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    if ($check = $user->checkUser($email, $password)) {
+        $id = $user->getIdUser($email, $password);
+        $_SESSION['user'] = $id;
+        header('Location: index.php');
+    } elseif ($check = $user->checkAdmin($email, $password)) {
+        $id = $user->getIdUser($email, $password);
+        $_SESSION['user'] = $id;
+        header('Location: index.php');
+    } else {
+        $error['login'] = 'Email hoặc mật khẩu không chính xác !';
+    }
+}
+?>
 <div class="d-flex flex-column justify-content-between min-vh-100">
     <div class="container-fluid bg-gray">
         <!-- login -->
@@ -13,10 +74,10 @@
             </div>
             <!--form-->
             <div style="max-width: 28rem; width: 100%">
-                <form class="bg-white shadow rounded p-3 input-group-lg">
+                <form class="bg-white shadow rounded p-3 input-group-lg" method="post">
                     <input type="email" name="email" id="email1" class="form-control my-3" placeholder="Email">
                     <input type="password" name="password" id="password1" class="form-control my-3" placeholder="Mật khẩu">
-                    <button class="btn btn-primary w-100 my-3 fw-bold" type="submit" name="login">Đăng nhập</button>
+                    <input class="btn btn-primary w-100 my-3 fw-bold" type="submit" name="login" value="Đăng nhập">
                     <a href="index.php?ctrl=forgetpassword" class="text-decoration-none text-center">
                         <p class="">Quên mật khẩu?</p>
                     </a>
@@ -27,86 +88,101 @@
                             Tạo tài khoản mới
                         </button>
                     </div>
-                    <!--creat modal start-->
-                    <div class="modal fade" id="creatModal" tabindex="-1" aria-labelledby="creatModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <!--head-->
-                                <div class="modal-header">
-                                    <div class="">
-                                        <h1 class="modal-title fs-3" id="creatModalLabel">Đăng ký</h1>
-                                        <p class="text-muted fs-7">Nhanh chóng và dễ dàng.</p>
-                                    </div>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </form>
+                <!--creat modal start-->
+                <div class="modal fade" id="creatModal" tabindex="-1" aria-labelledby="creatModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!--head-->
+                            <div class="modal-header">
+                                <div class="">
+                                    <h1 class="modal-title fs-3" id="creatModalLabel">Đăng ký</h1>
+                                    <p class="text-muted fs-7">Nhanh chóng và dễ dàng.</p>
                                 </div>
-                                <!--body register-->
-                                <div class="modal-body">
-                                    <form action="" method="post">
-                                        <!--name-->
-                                        <div class="row">
-                                            <div class="col">
-                                                <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Họ">
-                                            </div>
-                                            <div class="col">
-                                                <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Tên">
-                                            </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <!--body register-->
+                            <div class="modal-body">
+                                <form action="" method="post">
+                                    <!--name-->
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Họ">
                                         </div>
-                                        <!--email and password-->
-                                        <input type="email" name="email" id="email" class="form-control my-3" placeholder="Email">
-                                        <input type="text" name="phone" id="phone" class="form-control my-3" placeholder="Số điện thoại">
-                                        <input type="password" name="password" id="password" class="form-control my-3" placeholder="Mật khẩu">
-                                        <!--gender-->
-                                        <div class="row my-3">
-                                            <span class="text-muted fs-7 mb-1">
-                                                Giới tính
-                                                <i type="button" class="fa-solid fa-circle-question" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Bạn có thể thay đổi người nhìn thấy giới tính của mình trên trang cá nhân vào lúc khác. 
+                                        <?php
+                                        echo (!empty($error['last_name'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['last_name'] . '</span>' : false;
+                                        $error['last_name'] = '';
+                                        ?>
+                                        <div class="col">
+                                            <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Tên">
+                                        </div>
+                                        <?php
+                                        echo (!empty($error['first_name'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['first_name'] . '</span>' : false;
+                                        $error['first_name'] = '';
+                                        ?>
+                                    </div>
+                                    <!--email and password-->
+                                    <input type="email" name="email" id="email" class="form-control my-3" placeholder="Email">
+                                    <?php
+                                    echo (!empty($error['email'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['email'] . '</span>' : false;
+                                    $error['email'] = '';
+                                    ?>
+                                    <input type="text" name="phone" id="phone" class="form-control my-3" placeholder="Số điện thoại">
+                                    <?php
+                                    echo (!empty($error['phone'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['phone'] . '</span>' : false;
+                                    $error['phone'] = '';
+                                    ?>
+                                    <input type="password" name="password" id="password" class="form-control my-3" placeholder="Mật khẩu">
+                                    <?php
+                                    echo (!empty($error['password'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['password'] . '</span>' : false;
+                                    $error['password'] = '';
+                                    ?>
+                                    <!--gender-->
+                                    <div class="row my-3">
+                                        <span class="text-muted fs-7 mb-1">
+                                            Giới tính
+                                            <i type="button" class="fa-solid fa-circle-question" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Bạn có thể thay đổi người nhìn thấy giới tính của mình trên trang cá nhân vào lúc khác. 
                                                         Chọn Tùy chỉnh nếu bạn thuộc giới tính khác hoặc không muốn tiết lộ."></i>
 
-                                            </span>
-                                            <div class="col">
-                                                <div class="border rounded p-2">
-                                                    <input class="form-check-input" type="radio" name="gender" id="men">
-                                                    <label class="form-check-label" for="men">
-                                                        Nam
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="border rounded p-2">
-                                                    <input class="form-check-input" type="radio" name="gender" id="women">
-                                                    <label class="form-check-label" for="women">
-                                                        Nữ
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="border rounded p-2">
-                                                    <input class="form-check-input" type="radio" name="gender" id="custom">
-                                                    <label class="form-check-label" for="custom">
-                                                        Tùy chỉnh
-                                                    </label>
-                                                </div>
+                                        </span>
+                                        <div class="col">
+                                            <div class="border rounded p-2">
+                                                <input class="form-check-input" type="radio" name="gender" id="men" value="Nam">
+                                                <label class="form-check-label" for="men">
+                                                    Nam
+                                                </label>
                                             </div>
                                         </div>
-                                        <!--disclaimer-->
-                                        <div class="">
-                                            <span class="text-muted fs-7 mt-3">
-                                                Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin liên hệ của bạn lên Facebook. Tìm hiểu thêm.
-                                            </span>
+                                        <div class="col">
+                                            <div class="border rounded p-2">
+                                                <input class="form-check-input" type="radio" name="gender" id="women" value="Nữ">
+                                                <label class="form-check-label" for="women">
+                                                    Nữ
+                                                </label>
+                                            </div>
                                         </div>
-                                        <!--btn-->
-                                        <div class="text-center my-4">
-                                            <button type="submit" class="btn btn-success btn-lg" name="register">
-                                                Đăng ký
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                                        <?php
+                                        echo (!empty($error['gender'])) ? '<span class="error mt-1 d-block" style="color: #f44749;">' . $error['gender'] . '</span>' : false;
+                                        $error['gender'] = '';
+                                        ?>
+                                    </div>
+                                    <!--disclaimer-->
+                                    <div>
+                                        <span class="text-muted fs-7 mt-3">
+                                            Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin liên hệ của bạn lên Facebook. Tìm hiểu thêm.
+                                        </span>
+                                    </div>
+                                    <!--btn-->
+                                    <div class="text-center my-4">
+                                        <input type="submit" class="btn btn-success btn-lg" name="register" value="Đăng ký">
+                                        </input>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    <!--creat modal ends-->
-                </form>
+                </div>
+                <!--creat modal ends-->
             </div>
         </div>
     </div>

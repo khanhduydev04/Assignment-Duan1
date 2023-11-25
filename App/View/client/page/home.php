@@ -20,7 +20,7 @@
             </li>
             <!--Friends-->
             <li class="dropdown-item p-1 rounded">
-              <a href="" class="text-decoration-none text-dark d-flex align-items-center">
+              <a href="index.php?ctrl=friends" class="text-decoration-none text-dark d-flex align-items-center">
                 <div class="p-2">
                   <i data-visualcompletion="css-img" class="" style="background-image:url('https://static.xx.fbcdn.net/rsrc.php/v3/yz/r/4GR4KRf3hN2.png');background-position:0 -296px;background-size:auto;width:36px;height:36px;background-repeat:no-repeat;display:inline-block"></i>
                 </div>
@@ -78,7 +78,7 @@
                 </svg>
               </div>
               <div class="stories">
-                <a href="./upload_story.html" class="story">
+                <a href="index.php?ctrl=stories" class="story">
                   <img src="./Public/images/avt.jpg" alt="" class="position-relative">
                   <div class="author_add">Thêm tin</div>
                   <h3 class=" author_plus">
@@ -107,7 +107,7 @@
                 </svg>
               </div>
               <div class="story">
-                <img src="images/3.jpg" alt="" />
+                <img src="./Public/images/avt.jpg" alt="" class="mx-auto" />
                 <div class="author">Author</div>
               </div>
 
@@ -133,7 +133,7 @@
             <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true" data-bs-backdrop="true">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                  <form action="">
+                  <form action="" method="post">
                     <!-- head -->
                     <div class="modal-header align-items-center">
                       <h5 class="text-dark text-center w-100 m-0 fw-bold" id="exampleModalLabel">

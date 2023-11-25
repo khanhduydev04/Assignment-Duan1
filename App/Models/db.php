@@ -73,7 +73,15 @@ class connect
       $stmt = $conn->prepare($sql);
       $stmt->execute($sql_args);
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
-      return array_values($row)[0];
+      // return array_values($row)[0];
+      // Kiểm tra xem có kết quả hay không
+      if ($row !== false) {
+        $values = array_values($row);
+        return isset($values[0]) ? $values[0] : null;
+      } else {
+        // Trường hợp không có kết quả, có thể trả về một giá trị mặc định hoặc thông báo lỗi
+        return null; // hoặc return "No result";
+      }
     } catch (PDOException $e) {
       throw $e;
     } finally {

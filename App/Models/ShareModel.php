@@ -1,0 +1,28 @@
+<?php
+class Share
+{
+  var $FollowID = null;
+  var $UserID1 = null;
+  var $UserID2 = null;
+
+  public function getAllShareId($id)
+  {
+    $db = new connect();
+    $sql = "SELECT shares.post_id WHERE user_id = '$id'";
+    return $db->pdo_query($sql);
+  }
+
+  public function insertShare($user_id, $post_id)
+  {
+    $db = new connect();
+    $sql = "INSERT INTO shares(user_id,post_id) VALUES ('$user_id', '$post_id')";
+    return $db->pdo_execute($sql);
+  }
+
+  public function deleteShare($id)
+  {
+    $db = new connect();
+    $sql = "DELETE FROM shares WHERE id = '$id'";
+    return $db->pdo_execute($sql);
+  }
+}

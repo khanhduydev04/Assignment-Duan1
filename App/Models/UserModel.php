@@ -9,10 +9,10 @@ class User
   var $Phone = null;
   var $Role = null;
 
-  public function getAllUser()
+  public function getAllUser($user_id)
   {
     $db = new connect();
-    $sql = "SELECT * FROM users";
+    $sql = "SELECT * FROM users WHERE users.show = 1 AND id != '$user_id'";
     return $db->pdo_query($sql);
   }
 
@@ -21,6 +21,21 @@ class User
     $db = new connect();
     $sql = "SELECT * FROM users WHERE id = '$id'";
     return $db->pdo_query_one($sql);
+  }
+
+  public function getFullnameByUser($user_id)
+  {
+    $db = new connect();
+    $sql = "SELECT CONCAT_WS(' ', first_name, last_name) FROM users WHERE id = '$user_id'";
+    return $db->pdo_query_value($sql);
+  }
+
+  public function searchUser($keyword)
+  {
+    $db = new connect();
+    $sql = "SELECT * FROM users WHERE users.show = 1 AND first_name LIKE '%$keyword%' 
+    OR last_name LIKE '%$keyword%' OR CONCAT(first_name, ' ', last_name) LIKE '%$keyword%'";
+    return $db->pdo_query($sql);
   }
 
   public function checkEmailExists($email)
@@ -40,12 +55,18 @@ class User
   public function checkUser($email, $password)
   {
     $db = new connect();
-    $sql = "SELECT * FROM users WHERE email='$email' AND password='$password' AND role='user'";
-    $result = $db->pdo_query_one($sql);
-    if ($result != null)
-      return true;
-    else
-      return false;
+    $sql = "SELECT * FROM users WHERE email='$email' AND role='user'";
+    $userData = $db->pdo_query_one($sql);
+    if ($userData != null) {
+      $hashedPassword = $userData['password'];
+      if (password_verify($password, $hashedPassword)) {
+        return true; // Mật khẩu hợp lệ
+      } else {
+        return false; // Mật khẩu không hợp lệ
+      }
+    } else {
+      return false; // Người dùng không tồn tại
+    }
   }
 
   public function checkUserByEmail($email)
@@ -73,20 +94,38 @@ class User
   public function checkAdmin($email, $password)
   {
     $db = new connect();
-    $sql = "SELECT * FROM users WHERE email='$email' AND password='$password' AND role='admin'";
-    $result = $db->pdo_query_one($sql);
-    if ($result != null)
-      return true;
-    else
-      return false;
+    $sql = "SELECT * FROM users WHERE email='$email' AND role='admin'";
+    $userData = $db->pdo_query_one($sql);
+    if ($userData != null) {
+      $hashedPassword = $userData['password'];
+      if (password_verify($password, $hashedPassword)) {
+        return true; // Mật khẩu hợp lệ
+      } else {
+        return false; // Mật khẩu không hợp lệ
+      }
+    } else {
+      return false; // Người dùng không tồn tại
+    }
   }
 
   public function getIdUser($email, $password)
   {
     $db = new connect();
-    $sql = "SELECT id,role FROM  users WHERE email='$email' AND password='$password'";
-    $result = $db->pdo_query_one($sql);
-    return $result;
+    $sql = "SELECT id, role, password FROM users WHERE email='$email'";
+    $userData = $db->pdo_query_one($sql);
+    if ($userData != null) {
+      $hashedPassword = $userData['password'];
+      if (password_verify($password, $hashedPassword)) {
+        // Mật khẩu hợp lệ, trả về id và vai trò (role) của người dùng
+        return array('id' => $userData['id'], 'role' => $userData['role']);
+      } else {
+        // Mật khẩu không hợp lệ
+        return null;
+      }
+    } else {
+      // Người dùng không tồn tại
+      return null;
+    }
   }
 
   public function getIdByEmail($email)

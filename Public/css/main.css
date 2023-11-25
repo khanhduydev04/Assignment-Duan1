@@ -17,6 +17,10 @@
   color: #0d6efd !important;
 }
 
+.nav__btn-active a {
+  color: #0d6efd !important;
+}
+
 .nav__btn-active {
   position: relative;
 }
@@ -93,6 +97,7 @@
 
 .profile-cover {
   max-height: 420px;
+  height: 420px;
 }
 
 /* popover */
@@ -388,10 +393,6 @@
 }
 
 /* Friend */
-.bg-gay {
-  background-color: #f0f2f5;
-}
-
 .bg-main {
   background-color: white;
   height: 100%;
@@ -444,18 +445,18 @@
 
 
 /* friends */
-.search-friend{
-  position:relative;
+.search-friend {
+  position: relative;
 }
 
-.search-friend-icon{
-  position:absolute;
+.search-friend-icon {
+  position: absolute;
   top: 30%;
   left: 10px;
-  color:#7f7f7f;
+  color: #7f7f7f;
 }
 
-.search-friend-form{
+.search-friend-form {
   border: none;
   height: 35px;
   width: 200px;
@@ -465,32 +466,32 @@
 }
 
 /* Picture */
-.position-picture{
-  position:relative;
+.position-picture {
+  position: relative;
 }
 
-.position-picture-icon{
-  position:absolute;
+.position-picture-icon {
+  position: absolute;
   top: 5%;
   right: 5%;
 }
 
 .transparent-bg {
-  background-color: rgba(0, 0, 0, 0.4); 
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 
 /*post_plus*/
-.post_plus{
-  position:relative;
+.post_plus {
+  position: relative;
 }
 
-.post_image_plus{
-  position:absolute;
-  top:45%;
+.post_image_plus {
+  position: absolute;
+  top: 45%;
   right: 40%;
   font-size: 50px;
-  color:#fff;
+  color: #fff;
 }
 
 .overlay {
@@ -500,21 +501,25 @@
   width: 100%;
   height: 100%;
   background-color: black;
-  opacity: 0.5; /
+  opacity: 0.5;/
 }
 
 
 /* comments */
 .textarea-container {
   width: 100%;
-  overflow: hidden; /* Ẩn thanh cuộn */
+  overflow: hidden;
+  /* Ẩn thanh cuộn */
 }
 
 .textarea-container textarea {
-  width: calc(100% - 30px); /* Giảm kích thước để tránh hiển thị thanh cuộn ngang */
+  width: calc(100% - 30px);
+  /* Giảm kích thước để tránh hiển thị thanh cuộn ngang */
   height: 100%;
-  resize: none; /* Ngăn người dùng thay đổi kích thước textarea */
-  overflow: auto; /* Nội dung dài sẽ hiển thị thanh cuộn nếu không thể hiển thị hết trong kích thước textarea */
+  resize: none;
+  /* Ngăn người dùng thay đổi kích thước textarea */
+  overflow: auto;
+  /* Nội dung dài sẽ hiển thị thanh cuộn nếu không thể hiển thị hết trong kích thước textarea */
 }
 
 
@@ -523,5 +528,7 @@
 /* CSS cho hover */
 .hover_like:hover {
   cursor: pointer;
-  background-color: #f5f5f5; /* Màu nền khi hover */
+  background-color: #f5f5f5;
+  /* Màu nền khi hover */
+  background-color: rgba(0, 0, 0, 0.4);
 }

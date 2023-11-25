@@ -1,4 +1,5 @@
 <?php
+@include_once './App/Models/PhotoModel.php';
 @include_once './App/View/client/layout/header.php';
 
 $controller = "home";
@@ -10,15 +11,22 @@ switch ($controller) {
     include_once './App/View/client/page/home.php';
     break;
   case "stories":
-    include_once './App/Controllers/client/StoriesController.php';
+    include_once './App/View/client/page/stories.php';
     break;
   case "friends":
+    include_once './App/Models/UserModel.php';
+    include_once './App/Models/FriendModel.php';
+    include_once './App/Models/PhotoModel.php';
     include_once './App/View/client/page/friend.php';
     break;
   case "profile":
+    include_once './App/Models/UserModel.php';
+    include_once './App/Models/FriendModel.php';
+    include_once './App/Models/PhotoModel.php';
+    include_once './App/Models/FollowModel.php';
     include_once './App/View/client/page/profile.php';
     break;
-  case "information":
+  case "setting":
     include_once './App/View/client/page/setting.php';
     break;
   case "logout":

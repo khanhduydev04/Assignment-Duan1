@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row jusstify-contents-evenly" style="height: 100vh">
             <!--Sitebar-->
-            <div class="col-12 col-lg-3 shadow-sm mb-5 bg-body-tertiary rounded" style="height: 100%">
+            <div class="col-12 col-lg-3 shadow-sm mb-5 bg-white" style="height: 100%">
                 <div class="d-flex flex-row mb-3">
                     <a href="./home.html" class="p-2 me-3" style="width: 35px; height: 35px; object-fit: cover;">
                         <h1 class="fa-solid fa-circle-xmark text-secondary"></h1>
@@ -16,13 +16,10 @@
                     <div class="">
                         <h5 class="fw-bolder">Tin của bạn</h5>
                     </div>
-                    <div class="">
-                        <i class="fa-solid fa-gear rounded-circle me-2 p-2 bg-light"></i>
-                    </div>
                 </div>
                 <div class="d-flex flex-row mb-3">
                     <div class="p-2">
-                        <img src="./images/avatar.png" alt="avatar" class="rounded-circle me-2" style="width: 60px; height: 60px; object-fit: cover" />
+                        <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 60px; height: 60px; object-fit: cover" />
                     </div>
                     <div class="p-2 d-flex align-items-center">
                         <p class="m-0 fw-bold">Hồ Dư Mai Trân</p>
@@ -34,7 +31,7 @@
                 <div class="d-flex flex-row-reverse" style="height: 10%">
                     <!--Avatar-->
                     <div class="p-2">
-                        <img src="./images/avatar.png" alt="avatar" class="rounded-circle" style="width: 35px; height: 35px; object-fit: cover" />
+                        <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 35px; height: 35px; object-fit: cover" />
                     </div>
                     <!--Notification-->
                     <div class="p-2 mt-2 bg-secondary-subtle">
@@ -64,23 +61,6 @@
                                 </div>
                                 <!--text-->
                                 <p class="text-white">Tạo tin ảnh</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="position-relative">
-                        <i data-visualcompletion="css-img" class="" style="background-image: url(&quot;https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/Zd_TxH-pOMv.png&quot;); background-position: 0px -331px; background-size: auto; width: 220px; height: 330px; background-repeat: no-repeat; display: inline-block;"></i>
-                        <div class="position-absolute top-0 end-0 d-flex justify-content-center align-items-center" style="width:100%; height:100%">
-                            <div class="text-center">
-                                <!--picture-->
-                                <div class="d-flex justify-content-center align-items-center" style="width:100%">
-                                    <p class="d-flex justify-content-center align-items-center bg-white rounded-circle shadow-sm" style="width: 35px; height: 35px">
-                                        <i data-visualcompletion="css-img" class="x1b0d499 xep6ejk" style="background-image: url(&quot;https://static.xx.fbcdn.net/rsrc.php/v3/yO/r/QipVAdV6BEa.png&quot;);
-                                         background-position: 0px -255px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block;"></i>
-                                    </p>
-                                </div>
-                                <!--text-->
-                                <p class="text-white">Tạo tin dạng văn bản</p>
                             </div>
                         </div>
                     </div>

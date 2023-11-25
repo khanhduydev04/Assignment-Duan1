@@ -1,3 +1,6 @@
+<?php
+$photo = new Photo();
+?>
 <!-- header -->
 <header class="header bg-white d-flex align-items-center fixed-top shadow-sm" style="min-height: 56px; z-index: 5">
   <div class="container-fluid">
@@ -5,7 +8,9 @@
       <!-- search -->
       <div class="col d-flex align-items-center">
         <!-- header logo -->
-        <a href="index.php"><i class="fab fa-facebook text-primary" style="font-size: 2.5rem"></i></a>
+        <a href="index.php" class="d-block overflow-hidden rounded-circle" style="width: 2.5rem">
+          <img src="./Public/images/logo.jpg" alt="Logo Beebook" class="object-fit-cover" style="width: 100%; transform: scale(1.3);">
+        </a>
         <!-- search bar -->
         <div class="input-group ms-2" type="button">
           <!-- mobile -->
@@ -19,64 +24,43 @@
             <div class="d-lg-flex align-items-center bg-gray ps-3">
               <i class="fas fa-search"></i>
             </div>
-            <form action="post">
-              <input type="text" class="form-control search-input bg-gray rounded-pill border-0 h-100" placeholder="Tìm kiếm trên Facebook" id="search-input">
-            </form>
+            <input type="text" class="form-control search-input bg-gray rounded-pill border-0 h-100" placeholder="Tìm kiếm Beebook" id="search-input">
           </span>
           <!-- search menu -->
-          <ul class="dropdown-menu overflow-auto border-0 shadow p-3" aria-labelledby="searchMenu" style="width: 18em; max-height: 600px">
+          <ul class="dropdown-menu overflow-auto border-0 shadow p-3" aria-labelledby="searchMenu" style="width: 18em; max-height: 400px">
             <!-- search input -->
             <li class="d-lg-none">
-              <form action="">
-                <input type="text" class="rounded-pill border-0 bg-gray dropdown-item" placeholder="Tìm kiếm..." autofocus />
+              <form action="" method="post">
+                <input type="text" class="rounded-pill border-0 bg-gray dropdown-item" placeholder="Tìm kiếm..." autofocus id="search-input" />
               </form>
             </li>
-            <!-- search 1 -->
-            <li class="my-3">
-              <div class="alert fade show dropdown-item p-1 m-0 d-flex align-items-center justify-content-between" role="alert">
-                <div class="d-flex align-items-center">
-                  <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2" style="width: 35px; height: 35px; object-fit: cover" />
-                  <p class="m-0">Lorem ipsum</p>
-                </div>
-                <button type="button" class="btn-close p-0 m-0" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            </li>
-            <!-- search 2 -->
-            <li class="my-3">
-              <div class="alert fade show dropdown-item p-1 m-0 d-flex align-items-center justify-content-between" role="alert">
-                <div class="d-flex align-items-center">
-                  <img src="https://source.unsplash.com/random/2" alt="avatar" class="rounded-circle me-2" style="width: 35px; height: 35px; object-fit: cover" />
-                  <p class="m-0">Lorem ipsum</p>
-                </div>
-                <button type="button" class="btn-close p-0 m-0" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            </li>
+            <div id="search-data"></div>
           </ul>
         </div>
       </div>
       <!-- nav -->
       <nav class="col d-none d-xl-flex justify-content-center">
         <!-- home -->
-        <div class="mx-1 nav__btn nav__btn-active">
+        <div class="mx-1 nav__btn <?= isset($_GET['ctrl']) ? '' : 'nav__btn-active' ?>">
           <a href="index.php" class="btn px-5">
             <i class="fas fa-home text-muted fs-4"></i>
           </a>
         </div>
         <!-- friend -->
-        <div class="mx-1 nav__btn">
-          <a href="#" class="btn px-5">
+        <div class="mx-1 nav__btn <?= (isset($_GET['ctrl']) && $_GET['ctrl'] == 'friends') ? 'nav__btn-active' : '' ?>">
+          <a href="index.php?ctrl=friends" class="btn px-5">
             <i class="fa-solid fa-user-group  text-muted fs-4"></i>
           </a>
         </div>
         <!-- account -->
-        <div class="mx-1 nav__btn">
+        <div class="mx-1 nav__btn <?= (isset($_GET['ctrl']) && $_GET['ctrl'] == 'profile') ? 'nav__btn-active' : '' ?>">
           <a href="index.php?ctrl=profile" class="btn px-5">
             <i class="fa-solid fa-circle-user text-muted fs-4"></i>
           </a>
         </div>
         <!-- setting -->
-        <div class="mx-1 nav__btn">
-          <a href="#" class="btn px-5">
+        <div class="mx-1 nav__btn <?= (isset($_GET['ctrl']) && $_GET['ctrl'] == 'setting') ? 'nav__btn-active' : '' ?>">
+          <a href="index.php?ctrl=setting" class="btn px-5">
             <i class="fa-solid fa-gear text-muted fs-4"></i>
           </a>
         </div>
@@ -108,7 +92,7 @@
               <!-- big avatar -->
               <div class="d-flex align-items-center justify-content-evenly">
                 <div class="p-2">
-                  <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
+                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
                 </div>
                 <div>
                   <p class="fs-7 m-0">Mike</p>
@@ -123,7 +107,7 @@
               <!-- big avatar -->
               <div class="d-flex align-items-center justify-content-evenly">
                 <div class="p-2">
-                  <img src="https://source.unsplash.com/random/2" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
+                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
                 </div>
                 <div>
                   <p class="fs-7 m-0">
@@ -140,7 +124,7 @@
               <!-- big avatar -->
               <div class="d-flex align-items-center justify-content-evenly">
                 <div class="p-2">
-                  <img src="https://source.unsplash.com/random/3" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
+                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
                 </div>
                 <div>
                   <p class="fs-7 m-0">Jerry</p>
@@ -155,7 +139,7 @@
               <!-- big avatar -->
               <div class="d-flex align-items-center justify-content-evenly">
                 <div class="p-2">
-                  <img src="https://source.unsplash.com/random/4" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
+                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
                 </div>
                 <div>
                   <p class="fs-7 m-0">Tony</p>
@@ -170,7 +154,7 @@
               <!-- big avatar -->
               <div class="d-flex align-items-center justify-content-evenly">
                 <div class="p-2">
-                  <img src="https://source.unsplash.com/random/5" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
+                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
                 </div>
                 <div>
                   <p class="fs-7 m-0">Phu</p>
@@ -201,7 +185,7 @@
             <a href="#" class="d-flex align-items-center justify-content-evenly text-decoration-none text-dark">
               <div class="d-flex align-items-center justify-content-evenly">
                 <div class="p-2">
-                  <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
+                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
                 </div>
                 <div>
                   <p class="fs-7 m-0">
@@ -218,7 +202,7 @@
             <a href="#" class="d-flex align-items-center justify-content-evenly text-decoration-none text-dark">
               <div class="d-flex align-items-center justify-content-evenly">
                 <div class="p-2">
-                  <img src="https://source.unsplash.com/random/2" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
+                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
                 </div>
                 <div>
                   <p class="fs-7 m-0">
@@ -235,7 +219,7 @@
             <a href="#" class="d-flex align-items-center justify-content-evenly text-decoration-none text-dark">
               <div class="d-flex align-items-center justify-content-evenly">
                 <div class="p-2">
-                  <img src="https://source.unsplash.com/random/3" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
+                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
                 </div>
                 <div>
                   <p class="fs-7 m-0">
@@ -252,7 +236,7 @@
             <a href="#" class="d-flex align-items-center justify-content-evenly text-decoration-none text-dark">
               <div class="d-flex align-items-center justify-content-evenly">
                 <div class="p-2">
-                  <img src="https://source.unsplash.com/random/4" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
+                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
                 </div>
                 <div>
                   <p class="fs-7 m-0">
@@ -269,7 +253,7 @@
             <a href="#" class="d-flex align-items-center justify-content-evenly text-decoration-none text-dark">
               <div class="d-flex align-items-center justify-content-evenly">
                 <div class="p-2">
-                  <img src="https://source.unsplash.com/random/5" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
+                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
                 </div>
                 <div>
                   <p class="fs-7 m-0">
@@ -284,14 +268,26 @@
         </ul>
         <!-- secondary menu -->
         <div class="align-items-center justify-content-center d-xl-flex mx-2" type="button" id="secondMenu" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-          <img src="https://source.unsplash.com/collection/happy-people" class="rounded-circle" alt="avatar" style="width: 38px; height: 38px; object-fit: cover" />
+          <?php
+          if (isset($_SESSION['user']['id']) && ($photo->getNewAvatarByUser($_SESSION['user']['id']) != null)) { ?>
+            <img src="./Upload/<?= $photo->getNewAvatarByUser($_SESSION['user']['id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 45px; height: 45px; object-fit: cover" />
+          <?php } else { ?>
+            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 45px; height: 45px; object-fit: cover" />
+          <?php }
+          ?>
         </div>
         <!-- secondary menu dd -->
         <ul class="dropdown-menu border-0 shadow p-3" aria-labelledby="secondMenu" style="width: 21em">
           <!-- avatar -->
           <li type="button">
-            <a href="#" class="dropdown-item p-1 rounded d-flex align-items-center">
-              <img src="https://source.unsplash.com/collection/happy-people" alt="avatar" class="rounded-circle me-2" style="width: 45px; height: 45px; object-fit: cover" />
+            <a href="index.php?ctrl=profile" class="dropdown-item p-1 rounded d-flex align-items-center">
+              <?php
+              if (isset($_SESSION['user']['id']) && ($photo->getNewAvatarByUser($_SESSION['user']['id']) != null)) { ?>
+                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($_SESSION['user']['id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 45px; height: 45px; object-fit: cover" />
+              <?php } else { ?>
+                <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 45px; height: 45px; object-fit: cover" />
+              <?php }
+              ?>
               <p class="m-0 fw-semibold">Khánh Duy</p>
             </a>
           </li>
@@ -311,7 +307,7 @@
                 <!-- nested menu -->
                 <ul class="dropdown-menu">
                   <li>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    <a class="dropdown-item d-flex align-items-center" href="index.php?ctrl=setting">
                       <div class="rounded-circle p-1 bg-gray d-flex align-items-center justify-content-center me-2" style="width: 38px; height: 38px">
                         <i class="fas fa-newspaper"></i>
                       </div>
@@ -319,7 +315,7 @@
                     </a>
                   </li>
                   <li>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
+                    <a class="dropdown-item d-flex align-items-center" href="index.php?ctrl=setting&act=change_password">
                       <div class="rounded-circle p-1 bg-gray d-flex align-items-center justify-content-center me-2" style="width: 38px; height: 38px">
                         <i class="fas fa-lock"></i>
                       </div>
@@ -347,7 +343,7 @@
           <li class="dropdown-item p-1 my-3 rounded" type="button">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a href="./index.html" class="d-flex text-decoration-none text-dark">
+                <a href="index.php?ctrl=logout" class="d-flex text-decoration-none text-dark">
                   <i class="fas fa-cog bg-gray p-2 rounded-circle"></i>
                   <div class="ms-3 d-flex justify-content-between align-items-center w-100">
                     <p class="m-0">Đăng xuất</p>
@@ -465,3 +461,21 @@
     </div>
   </div>
 </div>
+<script>
+  $(document).ready(function() {
+    //search
+    $("#search-input").on("keyup", function() {
+      var search_term = $(this).val();
+      $.ajax({
+        url: "ajax.php",
+        type: "POST",
+        data: {
+          search: search_term
+        },
+        success: function(data) {
+          $("#search-data").html(data);
+        }
+      });
+    });
+  });
+</script>
