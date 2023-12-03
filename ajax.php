@@ -181,3 +181,26 @@ function displayComments($comments)
   }
 }
 ?>
+
+<?php
+// Thực hiện xử lý yêu cầu từ phía client
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  // Kiểm tra xem dữ liệu post_id, user_id và action có được gửi không
+  if (isset($_POST['action']) && isset($_POST['post_id']) && isset($_POST['user_id'])) {
+    $action = $_POST['action'];
+    $post_id = $_POST['post_id'];
+    $user_id = $_POST['user_id'];
+
+    // Tiến hành xử lý yêu cầu thích hoặc bỏ thích dựa trên action gửi từ client
+    if ($action === 'like') {
+      $response = $like->like($user_id, $post_id);
+    } else {
+      $response = $like->unlike($user_id, $post_id);
+    }
+
+    // Sau khi xử lý, trả về số lượt thích mới để cập nhật trên giao diện client
+    $updated_likes = $like->countPhotoByLike($post_id);
+    echo $updated_likes ? $updated_likes . ' lượt thích' : '0 lượt thích';
+  }
+}
+?>

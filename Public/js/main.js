@@ -167,85 +167,6 @@ document.querySelectorAll(".img-thumbnail").forEach((item) => {
   });
 });
 
-//Rep comment
-function showComment(commentNumber) {
-  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-  for (let i = 1; i <= 3; i++) {
-    const comment = document.getElementById(`repcomment${i}`);
-    comment.style.display = i === commentNumber ? "block" : "none";
-  }
-}
-
-function toggleReplyForm(commentNumber) {
-  const form = document.getElementById(`repcomment${commentNumber}`);
-  form.style.display = form.style.display === "none" ? "block" : "none";
-}
-
-function showComment1(commentNumber) {
-  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-  for (let i = 1; i <= 3; i++) {
-    const comment = document.getElementById(`repcomment1${i}`);
-    comment.style.display = i === commentNumber ? "block" : "none";
-  }
-}
-
-function toggleReplyForm1(commentNumber) {
-  const form = document.getElementById(`repcomment1${commentNumber}`);
-  form.style.display = form.style.display === "none" ? "block" : "none";
-}
-
-function showComment2(commentNumber) {
-  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-  for (let i = 1; i <= 3; i++) {
-    const comment = document.getElementById(`repcomment2${i}`);
-    comment.style.display = i === commentNumber ? "block" : "none";
-  }
-}
-
-function toggleReplyForm2(commentNumber) {
-  const form = document.getElementById(`repcomment2${commentNumber}`);
-  form.style.display = form.style.display === "none" ? "block" : "none";
-}
-
-function showComment3(commentNumber) {
-  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-  for (let i = 1; i <= 3; i++) {
-    const comment = document.getElementById(`repcomment3${i}`);
-    comment.style.display = i === commentNumber ? "block" : "none";
-  }
-}
-
-function toggleReplyForm3(commentNumber) {
-  const form = document.getElementById(`repcomment3${commentNumber}`);
-  form.style.display = form.style.display === "none" ? "block" : "none";
-}
-
-function showComment4(commentNumber) {
-  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-  for (let i = 1; i <= 3; i++) {
-    const comment = document.getElementById(`repcomment4${i}`);
-    comment.style.display = i === commentNumber ? "block" : "none";
-  }
-}
-
-function toggleReplyForm4(commentNumber) {
-  const form = document.getElementById(`repcomment4${commentNumber}`);
-  form.style.display = form.style.display === "none" ? "block" : "none";
-}
-
-function showComment5(commentNumber) {
-  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-  for (let i = 1; i <= 3; i++) {
-    const comment = document.getElementById(`repcomment5${i}`);
-    comment.style.display = i === commentNumber ? "block" : "none";
-  }
-}
-
-function toggleReplyForm5(commentNumber) {
-  const form = document.getElementById(`repcomment5${commentNumber}`);
-  form.style.display = form.style.display === "none" ? "block" : "none";
-}
-
 //Check creat post
 function toggleSubmitButton() {
   // textarea và input file
@@ -365,5 +286,42 @@ function showPreviewPostImage() {
 
     // Thêm nút xóa chung vào postPreview
     postPreview.appendChild(deleteAllButton);
+  }
+}
+
+// story upload
+function previewImage(input) {
+  const preview = document.getElementById("preview");
+  const previewContainer = document.querySelector(".preview-container");
+  const form = document.querySelector(".image-form");
+  const imageNameInput = document.getElementById("imageName"); // Thẻ input để lưu tên file ảnh
+  const file = input.files[0];
+  const reader = new FileReader();
+
+  // Kiểm tra định dạng tệp
+  const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+
+  reader.onloadend = function () {
+    if (file && allowedExtensions.test(file.name)) {
+      preview.src = reader.result;
+      previewContainer.classList.remove("hidden");
+      form.classList.remove("hidden"); // Hiển thị form
+      imageNameInput.files = input.files; // Gán dữ liệu ảnh từ input "uploadImage" sang input "imageName"
+    } else {
+      preview.src = "";
+      previewContainer.classList.add("hidden");
+      form.classList.add("hidden"); // Ẩn form nếu không có ảnh hợp lệ
+      imageNameInput.value = ""; // Xóa tên file nếu không hợp lệ
+      alert("Hãy chọn một tệp ảnh có định dạng jpg, jpeg hoặc png.");
+    }
+  };
+
+  if (file) {
+    reader.readAsDataURL(file);
+  } else {
+    preview.src = "";
+    previewContainer.classList.add("hidden");
+    form.classList.add("hidden"); // Ẩn form nếu không có tệp nào được chọn
+    imageNameInput.value = ""; // Xóa tên file nếu không có tệp nào được chọn
   }
 }

@@ -287,7 +287,6 @@ if (isset($_POST['post']) && $_POST['post']) {
           if ($all_post && $all_post !== null) {
             foreach ($all_post as $row) {
               $check_photo = $photo->countPhotoByPost($row['id']);
-
               //Phân layout dựa trên hình ảnh
               switch ($check_photo) {
                 case 0: ?>
@@ -318,15 +317,27 @@ if (isset($_POST['post']) && $_POST['post']) {
                           <!-- edit menu -->
                           <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
                             <li class="d-flex align-items-center">
-                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#" data-bs-toggle="modal" data-bs-target="#updatePostModal">
                                 Chỉnh sửa bài viết</a>
                             </li>
-                            <li class="d-flex align-items-center">
-                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
-                                Xóa bài viết</a>
+                            <li class="d-flex align-items-center btn-delete-post">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                Xóa bài viết
+                              </a>
+                              <?php
+                              if (isset($_GET['id'])) {
+                                $id = $_GET['id'];
+                                $delete = $post->deletePost($id);
+                                if ($delete) {
+                                  header('location: ./index.php');
+                                }
+                              }
+                              ?>
                             </li>
                           </ul>
-                        <?php }
+                        <?php
+
+                        }
                         ?>
                       </div>
                     </div>
@@ -345,9 +356,17 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center">
-                            <i class="fa-solid fa-heart text-danger"></i>
-                            <p class="m-0 text-muted fs-6 fw-normal" style="cursor: pointer;">30 lượt thích</p>
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+
+                            ?>
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
@@ -358,10 +377,20 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
                         <div class="d-flex justify-content-around px-3 pb-2">
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
                             <p class="m-0">Yêu thích</p>
-                          </div>
+                          </button>
+
                           <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
@@ -430,10 +459,19 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
                               Chỉnh sửa bài viết</a>
                           </li>
-                          <li class="d-flex align-items-center">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                          <li class="d-flex align-items-center btn-delete-post">
+                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
                               Xóa bài viết</a>
                           </li>
+                          <?php
+                          if (isset($_GET['id'])) {
+                            $id = $_GET['id'];
+                            $delete = $post->deletePost($id);
+                            if ($delete) {
+                              header('location: ./index.php');
+                            }
+                          }
+                          ?>
                         </ul>
                       <?php }
                       ?>
@@ -459,9 +497,17 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center">
-                            <i class="fa-solid fa-heart text-danger"></i>
-                            <p class="m-0 text-muted fs-6 fw-normal" style="cursor: pointer;">30 lượt thích</p>
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+
+                            ?>
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
@@ -472,10 +518,19 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
                         <div class="d-flex justify-content-around px-3 pb-2">
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
                             <p class="m-0">Yêu thích</p>
-                          </div>
+                          </button>
                           <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
@@ -544,10 +599,19 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
                               Chỉnh sửa bài viết</a>
                           </li>
-                          <li class="d-flex align-items-center">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                          <li class="d-flex align-items-center btn-delete-post">
+                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
                               Xóa bài viết</a>
                           </li>
+                          <?php
+                          if (isset($_GET['id'])) {
+                            $id = $_GET['id'];
+                            $delete = $post->deletePost($id);
+                            if ($delete) {
+                              header('location: ./index.php');
+                            }
+                          }
+                          ?>
                         </ul>
                       <?php }
                       ?>
@@ -568,7 +632,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           $image = $photo->getPhotoByPost($row['id']);
                           foreach ($image as $img) {
                             echo '<div class="col">
-                                    <img src="./Public/upload/' . $img['image_url'] . '" alt="post image" class="img-fluid" style="width: 100%;" />
+                                    <img src="./Public/upload/' . $img['image_url'] . '" alt="post image" class="img-fluid" style="width: 100%;  height: 550px;" />
                                     </div>';
                           }
                           ?>
@@ -579,9 +643,17 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center">
-                            <i class="fa-solid fa-heart text-danger"></i>
-                            <p class="m-0 text-muted fs-6 fw-normal" style="cursor: pointer;">30 lượt thích</p>
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+
+                            ?>
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
@@ -592,10 +664,19 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
                         <div class="d-flex justify-content-around px-3 pb-2">
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
                             <p class="m-0">Yêu thích</p>
-                          </div>
+                          </button>
                           <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
@@ -664,10 +745,19 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
                               Chỉnh sửa bài viết</a>
                           </li>
-                          <li class="d-flex align-items-center">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                          <li class="d-flex align-items-center btn-delete-post">
+                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
                               Xóa bài viết</a>
                           </li>
+                          <?php
+                          if (isset($_GET['id'])) {
+                            $id = $_GET['id'];
+                            $delete = $post->deletePost($id);
+                            if ($delete) {
+                              header('location: ./index.php');
+                            }
+                          }
+                          ?>
                         </ul>
                       <?php }
                       ?>
@@ -692,12 +782,12 @@ if (isset($_POST['post']) && $_POST['post']) {
                           }
                           ?>
                           <div class="col-8">
-                            <img src="./Public/upload/<?= $imageUrls[0] ?>" alt="post image" class="img-fluid" style="width: 100%;" />
+                            <img src="./Public/upload/<?= $imageUrls[0] ?>" alt="post image" class="img-fluid" style="width: 100%; height: 604px" />
                           </div>
                           <div class="col-4">
                             <?php
                             for ($i = 1; $i <= 2; $i++) {
-                              echo '<img src="./Public/upload/' . $imageUrls[$i] . '" alt="post image" class="img-fluid mb-1" style="height: 50%;" />';
+                              echo '<img src="./Public/upload/' . $imageUrls[$i] . '" alt="post image" class="img-fluid mb-1" style="height: 300px;" />';
                             }
                             ?>
                           </div>
@@ -708,9 +798,17 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center">
-                            <i class="fa-solid fa-heart text-danger"></i>
-                            <p class="m-0 text-muted fs-6 fw-normal" style="cursor: pointer;">30 lượt thích</p>
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+
+                            ?>
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
@@ -721,10 +819,19 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
                         <div class="d-flex justify-content-around px-3 pb-2">
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
                             <p class="m-0">Yêu thích</p>
-                          </div>
+                          </button>
                           <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
@@ -793,10 +900,19 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
                               Chỉnh sửa bài viết</a>
                           </li>
-                          <li class="d-flex align-items-center">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                          <li class="d-flex align-items-center btn-delete-post">
+                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
                               Xóa bài viết</a>
                           </li>
+                          <?php
+                          if (isset($_GET['id'])) {
+                            $id = $_GET['id'];
+                            $delete = $post->deletePost($id);
+                            if ($delete) {
+                              header('location: ./index.php');
+                            }
+                          }
+                          ?>
                         </ul>
                       <?php }
                       ?>
@@ -835,9 +951,17 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center">
-                            <i class="fa-solid fa-heart text-danger"></i>
-                            <p class="m-0 text-muted fs-6 fw-normal" style="cursor: pointer;">30 lượt thích</p>
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+
+                            ?>
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
@@ -848,10 +972,19 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
                         <div class="d-flex justify-content-around px-3 pb-2">
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
                             <p class="m-0">Yêu thích</p>
-                          </div>
+                          </button>
                           <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
@@ -920,10 +1053,19 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
                               Chỉnh sửa bài viết</a>
                           </li>
-                          <li class="d-flex align-items-center">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                          <li class="d-flex align-items-center btn-delete-post">
+                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
                               Xóa bài viết</a>
                           </li>
+                          <?php
+                          if (isset($_GET['id'])) {
+                            $id = $_GET['id'];
+                            $delete = $post->deletePost($id);
+                            if ($delete) {
+                              header('location: ./index.php');
+                            }
+                          }
+                          ?>
                         </ul>
                       <?php }
                       ?>
@@ -972,9 +1114,17 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center">
-                            <i class="fa-solid fa-heart text-danger"></i>
-                            <p class="m-0 text-muted fs-6 fw-normal" style="cursor: pointer;">30 lượt thích</p>
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+
+                            ?>
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
@@ -985,10 +1135,19 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
                         <div class="d-flex justify-content-around px-3 pb-2">
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-regular fa-heart me-3" style="color: #000000;"></i>
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
                             <p class="m-0">Yêu thích</p>
-                          </div>
+                          </button>
                           <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
@@ -1150,6 +1309,66 @@ if (isset($_POST['post']) && $_POST['post']) {
           console.log("Error loading comments");
         }
       });
-    }
+    };
+  })
+
+  $(document).ready(function() {
+    let userId = <?php echo $user_id ?>; // Lấy user_id từ PHP
+
+    $(document).on("click", ".btn-like-post", function() {
+      let postId = $(this).val();
+      let isLiked = localStorage.getItem('liked_' + postId);
+
+      if (!isLiked) {
+        let like = '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+        $(this).find('.fa-regular.fa-heart').replaceWith(like);
+
+        // Gửi yêu cầu AJAX khi thích
+        $.ajax({
+          type: 'POST',
+          url: './ajax.php',
+          data: {
+            user_id: userId,
+            post_id: postId,
+            action: "like",
+          },
+          success: function(response) {
+            console.log('Yêu cầu AJAX thành công');
+            console.log(response);
+
+            $('.btn-like-button[value="' + postId + '"]').html(response);
+            $('.btn-like-post[value="' + postId + '"]').addClass('liked');
+            localStorage.setItem('liked_' + postId, true); // Lưu trạng thái đã like vào localStorage
+          },
+          error: function(xhr, status, error) {
+            console.error('Lỗi khi gửi yêu cầu AJAX: ' + error);
+          }
+        });
+      } else {
+        let unlike = '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+        $(this).find('.fa-solid.fa-heart').replaceWith(unlike);
+
+        // Gửi yêu cầu AJAX khi hủy thích
+        $.ajax({
+          type: 'POST',
+          url: './ajax.php',
+          data: {
+            user_id: userId,
+            post_id: postId,
+            action: "unlike",
+          },
+          success: function(response) {
+            console.log('Yêu cầu AJAX thành công');
+            console.log(response);
+            $('.btn-like-button[value="' + postId + '"]').html(response);
+            $('.btn-like-post[value="' + postId + '"]').removeClass('liked');
+            localStorage.removeItem('liked_' + postId); // Xóa trạng thái đã like khỏi localStorage
+          },
+          error: function(xhr, status, error) {
+            console.error('Lỗi khi gửi yêu cầu AJAX: ' + error);
+          }
+        });
+      }
+    });
   });
 </script>

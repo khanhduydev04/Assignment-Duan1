@@ -26,6 +26,7 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
   <?php
   if (isset($_GET['ctrl']) && $_GET['ctrl'] == 'forgetpassword') {
     include_once './App/Models/UserModel.php';
+    @include_once './lib/PHPMailer-master/index.php';
     include_once './App/View/client/page/forget_password.php';
   } else {
     if (isset($_SESSION['user']) && ($_SESSION['user']['role'] == 'user')) {
@@ -40,6 +41,13 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
   ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Thư viện jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
   <script src="./Public/js/main.js?v=<?php echo time(); ?>"></script>
   <script src="./Public/js/stories.js?v=<?php echo time(); ?>"></script>
 </body>
