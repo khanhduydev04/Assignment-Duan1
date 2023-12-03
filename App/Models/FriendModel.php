@@ -6,11 +6,21 @@ class Friend
   var $UserID1 = null;
   var $UserID2 = null;
 
-  public function getAllRequestByUser($id)
+  public function getAllRequestByUser($id, $limit)
+  {
+    // Nếu bạn muốn lấy tất cả người dùng, hãy sử dụng giá trị lớn hoặc không giới hạn
+    $limitValue = ($limit === 'all') ? PHP_INT_MAX : $limit;
+
+    $db = new connect();
+    $sql = "SELECT * FROM friends WHERE user_id2 = '$id' AND status = 'Chờ chấp nhận' LIMIT $limitValue";
+    return $db->pdo_query($sql);
+  }
+
+  public function countRequestByUser($id)
   {
     $db = new connect();
-    $sql = "SELECT * FROM friends WHERE user_id2 = '$id' AND status = 'Chờ chấp nhận'";
-    return $db->pdo_query($sql);
+    $sql = "SELECT COUNT(*) FROM friends WHERE user_id2 = '$id' AND status = 'Chờ chấp nhận'";
+    return $db->pdo_query_value($sql);
   }
 
   public function getAllFriendByUser($id)
@@ -38,16 +48,24 @@ class Friend
   public function countMatualFriend($user_id, $user_id2)
   {
     $db = new connect();
-    $sql = "SELECT COUNT(*) AS soBanBeChung
-    FROM friends f1
-    JOIN friends f2 ON (
-      (f1.user_id1 = f2.user_id1 AND f1.user_id2 = f2.user_id2) OR
-      (f1.user_id1 = f2.user_id2 AND f1.user_id2 = f2.user_id1)
-    )
-    WHERE (f1.user_id1 = '$user_id' OR f1.user_id2 = '$user_id')
-      AND (f1.user_id1 = '$user_id2' OR f1.user_id2 = '$user_id2')
-      AND f1.status = 'Bạn bè'
-      AND f2.status = 'Bạn bè'";
+    $sql = "SELECT COUNT(*)  FROM
+    (((SELECT user_id2
+    FROM friends
+    WHERE user_id1 = '$user_id' and status = 'Bạn bè')
+    UNION
+    (SELECT user_id1
+    FROM friends
+    WHERE user_id2 = '$user_id' and status = 'Bạn bè'))
+    
+    INTERSECT
+
+    ((select user_id2 
+    from friends
+    where user_id1 = '$user_id2' and status = 'Bạn bè')
+    UNION
+    (select user_id1
+    from friends
+    where user_id2 ='$user_id2' ))) as aals";
     return $db->pdo_query_value($sql);
   }
 

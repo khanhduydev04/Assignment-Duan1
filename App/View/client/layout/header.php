@@ -2,14 +2,14 @@
 $photo = new Photo();
 ?>
 <!-- header -->
-<header class="header bg-white d-flex align-items-center fixed-top shadow-sm" style="min-height: 56px; z-index: 5">
+<header class="header bg-white d-flex align-items-center fixed-top shadow-sm" style="min-height: 56px; z-index: 999">
   <div class="container-fluid">
     <div class="row align-items-center">
       <!-- search -->
       <div class="col d-flex align-items-center">
         <!-- header logo -->
         <a href="index.php" class="d-block overflow-hidden rounded-circle" style="width: 2.5rem">
-          <img src="./Public/images/logo.jpg" alt="Logo Beebook" class="object-fit-cover" style="width: 100%; transform: scale(1.3);">
+          <img src="./Public/images/beebook-logo.png" alt="Logo Beebook" class="object-fit-cover w-100">
         </a>
         <!-- search bar -->
         <div class="input-group ms-2" type="button">
@@ -53,7 +53,7 @@ $photo = new Photo();
           </a>
         </div>
         <!-- account -->
-        <div class="mx-1 nav__btn <?= (isset($_GET['ctrl']) && $_GET['ctrl'] == 'profile') ? 'nav__btn-active' : '' ?>">
+        <div class="mx-1 nav__btn <?= (isset($_GET['ctrl']) && $_GET['ctrl'] == 'profile' && !isset($_GET['id'])) ? 'nav__btn-active' : '' ?>">
           <a href="index.php?ctrl=profile" class="btn px-5">
             <i class="fa-solid fa-circle-user text-muted fs-4"></i>
           </a>
@@ -270,7 +270,7 @@ $photo = new Photo();
         <div class="align-items-center justify-content-center d-xl-flex mx-2" type="button" id="secondMenu" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
           <?php
           if (isset($_SESSION['user']['id']) && ($photo->getNewAvatarByUser($_SESSION['user']['id']) != null)) { ?>
-            <img src="./Upload/<?= $photo->getNewAvatarByUser($_SESSION['user']['id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 45px; height: 45px; object-fit: cover" />
+            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($_SESSION['user']['id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 45px; height: 45px; object-fit: cover" />
           <?php } else { ?>
             <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 45px; height: 45px; object-fit: cover" />
           <?php }

@@ -10,7 +10,7 @@ if (isset($_POST['register']) && ($_POST['register'])) {
     $phone = $_POST['phone'];
     $password = $_POST['password'];
     $gender = $_POST['gender'];
-    // $password = password_hash($password, PASSWORD_DEFAULT);
+    $password = password_hash($password, PASSWORD_DEFAULT);
     echo $first_name;
     if ($register->addUser($first_name, $last_name, $email, $phone, $password, $gender)) {
         echo ("Thành công");
@@ -170,3 +170,4 @@ if (isset($_POST['login'])) {
         </div>
     </footer>
 </div>
+<script src="./Public/js/validation.js?v=<?php echo time(); ?>"></script>

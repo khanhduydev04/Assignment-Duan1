@@ -16,6 +16,21 @@ class User
     return $db->pdo_query($sql);
   }
 
+  public function getRadomUser($user_id, $limit)
+  {
+    $db = new connect();
+    $sql = "SELECT * FROM users u WHERE u.id != '$user_id'
+    AND NOT EXISTS (
+        SELECT * FROM friends f WHERE 
+            (f.user_id1 = u.id AND f.user_id2 = '$user_id' AND f.status IN ('Bạn bè', 'Chờ chấp nhận'))
+            OR
+            (f.user_id2 = u.id AND f.user_id1 = '$user_id' AND f.status IN ('Bạn bè', 'Chờ chấp nhận'))
+    )
+    ORDER BY RAND()
+    LIMIT $limit";
+    return $db->pdo_query($sql);
+  }
+
   public function getUserById($id)
   {
     $db = new connect();

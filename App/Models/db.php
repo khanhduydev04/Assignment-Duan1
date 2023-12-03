@@ -42,7 +42,9 @@ class connect
       $conn = $this->pdo_get_connection();
       $stmt = $conn->prepare($sql);
       $stmt->execute($sql_args);
-      $rows = $stmt->fetchAll();
+      // $rows = $stmt->fetchAll();
+      // Sử dụng FETCH_ASSOC để trả về mảng liên kết
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
       return $rows;
     } catch (PDOException $e) {
       throw $e;

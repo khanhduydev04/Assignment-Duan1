@@ -6,7 +6,7 @@ function resetModal(modal) {
   const textareaInput = modal.querySelector("#description");
   const imageInput = modal.querySelector(".image-input");
   const labelUpload = modal.querySelector("#labelUpload");
-  const modalFooter = modal.querySelector(".modal-footer");
+  const modalFooter = modal.querySelector(".modal-change-footer");
 
   // Ẩn textarea và reset ảnh preview
   textareas.style.display = "none";
@@ -27,13 +27,29 @@ $(".modal").on("hidden.bs.modal", function (e) {
   const labelUpload = modal.querySelector("#labelUpload");
   const textareas = modal.querySelector(".modal-desc");
   const textareaInput = modal.querySelector("#description");
+  const modalFooter = modal.querySelector(".modal-change-footer");
 
-  textareas.style.display = "none";
-  previewAreas.style.display = "none";
-  labelUpload.style.display = "block";
-  imagePreview.src = "";
-  imageInput.value = "";
-  textareaInput.value = "";
+  if (textareas) {
+    textareas.style.display = "none";
+  }
+  if (previewAreas) {
+    previewAreas.style.display = "none";
+  }
+  if (labelUpload) {
+    labelUpload.style.display = "block";
+  }
+  if (modalFooter) {
+    modalFooter.style.display = "none";
+  }
+  if (imagePreview) {
+    imagePreview.src = "";
+  }
+  if (imageInput) {
+    imageInput.value = "";
+  }
+  if (textareaInput) {
+    textareaInput.value = "";
+  }
 });
 
 // Hiển thị ảnh và textarea khi chọn ảnh
@@ -56,6 +72,7 @@ function showDetailModal(modal) {
     };
     reader.readAsDataURL(imageInput.files[0]);
   }
+  console.log(imageInput.value);
 }
 
 function showDetailModalWrapper(id) {
@@ -111,7 +128,6 @@ function showFollow() {
 }
 
 //Picture
-
 function showPicture() {
   document.getElementById("Picture").style.display = "block";
   document.getElementById("Avatar").style.display = "none";
@@ -149,83 +165,205 @@ document.querySelectorAll(".img-thumbnail").forEach((item) => {
   item.addEventListener("click", (event) => {
     myModal.show();
   });
-
-  //Rep comment
-  function showComment(commentNumber) {
-    // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-    for (let i = 1; i <= 3; i++) {
-      const comment = document.getElementById(`repcomment${i}`);
-      comment.style.display = i === commentNumber ? "block" : "none";
-    }
-  }
-
-  function toggleReplyForm(commentNumber) {
-    const form = document.getElementById(`repcomment${commentNumber}`);
-    form.style.display = form.style.display === "none" ? "block" : "none";
-  }
-
-  function showComment1(commentNumber) {
-    // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-    for (let i = 1; i <= 3; i++) {
-      const comment = document.getElementById(`repcomment1${i}`);
-      comment.style.display = i === commentNumber ? "block" : "none";
-    }
-  }
-
-  function toggleReplyForm1(commentNumber) {
-    const form = document.getElementById(`repcomment1${commentNumber}`);
-    form.style.display = form.style.display === "none" ? "block" : "none";
-  }
-
-  function showComment2(commentNumber) {
-    // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-    for (let i = 1; i <= 3; i++) {
-      const comment = document.getElementById(`repcomment2${i}`);
-      comment.style.display = i === commentNumber ? "block" : "none";
-    }
-  }
-
-  function toggleReplyForm2(commentNumber) {
-    const form = document.getElementById(`repcomment2${commentNumber}`);
-    form.style.display = form.style.display === "none" ? "block" : "none";
-  }
-
-  function showComment3(commentNumber) {
-    // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-    for (let i = 1; i <= 3; i++) {
-      const comment = document.getElementById(`repcomment3${i}`);
-      comment.style.display = i === commentNumber ? "block" : "none";
-    }
-  }
-
-  function toggleReplyForm3(commentNumber) {
-    const form = document.getElementById(`repcomment3${commentNumber}`);
-    form.style.display = form.style.display === "none" ? "block" : "none";
-  }
-
-  function showComment4(commentNumber) {
-    // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-    for (let i = 1; i <= 3; i++) {
-      const comment = document.getElementById(`repcomment4${i}`);
-      comment.style.display = i === commentNumber ? "block" : "none";
-    }
-  }
-
-  function toggleReplyForm4(commentNumber) {
-    const form = document.getElementById(`repcomment4${commentNumber}`);
-    form.style.display = form.style.display === "none" ? "block" : "none";
-  }
-
-  function showComment5(commentNumber) {
-    // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
-    for (let i = 1; i <= 3; i++) {
-      const comment = document.getElementById(`repcomment5${i}`);
-      comment.style.display = i === commentNumber ? "block" : "none";
-    }
-  }
-
-  function toggleReplyForm5(commentNumber) {
-    const form = document.getElementById(`repcomment5${commentNumber}`);
-    form.style.display = form.style.display === "none" ? "block" : "none";
-  }
 });
+
+//Rep comment
+function showComment(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm(commentNumber) {
+  const form = document.getElementById(`repcomment${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function showComment1(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment1${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm1(commentNumber) {
+  const form = document.getElementById(`repcomment1${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function showComment2(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment2${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm2(commentNumber) {
+  const form = document.getElementById(`repcomment2${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function showComment3(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment3${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm3(commentNumber) {
+  const form = document.getElementById(`repcomment3${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function showComment4(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment4${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm4(commentNumber) {
+  const form = document.getElementById(`repcomment4${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function showComment5(commentNumber) {
+  // Lặp qua các comment để ẩn hiện dựa trên commentNumber được truyền vào
+  for (let i = 1; i <= 3; i++) {
+    const comment = document.getElementById(`repcomment5${i}`);
+    comment.style.display = i === commentNumber ? "block" : "none";
+  }
+}
+
+function toggleReplyForm5(commentNumber) {
+  const form = document.getElementById(`repcomment5${commentNumber}`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+//Check creat post
+function toggleSubmitButton() {
+  // textarea và input file
+  let contentTextarea = document.getElementById("content-post");
+  let photoInput = document.getElementById("postImage");
+
+  // button post
+  let submitButton = document.getElementById("submitPost");
+  let contentValue = contentTextarea.value.trim();
+  let photoValue = photoInput.files.length;
+
+  // Nếu một trong hai có dữ liệu, kích hoạt nút "Đăng" và thêm class "btn-primary"
+  if (contentValue !== "" || photoValue > 0) {
+    submitButton.disabled = false;
+    submitButton.classList.remove("btn-secondary");
+    submitButton.classList.add("btn-primary");
+  } else {
+    submitButton.disabled = true;
+    submitButton.classList.remove("btn-primary");
+    submitButton.classList.add("btn-secondary");
+  }
+}
+
+function checkFilePostAvatar(fileInputId, submitButtonId) {
+  // input file
+  let photoInput = document.getElementById(fileInputId);
+  let photoValue = photoInput.files.length;
+  // button post
+  let submitButton = document.getElementById(submitButtonId);
+  // Nếu một trong hai có dữ liệu, kích hoạt nút "Đăng" và thêm class "btn-primary"
+  if (photoValue > 0) {
+    submitButton.disabled = false;
+    submitButton.classList.remove("btn-secondary");
+    submitButton.classList.add("btn-primary");
+  } else {
+    submitButton.disabled = true;
+    submitButton.classList.remove("btn-primary");
+    submitButton.classList.add("btn-secondary");
+  }
+}
+
+//show preview post image
+function showPreviewPostImage() {
+  // Kiểm tra và cập nhật trạng thái nút đăng
+  toggleSubmitButton();
+
+  let postImageInput = document.getElementById("postImage");
+  let postPreview = document.querySelector(".post-preview");
+
+  // Xóa tất cả các thẻ img hiện tại trong post-preview
+  postPreview.innerHTML = "";
+
+  // Hiển thị ảnh và thêm nút xóa chung
+  let row; // Khởi tạo biến row ở đây
+  let deleteAllButtonAdded = false; // Biến kiểm tra xem nút xóa chung đã được thêm vào hay chưa
+
+  if (postImageInput.files && postImageInput.files.length > 0) {
+    for (let i = 0; i < postImageInput.files.length; i++) {
+      // Tạo một dòng mới cho ảnh đầu tiên của mỗi cặp ảnh
+      if (i % 2 === 0) {
+        row = document.createElement("div");
+        row.classList.add("row", "mb-2");
+        postPreview.appendChild(row);
+      }
+
+      createImage(postImageInput.files[i], i, postImageInput.files);
+
+      // Thêm nút xóa chung nếu chưa thêm
+      if (!deleteAllButtonAdded) {
+        addDeleteAllButton();
+        deleteAllButtonAdded = true;
+      }
+    }
+  }
+
+  function createImage(file, index, filesArray) {
+    let imgContainer = document.createElement("div");
+    if (index === 0 && postImageInput.files.length === 1) {
+      imgContainer.classList.add("col-md-12");
+    } else {
+      imgContainer.classList.add("col-md-6");
+    }
+    imgContainer.classList.add("position-relative");
+
+    let img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.classList.add("img-fluid", "rounded", "mb-2");
+    img.style.aspectRatio = "1/1";
+    img.style.width = "100%";
+    img.style.objectFit = "cover";
+    imgContainer.appendChild(img);
+
+    row.appendChild(imgContainer);
+  }
+
+  function addDeleteAllButton() {
+    let deleteAllButton = document.createElement("button");
+    deleteAllButton.type = "button";
+    deleteAllButton.classList.add(
+      "btn",
+      "btn-danger",
+      "btn-sm",
+      "position-absolute",
+      "top-0",
+      "end-0",
+      "btn-close-image"
+    );
+    deleteAllButton.innerHTML = '<i class="fas fa-times"></i>';
+    deleteAllButton.addEventListener("click", function () {
+      // Xóa tất cả ảnh và reset input file
+      postPreview.innerHTML = "";
+      postImageInput.value = ""; // Reset input file
+      console.log(postImageInput);
+      // Kiểm tra và cập nhật trạng thái nút đăng
+      toggleSubmitButton();
+    });
+
+    // Thêm nút xóa chung vào postPreview
+    postPreview.appendChild(deleteAllButton);
+  }
+}

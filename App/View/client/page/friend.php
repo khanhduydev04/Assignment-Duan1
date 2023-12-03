@@ -2,6 +2,8 @@
 $user =  new User();
 $friend = new Friend();
 $photo = new Photo();
+
+$user_id = $_SESSION['user']['id'];
 ?>
 <div class="container-fluid bg-gray">
     <div class="row justify-content-evenly">
@@ -56,70 +58,42 @@ $photo = new Photo();
                                 </div>
                             </div>
                             <div class="d-flex pb-2 mt-0 justify-content-between align-content-center">
-                                <p class="m-0" style="font-weight: 500; color: rgb(65, 113, 194);">5 lời mời kết bạn</p>
+                                <p class="m-0" style="font-weight: 500; color: rgb(65, 113, 194);"><?= $friend->countRequestByUser($user_id) ?> lời mời kết bạn</p>
                             </div>
                             <div class="pb-3 mt-3 align-content-center justify-content-between">
                                 <div class="d-flex align-items-center flex-wrap row-gap-2">
-                                    <div class="px-1" style="width: calc(100% / 5)">
-                                        <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                        <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                            <form action="">
-                                                <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="px-1" style="width: calc(100% / 5)">
-                                        <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                        <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                            <form action="">
-                                                <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="px-1" style="width: calc(100% / 5)">
-                                        <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                        <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                            <form action="">
-                                                <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="px-1" style="width: calc(100% / 5)">
-                                        <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                        <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                            <form action="">
-                                                <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="px-1" style="width: calc(100% / 5)">
-                                        <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                        <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                            <form action="">
-                                                <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                                    <?php
+                                    $friend_request = $friend->getAllRequestByUser($user_id, 'all');
+                                    if (!empty($friend_request) && $friend_request !== null) {
+                                        foreach ($friend_request as $row) {
+                                            $row = $user->getUserById($row['user_id1']); ?>
+                                            <div class="px-1" style="width: calc(100% / 5)">
+                                                <form action="" method="post">
+                                                    <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>">
+                                                        <?php
+                                                        if (($photo->getNewAvatarByUser($row['id']) != null)) { ?>
+                                                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['id']) ?>" alt="" class="img" style="width: 100%;" />
+                                                        <?php } else { ?>
+                                                            <img src="./Public/images/avt_default.png" alt="" class="img" style="width: 100%;" />
+                                                        <?php }
+                                                        ?>
+                                                    </a>
+                                                    <div class="shadow-sm fb-1" style="padding-top: 1px;">
+                                                        <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>" class="text-black">
+                                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;"><?= $user->getFullnameByUser($row['id']) ?></p>
+                                                        </a>
+                                                        <div class="d-grid gap-2 mx-auto mt-3">
+                                                            <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                            <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                    <?php }
+                                    } else {
+                                        echo '<p class="w-100 fw-semibold text-center">Không có lời mời để hiển thị</p>';
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -133,66 +107,42 @@ $photo = new Photo();
                             </div>
                             <div class="pb-3 mt-3 align-content-center justify-content-between">
                                 <div class="d-flex align-items-center flex-wrap row-gap-2">
-                                    <div class="px-1" style="width: calc(100% / 5)">
-                                        <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                        <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                            <form action="">
-                                                <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="px-1" style="width: calc(100% / 5)">
-                                        <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                        <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                            <form action="">
-                                                <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="px-1" style="width: calc(100% / 5)">
-                                        <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                        <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                            <form action="">
-                                                <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="px-1" style="width: calc(100% / 5)">
-                                        <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                        <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                            <form action="">
-                                                <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="px-1" style="width: calc(100% / 5)">
-                                        <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                        <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                            <form action="">
-                                                <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                                    <?php
+                                    $getFriends = $friend->getAllFriendByUser($user_id);
+                                    if ($getFriends !== null && $getFriends) {
+                                        foreach ($getFriends as $row) {
+                                            if ($user_id != $row['user_id1']) {
+                                                $row = $user->getUserById($row['user_id1']);
+                                            } elseif ($user_id != $row['user_id2']) {
+                                                $row = $user->getUserById($row['user_id2']);
+                                            } ?>
+                                            <div class="px-1" style="width: calc(100% / 5)">
+                                                <form action="" method="post">
+                                                    <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>">
+                                                        <?php
+                                                        if (($photo->getNewAvatarByUser($row['id']) != null)) { ?>
+                                                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['id']) ?>" alt="" class="img" style="width: 100%;" />
+                                                        <?php } else { ?>
+                                                            <img src="./Public/images/avt_default.png" alt="" class="img" style="width: 100%;" />
+                                                        <?php }
+                                                        ?>
+                                                    </a>
+                                                    <div class="shadow-sm fb-1" style="padding-top: 1px;">
+                                                        <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>" class="text-black">
+                                                            <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;"><?= $user->getFullnameByUser($row['id']) ?></p>
+                                                        </a>
+                                                        <div class="d-grid gap-2 mx-auto mt-3">
+                                                            <input type="button" class="btn btn-primary" value="Hủy bạn" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                            <input type="button" class="btn btn-delete" value="Bỏ theo dõi" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                    <?php  }
+                                    } else {
+                                        echo '<p class="fw-semibold text-center w-100">Không có bạn bè để hiển thị</p>';
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -208,66 +158,38 @@ $photo = new Photo();
                     </div>
                     <div class="pb-3 mt-3 align-content-center justify-content-between">
                         <div class="d-flex align-items-center flex-wrap row-gap-2">
-                            <div class="px-1" style="width: calc(100% / 5)">
-                                <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                    <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                    <form action="">
-                                        <div class="d-grid gap-2 mx-auto mt-3">
-                                            <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                            <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="px-1" style="width: calc(100% / 5)">
-                                <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                    <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                    <form action="">
-                                        <div class="d-grid gap-2 mx-auto mt-3">
-                                            <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                            <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="px-1" style="width: calc(100% / 5)">
-                                <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                    <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                    <form action="">
-                                        <div class="d-grid gap-2 mx-auto mt-3">
-                                            <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                            <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="px-1" style="width: calc(100% / 5)">
-                                <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                    <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                    <form action="">
-                                        <div class="d-grid gap-2 mx-auto mt-3">
-                                            <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                            <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="px-1" style="width: calc(100% / 5)">
-                                <img src="./Public/images/banner-men.png" alt="" class="img" style="width: 100%;">
-                                <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                    <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;">Kiệt Nhỏ</p>
-                                    <form action="">
-                                        <div class="d-grid gap-2 mx-auto mt-3">
-                                            <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                            <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                            <?php
+                            $friend_request = $friend->getAllRequestByUser($user_id, 8);
+                            if (!empty($friend_request) && $friend_request !== null) {
+                                foreach ($friend_request as $row) {
+                                    $row = $user->getUserById($row['user_id1']); ?>
+                                    <div class="px-1" style="width: calc(100% / 5)">
+                                        <form action="" method="post">
+                                            <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>">
+                                                <?php
+                                                if (($photo->getNewAvatarByUser($row['id']) != null)) { ?>
+                                                    <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['id']) ?>" alt="" class="img" style="width: 100%;" />
+                                                <?php } else { ?>
+                                                    <img src="./Public/images/avt_default.png" alt="" class="img" style="width: 100%;" />
+                                                <?php }
+                                                ?>
+                                            </a>
+                                            <div class="shadow-sm fb-1" style="padding-top: 1px;">
+                                                <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>" class="text-black">
+                                                    <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;"><?= $user->getFullnameByUser($row['id']) ?></p>
+                                                </a>
+                                                <div class="d-grid gap-2 mx-auto mt-3">
+                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                            <?php }
+                            } else {
+                                echo '<p class="w-100 fw-semibold text-center">Không có lời mời để hiển thị</p>';
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -281,7 +203,7 @@ $photo = new Photo();
                     <div class="pb-3 mt-3 align-content-center justify-content-between">
                         <div class="d-flex align-items-center flex-wrap row-gap-2">
                             <?php
-                            $otherUser =  $user->getAllUser($_SESSION['user']['id']);
+                            $otherUser =  $user->getRadomUser($user_id, 12);
                             if (!empty($otherUser) && $otherUser !== null) {
                                 foreach ($otherUser as $row) { ?>
                                     <div class="px-1" style="width: calc(100% / 5)">
@@ -289,7 +211,7 @@ $photo = new Photo();
                                             <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>">
                                                 <?php
                                                 if (($photo->getNewAvatarByUser($row['id']) != null)) { ?>
-                                                    <img src="./Upload/<?= $photo->getNewAvatarByUser($row['id']) ?>" alt="" class="img" style="width: 100%;" />
+                                                    <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['id']) ?>" alt="" class="img" style="width: 100%;" />
                                                 <?php } else { ?>
                                                     <img src="./Public/images/avt_default.png" alt="" class="img" style="width: 100%;" />
                                                 <?php }
