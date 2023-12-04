@@ -5,10 +5,10 @@ class Share
   var $UserID1 = null;
   var $UserID2 = null;
 
-  public function getAllShareId($id)
+  public function getAllShareId()
   {
     $db = new connect();
-    $sql = "SELECT shares.post_id WHERE user_id = '$id'";
+    $sql = "SELECT post_id FROM shares";
     return $db->pdo_query($sql);
   }
 
