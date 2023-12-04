@@ -1,9 +1,68 @@
+<?php
+$user = new User();
+
+$id = $_SESSION['user']['id'];
+$user_id = $_SESSION['user']['id'];
+
+$update = $user->getUserById($id);
+
+if (isset($_POST['update']) && ($_POST['update'])) {
+  $first_name = $_POST['firstname'];
+  $last_name = $_POST['lastname'];
+  $email = $_POST['email'];
+  $phone = $_POST['phone'];
+  $gender = $update['gender'];
+
+  $error_email = []; // Khởi tạo thông báo lỗi về email
+  $error_phone = []; // Khởi tạo thông báo lỗi về số điện thoại
+
+  if (!empty($email)) {
+    // Kiểm tra email đã tồn tại hay chưa
+    if ($user->checkEmailExists($email, $user_id)) {
+      $error_email['update'] = 'Email đã tồn tại. Vui lòng chọn email khác.';
+    }
+  }
+
+  if (!empty($phone)) {
+    // Kiểm tra số điện thoại đã tồn tại hay chưa
+    if ($user->checkPhoneExists($phone, $user_id)) {
+      $error_phone['update'] = 'Số điện thoại đã tồn tại. Vui lòng chọn số điện thoại khác.';
+    }
+  }
+
+  // Kiểm tra xem có thông báo lỗi nào được tạo ra không
+  if (!empty($error_email) || !empty($error_phone)) {
+    // Nếu có thông báo lỗi, hiển thị chúng
+    if (!empty($error_email)) {
+      echo $error_email['update'];
+    } else {
+      $error_email['update'] = '';
+    }
+    if (!empty($error_phone)) {
+      echo $error_phone['update'];
+    } else {
+      $error_phone['update'] = '';
+    }
+  } else {
+    // Nếu không có lỗi, tiến hành cập nhật thông tin người dùng
+    if ($user->updateUser($id, $first_name, $last_name, $email, $phone, $gender)) {
+      echo 'Cập nhật thành công';
+      header("Location: ./index.php?ctrl=setting&act=change_information");
+    } else {
+      echo 'Cập nhật thất bại';
+    }
+  }
+}
+
+
+?>
 <!-- main -->
 <div class="container-fluid">
   <div class="row justify-content-evenly">
     <!-- sidebar -->
     <div class="col-12 col-lg-3">
-      <div class="d-none d-xxl-block h-100 fixed-top overflow-hidden shadow-sm scrollbar" style="max-width: 360px; width: 100%; z-index: 4; padding-top: 57px;">
+      <div class="d-none d-xxl-block h-100 fixed-top overflow-hidden shadow-sm scrollbar"
+        style="max-width: 360px; width: 100%; z-index: 4; padding-top: 57px;">
         <div class="p-3 bg-main">
           <ul class="navbar-nav mt-1 ms-1 d-flex flex-column pb-5 mb-2" style="padding-top: 40px">
             <div class="d-flex align-items-center w-100 gap-3">
@@ -26,7 +85,8 @@
             <li class="btn-bg dropdown-item p-1 mt-1 rounded" id="myButton">
               <div class="d-flex">
                 <i class="fa-solid fa-user p-2 rounded-circle" style="font-size: 20px;color: #000000;"></i>
-                <a href="index.php?ctrl=setting&act=change_information" class="d-flex ms-3 align-items-center text-decoration-none text-dark">
+                <a href="index.php?ctrl=setting&act=change_information"
+                  class="d-flex ms-3 align-items-center text-decoration-none text-dark">
                   <p class="m-0 p-2" style="font-weight: 500; font-size: 17px;">Cập nhật tài khoản
                   </p>
                 </a>
@@ -35,7 +95,8 @@
             <li class="btn-bg dropdown-item p-1 mt-1 rounded" id="myButton">
               <div class="d-flex">
                 <i class="fa-solid fa-lock p-2 rounded-circle" style="font-size: 20px;color: #000000;"></i>
-                <a href="index.php?ctrl=setting&act=change_password" class="d-flex ms-3 align-items-center text-decoration-none text-dark">
+                <a href="index.php?ctrl=setting&act=change_password"
+                  class="d-flex ms-3 align-items-center text-decoration-none text-dark">
                   <p class="m-0 p-2" style="font-weight: 500; font-size: 17px;">Cập nhật mật khẩu
                   </p>
                 </a>
@@ -59,40 +120,69 @@
                 </div>
               </div>
               <div class="justify-content-between align-content-center">
-                <form action="" class="mt-3">
+                <form action="" class="mt-3" method="POST" id="form-update" onsubmit="UpdateFormSubmit(event)">
                   <div class="row">
                     <div class="col-md-4">
                       <label class="form-label" style="font-size: 16px;font-weight: 500;">Họ</label>
-                      <input type="text" id="" class="form-control">
+                      <input type="text" id="lastname" name="lastname" class="form-control"
+                        value="<?= $update['last_name'] ?>">
+                      <div class="mt-2">
+                        <span class="text-danger" id="lastSpan"></span>
+                      </div>
                     </div>
                     <div class="col-md-4">
                       <label class="form-label" style="font-size: 16px;font-weight: 500;">Tên</label>
-                      <input type="text" id="" class="form-control" width="30px">
+                      <input type="text" id="firstname" name="firstname" class="form-control" width="30px"
+                        value="<?= $update['first_name'] ?>">
+                      <div class="mt-2">
+                        <span class="text-danger" id="firstSpan"></span>
+                      </div>
                     </div>
                   </div>
                   <div class="row mt-4">
                     <div class="col-md-8">
                       <label class="form-label" style="font-size: 16px;font-weight: 500;">Email</label>
-                      <input type="email" id="" class="form-control" width="30px">
+                      <input type="email" id="email" name="email" class="form-control" width="30px"
+                        value="<?= $update['email'] ?>">
+                      <span class="text-danger" id="emailText"></span>
+                      <div class="mt-2">
+                        <span class="text-danger">
+                          <?php
+                          if (isset($error_email['update'])) {
+                            echo $error_email['update'];
+                          }
+                          ?>
+                        </span>
+                      </div>
                     </div>
                   </div>
                   <div class="row mt-4">
                     <div class="col-md-8">
                       <label class="form-label" style="font-size: 16px;font-weight: 500;">Số điện
                         thoại</label>
-                      <input type="text" id="" class="form-control">
+                      <input type="text" id="phone" name="phone" class="form-control" value="<?= $update['phone'] ?>">
+                      <span class="text-danger" id="phoneText"></span>
+                      <div class="mt-2">
+                        <span class="text-danger">
+                          <?php
+                          if (isset($error_phone['update'])) {
+                            echo $error_phone['update'];
+                          }
+                          ?>
+                        </span>
+                      </div>
                     </div>
                   </div>
                   <div class="row mt-4">
                     <div class="col-md-4">
-                      <button class="btn btn-dark" style="width: 85%;border-radius: 22px;">Cập
-                        nhật</button>
+                      <input type="submit" class="btn btn-dark" style="width: 85%;border-radius: 22px;" name="update"
+                        value="Cập nhật">
                     </div>
                   </div>
                 </form>
               </div>
             </div>
-          <?php break;
+            <?php break;
           case "change_password": ?>
              <div class="d-flex flex-column justify-content-center w-100 mx-auto" style="padding-top: 57px; max-width: 1080px">
               <div class="mt-3 d-flex justify-content-between position-relative">
@@ -167,7 +257,7 @@
               </div>
               
             </div>
-        <?php break;
+            <?php break;
         }
       } else { ?>
         <div class="d-flex flex-column justify-content-center w-100 mx-auto" style="padding-top: 57px; max-width: 1000px">

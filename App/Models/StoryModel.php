@@ -2,7 +2,7 @@
 class Stories
 {
     var $id = null;
-    var $image =  null;
+    var $image = null;
     var $created_at = null;
     var $user_id = null;
     var $show = null;
@@ -64,10 +64,8 @@ class Stories
             ':created_at' => $created_at,
             ':show' => $show
         ];
-
         // Thực hiện chèn bài viết mới vào cơ sở dữ liệu
         $result = $db->pdo_query($query, $param);
-
         return $result;
     }
 }

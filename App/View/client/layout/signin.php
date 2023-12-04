@@ -10,13 +10,45 @@ if (isset($_POST['register']) && ($_POST['register'])) {
     $phone = $_POST['phone'];
     $password = $_POST['password'];
     $gender = $_POST['gender'];
-    $password = password_hash($password, PASSWORD_DEFAULT);
-    echo $first_name;
-    if ($register->addUser($first_name, $last_name, $email, $phone, $password, $gender)) {
-        echo ("Thành công");
-        header("Location: index.php");
+
+    $error_email = []; // Khởi tạo thông báo lỗi về email
+    $error_phone = []; // Khởi tạo thông báo lỗi về số điện thoại
+
+    if (!empty($email)) {
+        // Kiểm tra email đã tồn tại hay chưa
+        if ($register->checkEmailExists($email, $user_id)) {
+            $error_email['register'] = 'Email đã tồn tại. Vui lòng chọn email khác.';
+        }
+    }
+
+    if (!empty($phone)) {
+        // Kiểm tra số điện thoại đã tồn tại hay chưa
+        if ($register->checkPhoneExists($phone, $user_id)) {
+            $error_phone['register'] = 'Số điện thoại đã tồn tại. Vui lòng chọn số điện thoại khác.';
+        }
+    }
+
+    // Kiểm tra xem có thông báo lỗi nào được tạo ra không
+    if (!empty($error_email) || !empty($error_phone)) {
+        // Nếu có thông báo lỗi, hiển thị chúng
+        if (!empty($error_email)) {
+            $error_email['register'];
+        } else {
+            $error_email['register'] = '';
+        }
+        if (!empty($error_phone)) {
+            $error_phone['register'];
+        } else {
+            $error_phone['register'] = '';
+        }
     } else {
-        echo ("Thất bại");
+        // $password = password_hash($password, PASSWORD_DEFAULT);
+        if ($register->addUser($first_name, $last_name, $email, $phone, $password, $gender)) {
+            echo ("Thành công");
+            header("Location: index.php");
+        } else {
+            echo ("Thất bại");
+        }
     }
 }
 
@@ -56,7 +88,14 @@ if (isset($_POST['login'])) {
                     <input type="email" name="email" id="email1" class="form-control my-3" placeholder="Email">
                     <span class="text-danger" id="email_Span"></span>
                     <input type="password" name="password" id="password1" class="form-control my-3" placeholder="Mật khẩu">
-                    <span class="text-danger" id="password_Span"></span><br>
+                    <span class="text-danger mt-2" id="password_Span"></span><br>
+                    <span class="text-danger">
+                        <?php
+                        if (isset($error['login'])) {
+                            echo $error['login'];
+                        }
+                        ?>
+                    </span>
                     <input class="btn btn-primary w-100 my-3 fw-bold" type="submit" name="login" value="Đăng nhập">
                     <a href="index.php?ctrl=forgetpassword" class="text-decoration-none text-center">
                         <p class="">Quên mật khẩu?</p>
@@ -83,23 +122,45 @@ if (isset($_POST['login'])) {
                             </div>
                             <!--body register-->
                             <div class="modal-body">
-                                <form action="" method="post" id="form-register">
+                                <form action="" method="post" id="form-register" onsubmit="handleFormSubmit(event)">
                                     <!--name-->
                                     <div class="row">
                                         <div class="col">
                                             <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Họ">
-                                            <span class="text-danger mt-4" id="lastSpan"></span>
+                                            <div class="mt-2">
+                                                <span class="text-danger" id="lastSpan"></span>
+                                            </div>
                                         </div>
                                         <div class="col">
                                             <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Tên">
-                                            <span class="text-danger" id="firstSpan"></span>
+                                            <div class="mt-2">
+                                                <span class="text-danger" id="firstSpan"></span>
+                                            </div>
                                         </div>
                                     </div>
                                     <!--email and password-->
                                     <input type="email" name="email" id="email" class="form-control my-3" placeholder="Email" />
                                     <span class="text-danger" id="emailText"></span>
+                                    <div class="mt-2">
+                                        <span class="text-danger">
+                                            <?php
+                                            if (isset($error_email['register'])) {
+                                                echo $error_email['register'];
+                                            }
+                                            ?>
+                                        </span>
+                                    </div>
                                     <input type="text" name="phone" id="phone" class="form-control my-3" placeholder="Số điện thoại" />
                                     <span class="text-danger" id="phoneText"></span>
+                                    <div class="mt-2">
+                                        <span class="text-danger">
+                                            <?php
+                                            if (isset($error_phone['register'])) {
+                                                echo $error_phone['register'];
+                                            }
+                                            ?>
+                                        </span>
+                                    </div>
                                     <input type="password" name="password" id="password" class="form-control my-3" placeholder="Mật khẩu" />
                                     <span class="text-danger" id="passText"></span>
                                     <!--gender-->
@@ -126,7 +187,9 @@ if (isset($_POST['login'])) {
                                                 </label>
                                             </div>
                                         </div>
-                                        <span class="text-danger" id="genderSpan"></span>
+                                        <div class="mt-2">
+                                            <span class="text-danger" id="genderSpan"></span>
+                                        </div>
                                     </div>
                                     <!--disclaimer-->
                                     <div class="">

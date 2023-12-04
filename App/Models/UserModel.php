@@ -53,17 +53,17 @@ class User
     return $db->pdo_query($sql);
   }
 
-  public function checkEmailExists($email)
+  public function checkEmailExists($email, $user_id)
   {
     $db = new connect();
-    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $sql = "SELECT * FROM users WHERE email = '$email' AND id != '$user_id'";
     return $db->pdo_query_one($sql);
   }
 
-  public function checkPhoneExists($phone)
+  public function checkPhoneExists($phone, $user_id)
   {
     $db = new connect();
-    $sql = "SELECT * FROM users WHERE phone = '$phone'";
+    $sql = "SELECT * FROM users WHERE phone = '$phone' AND id != '$user_id'";
     return $db->pdo_query_one($sql);
   }
 
@@ -159,12 +159,12 @@ class User
     return $db->pdo_execute($sql);
   }
 
-  public function updateUser($id, $first_name, $last_name, $email, $phone, $password, $gender)
+  public function updateUser($id, $first_name, $last_name, $email, $phone, $gender)
   {
     $db = new connect();
     $sql = "UPDATE users SET 
       first_name = '$first_name', last_name = '$last_name', email = '$email',
-      phone = '$phone', password = '$password', gender = '$gender'
+      phone = '$phone', gender = '$gender'
       WHERE id = '$id'";
     return $db->pdo_execute($sql);
   }

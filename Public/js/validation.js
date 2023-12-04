@@ -89,11 +89,16 @@ function isFormValid() {
     return isValid;
 }
 
-document.getElementById('form-register').addEventListener('submit', function (e) {
+// document.getElementById('form-register').addEventListener('submit', function (e) {
+//     if (!isFormValid()) {
+//         e.preventDefault(); // Ngăn form được gửi đi nếu thông tin không hợp lệ
+//     }
+// });
+function handleFormSubmit(e) {
     if (!isFormValid()) {
         e.preventDefault(); // Ngăn form được gửi đi nếu thông tin không hợp lệ
     }
-});
+}
 
 // login
 function isLoginValid() {
@@ -122,9 +127,75 @@ function isLoginValid() {
     return isValid;
 }
 
-document.getElementById('form-login').addEventListener('submit', function (e) {
+// document.getElementById('form-login').addEventListener('submit', function (e) {
+//     if (!isLoginValid()) {
+//         e.preventDefault(); // Ngăn form được gửi đi nếu thông tin không hợp lệ
+//     }
+// });
+function LoginFormSubmit(e) {
     if (!isLoginValid()) {
         e.preventDefault(); // Ngăn form được gửi đi nếu thông tin không hợp lệ
     }
-});
+}
+//update setting 
+function isFormUpdate() {
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const lastname = document.getElementById('lastname').value;
+    const firstname = document.getElementById('firstname').value;
+
+    const lastSpan = document.getElementById('lastSpan');
+    const firstSpan = document.getElementById('firstSpan');
+    const emailText = document.getElementById('emailText');
+    const phoneText = document.getElementById('phoneText');
+
+    let isValid = true;
+
+    if (email.trim() === '') {
+        emailText.innerText = 'Vui lòng nhập địa chỉ email';
+        isValid = false;
+    } else if (!isEmailValid(email)) {
+        emailText.innerText = 'Email không đúng định dạng';
+        isValid = false;
+    } else {
+        emailText.innerText = '';
+    }
+
+    if (phone.trim() === '') {
+        phoneText.innerText = 'Vui lòng nhập số điện thoại';
+        isValid = false;
+    } else if (!isPhoneNumberValid(phone)) {
+        phoneText.innerText = 'Số điện thoại không đúng định dạng';
+        isValid = false;
+    } else {
+        phoneText.innerText = '';
+    }
+
+    if (lastname.trim() === '') {
+        lastSpan.innerText = 'Vui lòng nhập Họ';
+        isValid = false;
+    } else {
+        lastSpan.innerText = '';
+    }
+
+    if (firstname.trim() === '') {
+        firstSpan.innerText = 'Vui lòng nhập Tên';
+        isValid = false;
+    } else {
+        firstSpan.innerText = '';
+    }
+
+    return isValid;
+}
+
+// document.getElementById('form-update').addEventListener('submit', function (e) {
+//     if (!isLoginValid()) {
+//         e.preventDefault(); // Ngăn form được gửi đi nếu thông tin không hợp lệ
+//     }
+// });
+function UpdateFormSubmit(e) {
+    if (!isFormUpdate()) {
+        e.preventDefault(); // Ngăn form được gửi đi nếu thông tin không hợp lệ
+    }
+}
 
