@@ -7,65 +7,64 @@ class Stories
     var $user_id = null;
     var $show = null;
 
-    // Hiện danh sách stories
-    public function getStories()
+    // Hiện danh sách stories với thông tin người dùng
+    public function getStoriesWithUsers($user_id)
     {
         $db = new connect(); // Kết nối cơ sở dữ liệu
-        $query = "SELECT * FROM stories";
+        $query = "SELECT stories.*, users.first_name, users.last_name 
+                  FROM stories 
+                  LEFT JOIN users ON stories.user_id = users.id 
+                  WHERE stories.user_id = $user_id AND stories.show = 1";
         $result = $db->pdo_query($query);
         return $result;
     }
 
-    // Hiện danh sách stories theo user_id
-    public function getStoriesByUserId($user_id)
+    public function getStoriesByUserIdWithUserInfo($user_id)
     {
-        $db = new connect(); // Kết nối cơ sở dữ liệu
-        $query = "SELECT * FROM stories WHERE user_id = :user_id";
-        $params = [':user_id' => $user_id];
-        $result = $db->pdo_query($query, $params);
+        $db = new connect();
+        $query = "SELECT s.*, u.first_name, u.last_name 
+                  FROM stories s
+                  INNER JOIN users u ON s.user_id = u.id
+                  WHERE s.`show` = 1";
+
+        $result = $db->pdo_query($query);
         return $result;
     }
 
-    // Xóa story
-    public function deleteStory($story_id, $user_id)
+    public function getUserIdByStory($id)
     {
-        $db = new connect(); // Kết nối cơ sở dữ liệu
+        $db = new connect();
+        $query = "SELECT user_id.stories FROM stories WHERE id ='$id'";
+        $result = $db->pdo_query_one($query);
+        return $result;
+    }
 
-        // Kiểm tra xem story_id có phải của user_id đăng nhập không trước khi xóa
-        $query_check = "SELECT * FROM stories WHERE id = :story_id AND user_id = :user_id";
-        $params_check = [
-            ':story_id' => $story_id,
-            ':user_id' => $user_id
-        ];
-        $result_check = $db->pdo_query($query_check, $params_check);
+    // Ẩn story dựa trên ID
+    public function hideStory($story_id)
+    {
+        $db = new connect();
+        $query = "UPDATE stories SET `show` = 0 WHERE `id` = $story_id";
+        // Thực hiện cập nhật trạng thái ẩn của story trong cơ sở dữ liệu
+        $result = $db->pdo_execute($query);
+        return $result;
+    }
 
-        if ($result_check) {
-            // Nếu story_id và user_id đúng, thực hiện xóa câu chuyện
-            $query_delete = "DELETE FROM stories WHERE id = :story_id";
-            $params_delete = [
-                ':story_id' => $story_id
-            ];
-            $result_delete = $db->pdo_query($query_delete, $params_delete);
-            return $result_delete;
-        } else {
-            // Nếu story_id không phải của user_id đăng nhập, thông báo lỗi hoặc xử lý theo ý của bạn
-            return false; // hoặc throw Exception("Unauthorized deletion");
-        }
+    // kiểm tra user_id và story có cùng 1 người đăng
+    public function checUser($story_id, $user_id)
+    {
+        $db = new connect();
+        $query = "SELECT * FROM stories WHERE `id` = $story_id AND `user_id` = $user_id";
+        $result = $db->pdo_query_one($query);
+        return $result;
     }
 
     //Thêm bài post
-    public function createStory($user_id, $image, $created_at, $show)
+    public function createStory($user_id, $image)
     {
         $db = new connect();
-        $query = "INSERT INTO stories (user_id, image, created_at, show) VALUES (:user_id, :image, :created_at, :show)";
-        $param = [
-            ':user_id' => $user_id,
-            ':image' => $image,
-            ':created_at' => $created_at,
-            ':show' => $show
-        ];
+        $query = "INSERT INTO stories (`user_id`, `image_url`) VALUES ('$user_id','$image')";
         // Thực hiện chèn bài viết mới vào cơ sở dữ liệu
-        $result = $db->pdo_query($query, $param);
+        $result = $db->pdo_execute($query);
         return $result;
     }
 }

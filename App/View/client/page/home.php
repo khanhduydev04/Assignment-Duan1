@@ -4,6 +4,8 @@ $photo = new Photo();
 $user = new User();
 $comment = new Comment();
 $like = new Likes();
+$share = new Share();
+$story = new Stories();
 
 $uploadDir = './Public/upload/';
 $allowedExtensions = ['png', 'jpg', 'jpeg'];

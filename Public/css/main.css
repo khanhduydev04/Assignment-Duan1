@@ -150,6 +150,30 @@
   }
 }
 
+
+/*upload_story*/
+.image-form{
+  position:absolute;
+  bottom: 0;
+}
+
+.container_story{
+  position:relative;
+}
+
+.preview-container{
+  position:absolute;
+  top: 0;
+  width: 80%;
+  height: 95%;
+}
+
+.hidden{
+  display: none;
+}
+
+
+
 /* story */
 .stories-container {
   max-width: 680px;
