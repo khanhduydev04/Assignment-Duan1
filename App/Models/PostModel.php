@@ -27,7 +27,7 @@ class Post
   public function getPostById($id)
   {
     $db = new connect();
-    $sql = "SELECT * FROM posts WHERE id = '$id' AND show = 1";
+    $sql = "SELECT * FROM posts WHERE id = '$id' AND posts.show = 1";
     return $db->pdo_query_one($sql);
   }
 

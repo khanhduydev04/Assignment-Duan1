@@ -8,7 +8,7 @@ class Share
   public function getAllShareId()
   {
     $db = new connect();
-    $sql = "SELECT post_id FROM shares";
+    $sql = "SELECT post_share_id FROM shares";
     return $db->pdo_query($sql);
   }
   public function countShareByPost($id)
@@ -18,10 +18,17 @@ class Share
     return $db->pdo_query_value($sql);
   }
 
-  public function insertShare($user_id, $post_id)
+  public function getPostShare($id)
   {
     $db = new connect();
-    $sql = "INSERT INTO shares(user_id,post_id) VALUES ('$user_id', '$post_id')";
+    $sql = "SELECT * FROM shares WHERE post_share_id = '$id'";
+    return $db->pdo_query_one($sql);
+  }
+
+  public function insertShare($user_id, $post_id, $post_share_id)
+  {
+    $db = new connect();
+    $sql = "INSERT INTO shares(user_id,post_id,post_share_id) VALUES ('$user_id', '$post_id','$post_share_id')";
     return $db->pdo_execute($sql);
   }
 

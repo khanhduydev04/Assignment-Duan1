@@ -289,18 +289,1148 @@ if (isset($_POST['post']) && $_POST['post']) {
           $all_post = $post->getAllPost($user_id);
           if ($all_post && $all_post !== null) {
             foreach ($all_post as $row) {
-              $check_photo = $photo->countPhotoByPost($row['id']);
-              //Phân layout dựa trên hình ảnh
-              switch ($check_photo) {
-                case 0: ?>
-                  <!-- post-layout-0 -->
-                  <div class="bg-white rounded shadow-sm mt-3">
-                    <!-- author -->
-                    <div class="d-flex justify-content-between p-3 pb-0">
-                      <!-- avatar -->
-                      <div class="d-flex justify-content-between w-100">
+              $shareArray = $share->getAllShareId();
+              $sharedPostIds = []; // Mảng để lưu trữ các post_id được chia sẻ
+              //lặp lấy post_id
+              foreach ($shareArray as $sharedPostId) {
+                $sharedPostIds[] = $sharedPostId['post_share_id'];
+              }
+              if (in_array($row['id'], $sharedPostIds)) {
+                $post_share_id = $share->getPostShare($row['id']);
+                $row = $post->getPostById($post_share_id['post_id']);
+                $check_photo = $photo->countPhotoByPost($row['id']);
+
+                //Phân layout dựa trên hình ảnh
+                switch ($check_photo) {
+                  case 0: ?>
+                    <!-- post-layout -->
+                    <div class="bg-white rounded shadow-sm mt-3">
+                      <!-- author -->
+                      <div class="d-flex justify-content-between p-3 pb-0">
                         <!-- avatar -->
-                        <div class="d-flex">
+                        <div class="d-flex align-items-center">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- edit -->
+                        <?php
+                        if ($user_id === $row['user_id']) { ?>
+                          <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                          <!-- edit menu -->
+                          <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                            <li class="d-flex align-items-center">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                                Chỉnh sửa bài viết</a>
+                            </li>
+                            <li class="d-flex align-items-center btn-delete-post">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                Xóa bài viết</a>
+                            </li>
+                            <?php
+                            if (isset($_GET['id'])) {
+                              $id = $_GET['id'];
+                              $delete = $post->deletePost($id);
+                              if ($delete) {
+                                header('location: ./index.php');
+                              }
+                            }
+                            ?>
+                          </ul>
+                        <?php }
+                        ?>
+                      </div>
+                      <!-- post content -->
+                      <div class="border rounded-4 m-4">
+                        <!--avatar-->
+                        <div class="d-flex align-items-center mt-2 ms-3 mb-3">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- content -->
+                        <?php
+                        if ($row['content'] !== null || $row['content'] !== '') {
+                          echo '<div class="post-content">
+                                        <p class="px-3">' . $row['content'] . '</p>
+                                    </div>';
+                        }
+                        ?>
+                      </div>
+                      <!-- likes & comments -->
+                      <div class="post__comment position-relative pt-0">
+                        <!-- likes-comment -->
+                        <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
+                          <!-- like -->
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+
+                            ?>
+                          </button>
+                          <!-- comment -->
+                          <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                            <p class="m-0">2 bình luận</p>
+                            <p class="m-0">4 lượt chia sẻ</p>
+                          </div>
+                        </div>
+                        <hr class="mt-0 mb-2 mx-3" />
+                        <!-- comment & like bar -->
+                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
+                            <p class="m-0">Yêu thích</p>
+                          </button>
+                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                            <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                            <p class="m-0">Bình luận</p>
+                          </div>
+                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                            <p class="m-0">Chia sẻ</p>
+                          </button>
+                        </form>
+                        <!-- comment model -->
+                        <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                          <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                          <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                          </div>
+                          <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                            <div class="d-flex" style="margin-top: 18px;">
+                              <?php
+                              if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php } else { ?>
+                                <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php }
+                              ?>
+                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                <input type="hidden" name="parentId" value="0">
+                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                <button type="submit" class="border-0 bg-transparent ms-1">
+                                  <i class="fa-solid fa-paper-plane text-primary"></i>
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end -->
+                    </div>
+                  <?php break;
+                  case 1: ?>
+                    <!-- post-layout-1 -->
+                    <div class="bg-white rounded shadow-sm mt-3">
+                      <!-- author -->
+                      <div class="d-flex justify-content-between p-3 pb-0">
+                        <!-- avatar -->
+                        <div class="d-flex align-items-center">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- edit -->
+                        <?php
+                        if ($user_id === $row['user_id']) { ?>
+                          <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                          <!-- edit menu -->
+                          <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                            <li class="d-flex align-items-center">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                                Chỉnh sửa bài viết</a>
+                            </li>
+                            <li class="d-flex align-items-center btn-delete-post">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                Xóa bài viết</a>
+                            </li>
+                            <?php
+                            if (isset($_GET['id'])) {
+                              $id = $_GET['id'];
+                              $delete = $post->deletePost($id);
+                              if ($delete) {
+                                header('location: ./index.php');
+                              }
+                            }
+                            ?>
+                          </ul>
+                        <?php }
+                        ?>
+                      </div>
+                      <!-- post content -->
+                      <div class="border rounded-4 m-4">
+                        <!--image-->
+                        <div id="post-images">
+                          <?php
+                          $image = $photo->getPhotoByPost($row['id']);
+                          echo '<img src="./Public/upload/' . $image[0]['image_url'] . '" alt="post image " class="img-fluid " style="width: 100%; border-radius: 15px 15px 0px 0px;"  />';
+                          ?>
+                        </div>
+                        <!--avatar-->
+                        <div class="d-flex align-items-center mt-2 ms-3 mb-3">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- content -->
+                        <?php
+                        if ($row['content'] !== null || $row['content'] !== '') {
+                          echo '<div class="post-content">
+                                        <p class="px-3">' . $row['content'] . '</p>
+                                    </div>';
+                        }
+                        ?>
+                      </div>
+                      <!-- likes & comments -->
+                      <div class="post__comment position-relative pt-0">
+                        <!-- likes-comment -->
+                        <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
+                          <!-- like -->
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+                            ?>
+                          </button>
+                          <!-- comment -->
+                          <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                            <p class="m-0">2 bình luận</p>
+                            <p class="m-0">4 lượt chia sẻ</p>
+                          </div>
+                        </div>
+                        <hr class="mt-0 mb-2 mx-3" />
+                        <!-- comment & like bar -->
+                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
+                            <p class="m-0">Yêu thích</p>
+                          </button>
+                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                            <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                            <p class="m-0">Bình luận</p>
+                          </div>
+                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                            <p class="m-0">Chia sẻ</p>
+                          </button>
+                        </form>
+                        <!-- comment model -->
+                        <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                          <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                          <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                          </div>
+                          <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                            <div class="d-flex" style="margin-top: 18px;">
+                              <?php
+                              if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php } else { ?>
+                                <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php }
+                              ?>
+                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                <input type="hidden" name="parentId" value="0">
+                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                <button type="submit" class="border-0 bg-transparent ms-1">
+                                  <i class="fa-solid fa-paper-plane text-primary"></i>
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end -->
+                    </div>
+                  <?php break;
+                  case 2: ?>
+                    <!-- post-layout-2 -->
+                    <div class="bg-white rounded shadow-sm mt-3">
+                      <!-- author -->
+                      <div class="d-flex justify-content-between p-3 pb-0">
+                        <!-- avatar -->
+                        <div class="d-flex align-items-center">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- edit -->
+                        <?php
+                        if ($user_id === $row['user_id']) { ?>
+                          <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                          <!-- edit menu -->
+                          <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                            <li class="d-flex align-items-center">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                                Chỉnh sửa bài viết</a>
+                            </li>
+                            <li class="d-flex align-items-center btn-delete-post">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                Xóa bài viết</a>
+                            </li>
+                            <?php
+                            if (isset($_GET['id'])) {
+                              $id = $_GET['id'];
+                              $delete = $post->deletePost($id);
+                              if ($delete) {
+                                header('location: ./index.php');
+                              }
+                            }
+                            ?>
+                          </ul>
+                        <?php }
+                        ?>
+                      </div>
+                      <!-- post content -->
+                      <div class="border rounded-4 m-4">
+                        <!--image-->
+                        <div class="container m-0 g-0">
+                          <div class="row g-1" id="post-images">
+                            <?php
+                            $image = $photo->getPhotoByPost($row['id']);
+                            foreach ($image as $img) {
+                              echo '<div class="col">
+                                            <img src="./Public/upload/' . $img['image_url'] . '" alt="post image" class="img-fluid" style="width: 100%;  height: 550px; border-radius: 10px 10px 0px 0px;"  />
+                                            </div>';
+                            }
+                            ?>
+                          </div>
+                        </div>
+                        <!--avatar-->
+                        <div class="d-flex align-items-center mt-2 ms-3 mb-3">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- content -->
+                        <?php
+                        if ($row['content'] !== null || $row['content'] !== '') {
+                          echo '<div class="post-content">
+                                        <p class="px-3">' . $row['content'] . '</p>
+                                    </div>';
+                        }
+                        ?>
+                      </div>
+                      <!-- likes & comments -->
+                      <div class="post__comment position-relative pt-0">
+                        <!-- likes-comment -->
+                        <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
+                          <!-- like -->
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+                            ?>
+                          </button>
+                          <!-- comment -->
+                          <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                            <p class="m-0">2 bình luận</p>
+                            <p class="m-0">4 lượt chia sẻ</p>
+                          </div>
+                        </div>
+                        <hr class="mt-0 mb-2 mx-3" />
+                        <!-- comment & like bar -->
+                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
+                            <p class="m-0">Yêu thích</p>
+                          </button>
+                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                            <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                            <p class="m-0">Bình luận</p>
+                          </div>
+                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                            <p class="m-0">Chia sẻ</p>
+                          </button>
+                        </form>
+                        <!-- comment model -->
+                        <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                          <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                          <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                          </div>
+                          <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                            <div class="d-flex" style="margin-top: 18px;">
+                              <?php
+                              if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php } else { ?>
+                                <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php }
+                              ?>
+                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                <input type="hidden" name="parentId" value="0">
+                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                <button type="submit" class="border-0 bg-transparent ms-1">
+                                  <i class="fa-solid fa-paper-plane text-primary"></i>
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end -->
+                    </div>
+                  <?php break;
+                  case 3: ?>
+                    <!-- post-layout-3 -->
+                    <div class="bg-white rounded shadow-sm mt-3">
+                      <!-- author -->
+                      <div class="d-flex justify-content-between p-3 pb-0">
+                        <!-- avatar -->
+                        <div class="d-flex align-items-center">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- edit -->
+                        <?php
+                        if ($user_id === $row['user_id']) { ?>
+                          <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                          <!-- edit menu -->
+                          <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                            <li class="d-flex align-items-center">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                                Chỉnh sửa bài viết</a>
+                            </li>
+                            <li class="d-flex align-items-center btn-delete-post">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                Xóa bài viết</a>
+                            </li>
+                            <?php
+                            if (isset($_GET['id'])) {
+                              $id = $_GET['id'];
+                              $delete = $post->deletePost($id);
+                              if ($delete) {
+                                header('location: ./index.php');
+                              }
+                            }
+                            ?>
+                          </ul>
+                        <?php }
+                        ?>
+                      </div>
+                      <!-- post content -->
+                      <div class="border rounded-4 m-4">
+                        <!--image-->
+                        <div class="container m-0 g-0" style="width: 100%;">
+                          <div class="row g-1">
+                            <?php
+                            $image = $photo->getPhotoByPost($row['id']);
+                            $imageUrls = [];
+                            foreach ($image as $img) {
+                              $imageUrls[] = $img['image_url'];
+                            }
+                            ?>
+                            <div class="col-8">
+                              <img src="./Public/upload/<?= $imageUrls[0] ?>" alt="post image" class="img-fluid" style="width: 100%; height: 604px; border-radius: 15px 0 0 0" />
+                            </div>
+                            <div class="col-4">
+                              <?php
+                              for ($i = 1; $i <= 2; $i++) {
+                                $imageSrc = "./Public/upload/" . $imageUrls[$i];
+                                $borderStyle = ($i === 1) ? 'border-radius: 0 15px 0 0' : ''; // Thêm border cho ảnh đầu tiên
+
+                                echo '<img src="' . $imageSrc . '" alt="post image" class="img-fluid mb-1" style="height: 300px; width: 100%; ' . $borderStyle . '" />';
+                              }
+                              ?>
+                            </div>
+                          </div>
+                        </div>
+                        <!--avatar-->
+                        <div class="d-flex align-items-center mt-2 ms-3 mb-3">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- content -->
+                        <?php
+                        if ($row['content'] !== null || $row['content'] !== '') {
+                          echo '<div class="post-content">
+                                        <p class="px-3">' . $row['content'] . '</p>
+                                    </div>';
+                        }
+                        ?>
+                      </div>
+                      <!-- likes & comments -->
+                      <div class="post__comment position-relative pt-0">
+                        <!-- likes-comment -->
+                        <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
+                          <!-- like -->
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+                            ?>
+                          </button>
+                          <!-- comment -->
+                          <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                            <p class="m-0">2 bình luận</p>
+                            <p class="m-0">4 lượt chia sẻ</p>
+                          </div>
+                        </div>
+                        <hr class="mt-0 mb-2 mx-3" />
+                        <!-- comment & like bar -->
+                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
+                            <p class="m-0">Yêu thích</p>
+                          </button>
+                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                            <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                            <p class="m-0">Bình luận</p>
+                          </div>
+                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                            <p class="m-0">Chia sẻ</p>
+                          </button>
+                        </form>
+                        <!-- comment model -->
+                        <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                          <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                          <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                          </div>
+                          <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                            <div class="d-flex" style="margin-top: 18px;">
+                              <?php
+                              if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php } else { ?>
+                                <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php }
+                              ?>
+                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                <input type="hidden" name="parentId" value="0">
+                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                <button type="submit" class="border-0 bg-transparent ms-1">
+                                  <i class="fa-solid fa-paper-plane text-primary"></i>
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end -->
+                    </div>
+                  <?php break;
+                  case 4: ?>
+                    <!-- post-layout-4 -->
+                    <div class="bg-white rounded shadow-sm mt-3">
+                      <!-- author -->
+                      <div class="d-flex justify-content-between p-3 pb-0">
+                        <!-- avatar -->
+                        <div class="d-flex align-items-center">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- edit -->
+                        <?php
+                        if ($user_id === $row['user_id']) { ?>
+                          <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                          <!-- edit menu -->
+                          <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                            <li class="d-flex align-items-center">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                                Chỉnh sửa bài viết</a>
+                            </li>
+                            <li class="d-flex align-items-center btn-delete-post">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                Xóa bài viết</a>
+                            </li>
+                            <?php
+                            if (isset($_GET['id'])) {
+                              $id = $_GET['id'];
+                              $delete = $post->deletePost($id);
+                              if ($delete) {
+                                header('location: ./index.php');
+                              }
+                            }
+                            ?>
+                          </ul>
+                        <?php }
+                        ?>
+                      </div>
+                      <!-- post content -->
+                      <div class="border rounded-4 m-4">
+                        <!--image-->
+                        <div class="container m-0 g-0 mb-1" style="width: 100%;">
+                          <div class="row g-1">
+                            <?php
+                            $images = $photo->getPhotoByPost($row['id']);
+                            $photoUrl = [];
+                            foreach ($images as $img) {
+                              $photoUrl[] = $img['image_url'];
+                            }
+                            ?>
+                            <div class="col">
+                              <img src="./Public/upload/<?= $photoUrl[0] ?>" alt="post image" class="img-fluid mb-1 object-fit-cover" style="height: 50%; border-radius: 15px 0 0 0;" />
+                              <img src="./Public/upload/<?= $photoUrl[1] ?>" alt="post image" class="img-fluid w-100 object-fit-cover" style="height: 50%; " />
+                            </div>
+                            <div class="col">
+                              <img src="./Public/upload/<?= $photoUrl[2] ?>" alt="post image" class="img-fluid mb-1 object-fit-cover" style="height: 50%; border-radius: 0 15px 0 0;" />
+                              <img src="./Public/upload/<?= $photoUrl[3] ?>" alt="post image" class="img-fluid w-100 object-fit-cover" style="height: 50%;" />
+                            </div>
+                          </div>
+                        </div>
+                        <!--avatar-->
+                        <div class="d-flex align-items-center mt-2 ms-3 mb-3">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- content -->
+                        <?php
+                        if ($row['content'] !== null || $row['content'] !== '') {
+                          echo '<div class="post-content">
+                                        <p class="px-3">' . $row['content'] . '</p>
+                                    </div>';
+                        }
+                        ?>
+                      </div>
+                      <!-- likes & comments -->
+                      <div class="post__comment position-relative pt-0">
+                        <!-- likes-comment -->
+                        <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
+                          <!-- like -->
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+                            ?>
+                          </button>
+                          <!-- comment -->
+                          <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                            <p class="m-0">2 bình luận</p>
+                            <p class="m-0">4 lượt chia sẻ</p>
+                          </div>
+                        </div>
+                        <hr class="mt-0 mb-2 mx-3" />
+                        <!-- comment & like bar -->
+                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
+                            <p class="m-0">Yêu thích</p>
+                          </button>
+                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                            <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                            <p class="m-0">Bình luận</p>
+                          </div>
+                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                            <p class="m-0">Chia sẻ</p>
+                          </button>
+                        </form>
+                        <!-- comment model -->
+                        <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                          <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                          <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                          </div>
+                          <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                            <div class="d-flex" style="margin-top: 18px;">
+                              <?php
+                              if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php } else { ?>
+                                <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php }
+                              ?>
+                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                <input type="hidden" name="parentId" value="0">
+                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                <button type="submit" class="border-0 bg-transparent ms-1">
+                                  <i class="fa-solid fa-paper-plane text-primary"></i>
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end -->
+                    </div>
+                  <?php break;
+                  default: ?>
+                    <!-- post-layout-4 -->
+                    <div class="bg-white rounded shadow-sm mt-3">
+                      <!-- author -->
+                      <div class="d-flex justify-content-between p-3 pb-0">
+                        <!-- avatar -->
+                        <div class="d-flex align-items-center">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- edit -->
+                        <?php
+                        if ($user_id === $row['user_id']) { ?>
+                          <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                          <!-- edit menu -->
+                          <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                            <li class="d-flex align-items-center">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                                Chỉnh sửa bài viết</a>
+                            </li>
+                            <li class="d-flex align-items-center btn-delete-post">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                Xóa bài viết</a>
+                            </li>
+                            <?php
+                            if (isset($_GET['id'])) {
+                              $id = $_GET['id'];
+                              $delete = $post->deletePost($id);
+                              if ($delete) {
+                                header('location: ./index.php');
+                              }
+                            }
+                            ?>
+                          </ul>
+                        <?php }
+                        ?>
+                      </div>
+                      <!-- post content -->
+                      <div class="border rounded-4 m-4">
+                        <!--image-->
+                        <div class="container m-0 g-0 position-relative" style="width: 100%;">
+                          <div class="row g-1">
+                            <?php
+                            $images = $photo->getPhotoByPost($row['id']);
+                            $imageUrls = [];
+                            foreach ($images as $img) {
+                              $imageUrls[] = $img['image_url'];
+                            }
+                            // Biến đếm số lượng ảnh đã hiển thị
+                            $displayedCount = 0;
+                            $i = 0;
+                            $j = 0;
+                            while ($i < 2) {
+                              echo '<div class="col">';
+                              echo '<img src="./Public/upload/' . $imageUrls[$j] . '" alt="post image" class="img-fluid mb-1" style="height: 50%;" />';
+                              $j++;
+                              echo '<img src="./Public/upload/' . $imageUrls[$j] . '" alt="post image" class="img-fluid" style="height: 50%;" />';
+                              echo '</div>';
+                              $j++;
+                              $i++;
+                            }
+                            ?>
+                          </div>
+                          <div class="h-50 w-50 position-absolute bottom-0 end-0 d-flex align-items-center">
+                            <div class="overlay">
+                            </div>
+                            <p class="w-100 text-white text-center text-center fs-3 z-3">+ <?= $check_photo - 3 ?></p>
+                          </div>
+                        </div>
+                        <!--avatar-->
+                        <div class="d-flex align-items-center mt-2 ms-3 mb-3">
+                          <?php
+                          if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                          <?php }
+                          ?>
+                          <div>
+                            <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                            <span class="text-muted fs-7">18 giờ</span>
+                          </div>
+                        </div>
+                        <!-- content -->
+                        <?php
+                        if ($row['content'] !== null || $row['content'] !== '') {
+                          echo '<div class="post-content">
+                                        <p class="px-3">' . $row['content'] . '</p>
+                                    </div>';
+                        }
+                        ?>
+                      </div>
+                      <!-- likes & comments -->
+                      <div class="post__comment position-relative pt-0">
+                        <!-- likes-comment -->
+                        <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
+                          <!-- like -->
+                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <?php
+                            $post_id = $row['id'];
+                            $response = $like->countPhotoByLike($post_id);
+                            if ($response) {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                            } else {
+                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            }
+                            ?>
+                          </button>
+                          <!-- comment -->
+                          <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                            <p class="m-0">2 bình luận</p>
+                            <p class="m-0">4 lượt chia sẻ</p>
+                          </div>
+                        </div>
+                        <hr class="mt-0 mb-2 mx-3" />
+                        <!-- comment & like bar -->
+                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <?php
+                            $post_id = $row['id'];
+                            $user_id = $_SESSION['user']['id'];
+                            $Checklike = $like->checklike($user_id, $post_id);
+                            if (!$Checklike) {
+                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                            } else {
+                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            }
+                            ?>
+                            <p class="m-0">Yêu thích</p>
+                          </button>
+                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                            <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                            <p class="m-0">Bình luận</p>
+                          </div>
+                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                            <p class="m-0">Chia sẻ</p>
+                          </button>
+                        </form>
+                        <!-- comment model -->
+                        <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                          <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                          <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                          </div>
+                          <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                            <div class="d-flex" style="margin-top: 18px;">
+                              <?php
+                              if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php } else { ?>
+                                <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                              <?php }
+                              ?>
+                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                <input type="hidden" name="parentId" value="0">
+                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                <button type="submit" class="border-0 bg-transparent ms-1">
+                                  <i class="fa-solid fa-paper-plane text-primary"></i>
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end -->
+                    </div>
+                  <?php break;
+                }
+              } else {
+                $check_photo = $photo->countPhotoByPost($row['id']);
+                switch ($check_photo) {
+                  case 0: ?>
+                    <!-- post-layout-0 -->
+                    <div class="bg-white rounded shadow-sm mt-3">
+                      <!-- author -->
+                      <div class="d-flex justify-content-between p-3 pb-0">
+                        <!-- avatar -->
+                        <div class="d-flex justify-content-between w-100">
+                          <!-- avatar -->
+                          <div class="d-flex">
+                            <?php
+                            if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                              <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                            <?php } else { ?>
+                              <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                            <?php }
+                            ?>
+                            <div>
+                              <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                              <span class="text-muted fs-7">18 giờ</span>
+                            </div>
+                          </div>
+                          <!-- edit -->
+
+                          <?php
+                          if ($user_id === $row['user_id']) { ?>
+                            <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                            <!-- edit menu -->
+                            <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                              <li class="d-flex align-items-center">
+                                <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#" data-bs-toggle="modal" data-bs-target="#updatePostModal">
+                                  Chỉnh sửa bài viết</a>
+                              </li>
+                              <li class="d-flex align-items-center btn-delete-post">
+                                <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                  Xóa bài viết
+                                </a>
+                                <?php
+                                if (isset($_GET['id'])) {
+                                  $id = $_GET['id'];
+                                  $delete = $post->deletePost($id);
+                                  if ($delete) {
+                                    header('location: ./index.php');
+                                  }
+                                }
+                                ?>
+                              </li>
+                            </ul>
+                          <?php
+                          }
+                          ?>
+                        </div>
+                      </div>
+                      <!-- post content -->
+                      <form method="POST" class="mt-3">
+                        <!-- content -->
+                        <?php
+                        if ($row['content'] !== null || $row['content'] !== '') {
+                          echo '<div class="post-content">
+                                  <p class="px-3">' . $row['content'] . '</p>
+                                </div>';
+                          echo '<input type="hidden" name="content-post-share" value="' . $row['content'] . '">';
+                        }
+                        ?>
+                        <!-- likes & comments -->
+                        <div class="post__comment position-relative pt-0">
+                          <!-- likes-comment -->
+                          <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
+                            <!-- like -->
+                            <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                              <?php
+                              $post_id = $row['id'];
+                              $response = $like->countPhotoByLike($post_id);
+                              if ($response) {
+                                echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                              } else {
+                                echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                              }
+                              ?>
+                            </button>
+                            <!-- comment -->
+                            <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                              <p class="m-0">2 bình luận</p>
+                              <p class="m-0">4 lượt chia sẻ</p>
+                            </div>
+                          </div>
+                          <hr class="mt-0 mb-2 mx-3" />
+                          <!-- comment & like bar -->
+                          <div class="d-flex justify-content-around px-3 pb-2">
+                            <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                              <?php
+                              $post_id = $row['id'];
+                              $user_id = $_SESSION['user']['id'];
+                              $Checklike = $like->checklike($user_id, $post_id);
+                              if (!$Checklike) {
+                                echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                              } else {
+                                echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                              }
+                              ?>
+                              <p class="m-0">Yêu thích</p>
+                            </button>
+                            <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                              <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                              <p class="m-0">Bình luận</p>
+                            </div>
+                            <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                              <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                              <p class="m-0">Chia sẻ</p>
+                            </button>
+                          </div>
+                          <!-- comment model -->
+                          <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                            <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                            <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                            </div>
+                            <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                              <div class="d-flex" style="margin-top: 18px;">
+                                <?php
+                                if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                  <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                <?php } else { ?>
+                                  <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                <?php }
+                                ?>
+                                <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                  <input type="hidden" name="parentId" value="0">
+                                  <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                  <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                  <button type="submit" class="border-0 bg-transparent ms-1">
+                                    <i class="fa-solid fa-paper-plane text-primary"></i>
+                                  </button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                      <!-- end -->
+                    </div>
+                  <?php break;
+                  case 1: ?>
+                    <!-- post-layout-1 -->
+                    <div class="bg-white rounded shadow-sm mt-3">
+                      <!-- author -->
+                      <div class="d-flex justify-content-between p-3 pb-0">
+                        <!-- avatar -->
+                        <div class="d-flex align-items-center">
                           <?php
                           if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
                             <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
@@ -320,23 +1450,22 @@ if (isset($_POST['post']) && $_POST['post']) {
                           <!-- edit menu -->
                           <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
                             <li class="d-flex align-items-center">
-                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#" data-bs-toggle="modal" data-bs-target="#updatePostModal">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
                                 Chỉnh sửa bài viết</a>
                             </li>
                             <li class="d-flex align-items-center btn-delete-post">
                               <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
-                                Xóa bài viết
-                              </a>
-                              <?php
-                              if (isset($_GET['id'])) {
-                                $id = $_GET['id'];
-                                $delete = $post->deletePost($id);
-                                if ($delete) {
-                                  header('location: ./index.php');
-                                }
-                              }
-                              ?>
+                                Xóa bài viết</a>
                             </li>
+                            <?php
+                            if (isset($_GET['id'])) {
+                              $id = $_GET['id'];
+                              $delete = $post->deletePost($id);
+                              if ($delete) {
+                                header('location: ./index.php');
+                              }
+                            }
+                            ?>
                           </ul>
                         <?php
                         }
@@ -367,7 +1496,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                             } else {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
                             }
-
                             ?>
                           </button>
                           <!-- comment -->
@@ -416,829 +1544,754 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
                               <?php }
                               ?>
-                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
-                                <input type="hidden" name="parentId" value="0">
-                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
-                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
-                                <button type="submit" class="border-0 bg-transparent ms-1">
-                                  <i class="fa-solid fa-paper-plane text-primary"></i>
-                                </button>
-                              </form>
+                              </button>
+                              <!-- comment -->
+                              <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                                <p class="m-0">2 bình luận</p>
+                                <p class="m-0">4 lượt chia sẻ</p>
+                              </div>
+                            </div>
+                            <hr class="mt-0 mb-2 mx-3" />
+                            <!-- comment & like bar -->
+                            <div class="d-flex justify-content-around px-3 pb-2">
+                              <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                                <?php
+                                $post_id = $row['id'];
+                                $user_id = $_SESSION['user']['id'];
+                                $Checklike = $like->checklike($user_id, $post_id);
+                                if (!$Checklike) {
+                                  echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                                } else {
+                                  echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                                }
+                                ?>
+                                <p class="m-0">Yêu thích</p>
+                              </button>
+                              <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                                <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                                <p class="m-0">Bình luận</p>
+                              </div>
+                              <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                                <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                                <input type="hidden" name="post_id" value="<?php $row['id']; ?>"> <!-- ID của bài viết -->
+                                <p class="m-0">Chia sẻ</p>
+                              </button>
+
+                            </div>
+                            <!-- comment model -->
+                            <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                              <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                              <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                              </div>
+                              <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                                <div class="d-flex" style="margin-top: 18px;">
+                                  <?php
+                                  if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                    <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                  <?php } else { ?>
+                                    <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                  <?php }
+                                  ?>
+                                  <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                    <input type="hidden" name="parentId" value="0">
+                                    <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                    <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                    <button type="submit" class="border-0 bg-transparent ms-1">
+                                      <i class="fa-solid fa-paper-plane text-primary"></i>
+                                    </button>
+                                  </form>
+                                </div>
+                              </div>
                             </div>
                           </div>
+                          </form>
+                          <!-- end -->
                         </div>
-                      </div>
-                    </div>
-                    <!-- end -->
-                  </div>
-                <?php break;
-                case 1: ?>
-                  <!-- post-layout-1 -->
-                  <div class="bg-white rounded shadow-sm mt-3">
-                    <!-- author -->
-                    <div class="d-flex justify-content-between p-3 pb-0">
-                      <!-- avatar -->
-                      <div class="d-flex align-items-center">
-                        <?php
-                        if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
-                          <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                        <?php } else { ?>
-                          <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                        <?php }
-                        ?>
-                        <div>
-                          <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
-                          <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
-                        </div>
-                      </div>
-                      <!-- edit -->
-                      <?php
-                      if ($user_id === $row['user_id']) { ?>
-                        <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                        <!-- edit menu -->
-                        <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
-                          <li class="d-flex align-items-center">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
-                              Chỉnh sửa bài viết</a>
-                          </li>
-                          <li class="d-flex align-items-center btn-delete-post">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
-                              Xóa bài viết</a>
-                          </li>
-                          <?php
-                          if (isset($_GET['id'])) {
-                            $id = $_GET['id'];
-                            $delete = $post->deletePost($id);
-                            if ($delete) {
-                              header('location: ./index.php');
-                            }
-                          }
-                          ?>
-                        </ul>
-                      <?php }
-                      ?>
-                    </div>
-                    <!-- post content -->
-                    <div class="mt-3">
-                      <!-- content -->
-                      <?php
-                      if ($row['content'] !== null || $row['content'] !== '') {
-                        echo '<div class="post-content">
-                                <p class="px-3">' . $row['content'] . '</p>
-                              </div>';
-                      }
-                      ?>
-                      <div id="post-images">
-                        <?php
-                        $image = $photo->getPhotoByPost($row['id']);
-                        echo '<img src="./Public/upload/' . $image[0]['image_url'] . '" alt="post image" class="img-fluid" style="width: 100%;" />';
-                        ?>
-                      </div>
-                      <!-- likes & comments -->
-                      <div class="post__comment position-relative pt-0">
-                        <!-- likes-comment -->
-                        <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
-                          <!-- like -->
-                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
-                            <?php
-                            $post_id = $row['id'];
-                            $response = $like->countPhotoByLike($post_id);
-                            if ($response) {
-                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
-                            } else {
-                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
-                            }
-
-                            ?>
-                          </button>
-                          <!-- comment -->
-                          <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
-                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
-                          </div>
-                        </div>
-                        <hr class="mt-0 mb-2 mx-3" />
-                        <!-- comment & like bar -->
-                        <div class="d-flex justify-content-around px-3 pb-2">
-                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <?php
-                            $post_id = $row['id'];
-                            $user_id = $_SESSION['user']['id'];
-                            $Checklike = $like->checklike($user_id, $post_id);
-                            if (!$Checklike) {
-                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
-                            } else {
-                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
-                            }
-                            ?>
-                            <p class="m-0">Yêu thích</p>
-                          </button>
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
-                            <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
-                            <p class="m-0">Bình luận</p>
-                          </div>
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                            <p class="m-0">Chia sẻ</p>
-                          </div>
-                        </div>
-                        <!-- comment model -->
-                        <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
-                          <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
-                          <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" data-post-id="<?= $row['id'] ?>" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
-                          </div>
-                          <div class="position-absolute bottom-0 bg-white w-100 px-3" data-post-id="<?= $row['id'] ?>" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
-                            <div class="d-flex" style="margin-top: 18px;">
+                      <?php break;
+                    case 2: ?>
+                        <!-- post-layout-2 -->
+                        <div class="bg-white rounded shadow-sm mt-3">
+                          <!-- author -->
+                          <div class="d-flex justify-content-between p-3 pb-0">
+                            <!-- avatar -->
+                            <div class="d-flex align-items-center">
                               <?php
                               if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
-                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
                               <?php } else { ?>
-                                <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
                               <?php }
                               ?>
-                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
-                                <input type="hidden" name="parentId" value="0">
-                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
-                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
-                                <button type="submit" class="border-0 bg-transparent ms-1">
-                                  <i class="fa-solid fa-paper-plane text-primary"></i>
-                                </button>
-                              </form>
+                              <div>
+                                <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                                <span class="text-muted fs-7">18 giờ</span>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- end -->
-                  </div>
-                <?php break;
-                case 2: ?>
-                  <!-- post-layout-2 -->
-                  <div class="bg-white rounded shadow-sm mt-3">
-                    <!-- author -->
-                    <div class="d-flex justify-content-between p-3 pb-0">
-                      <!-- avatar -->
-                      <div class="d-flex align-items-center">
-                        <?php
-                        if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
-                          <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                        <?php } else { ?>
-                          <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                        <?php }
-                        ?>
-                        <div>
-                          <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
-                          <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
-                        </div>
-                      </div>
-                      <!-- edit -->
-                      <?php
-                      if ($user_id === $row['user_id']) { ?>
-                        <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                        <!-- edit menu -->
-                        <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
-                          <li class="d-flex align-items-center">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
-                              Chỉnh sửa bài viết</a>
-                          </li>
-                          <li class="d-flex align-items-center btn-delete-post">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
-                              Xóa bài viết</a>
-                          </li>
-                          <?php
-                          if (isset($_GET['id'])) {
-                            $id = $_GET['id'];
-                            $delete = $post->deletePost($id);
-                            if ($delete) {
-                              header('location: ./index.php');
-                            }
-                          }
-                          ?>
-                        </ul>
-                      <?php }
-                      ?>
-                    </div>
-                    <!-- post content -->
-                    <div class="mt-3">
-                      <!-- content -->
-                      <?php
-                      if ($row['content'] !== null || $row['content'] !== '') {
-                        echo '<div class="post-content">
-                                <p class="px-3">' . $row['content'] . '</p>
-                              </div>';
-                      }
-                      ?>
-                      <div class="container m-0 g-0">
-                        <div class="row g-1" id="post-images">
-                          <?php
-                          $image = $photo->getPhotoByPost($row['id']);
-                          foreach ($image as $img) {
-                            echo '<div class="col">
-                                    <img src="./Public/upload/' . $img['image_url'] . '" alt="post image" class="img-fluid" style="width: 100%;  height: 550px;" />
-                                    </div>';
-                          }
-                          ?>
-                        </div>
-                      </div>
-                      <!-- likes & comments -->
-                      <div class="post__comment position-relative pt-0">
-                        <!-- likes-comment -->
-                        <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
-                          <!-- like -->
-                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <!-- edit -->
                             <?php
-                            $post_id = $row['id'];
-                            $response = $like->countPhotoByLike($post_id);
-                            if ($response) {
-                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
-                            } else {
-                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            if ($user_id === $row['user_id']) { ?>
+                              <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                              <!-- edit menu -->
+                              <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                                <li class="d-flex align-items-center">
+                                  <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                                    Chỉnh sửa bài viết</a>
+                                </li>
+                                <li class="d-flex align-items-center btn-delete-post">
+                                  <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                    Xóa bài viết</a>
+                                </li>
+                                <?php
+                                if (isset($_GET['id'])) {
+                                  $id = $_GET['id'];
+                                  $delete = $post->deletePost($id);
+                                  if ($delete) {
+                                    header('location: ./index.php');
+                                  }
+                                }
+                                ?>
+                              </ul>
+                            <?php }
+                            ?>
+                          </div>
+                          <!-- post content -->
+                          <form method="POST" class="mt-3" enctype="multipart/form-data">
+                            <!-- content -->
+                            <?php
+                            if ($row['content'] !== null || $row['content'] !== '') {
+                              echo '<div class="post-content">
+                                  <p class="px-3">' . $row['content'] . '</p>
+                                </div>';
+                              echo '<input type="hidden" name="content-post-share" value="' . $row['content'] . '">';
                             }
+                            ?>
+                            <div class="container m-0 g-0">
+                              <div class="row g-1" id="post-images">
+                                <?php
+                                $image = $photo->getPhotoByPost($row['id']);
+                                foreach ($image as $img) {
+                                  echo '<div class="col">
+                                      <img src="./Public/upload/' . $img['image_url'] . '" alt="post image" class="img-fluid" style="width: 100%;  height: 550px;" />
+                                      </div>';
+                                }
+                                ?>
+                              </div>
+                            </div>
+                            <!-- likes & comments -->
+                            <div class="post__comment position-relative pt-0">
+                              <!-- likes-comment -->
+                              <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
+                                <!-- like -->
+                                <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                                  <?php
+                                  $post_id = $row['id'];
+                                  $response = $like->countPhotoByLike($post_id);
+                                  if ($response) {
+                                    echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                                  } else {
+                                    echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                                  }
 
-                            ?>
-                          </button>
-                          <!-- comment -->
-                          <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
-                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
-                          </div>
+                                  ?>
+                                </button>
+                                <!-- comment -->
+                                <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                                  <p class="m-0">2 bình luận</p>
+                                  <p class="m-0">4 lượt chia sẻ</p>
+                                </div>
+                              </div>
+                              <hr class="mt-0 mb-2 mx-3" />
+                              <!-- comment & like bar -->
+                              <div class="d-flex justify-content-around px-3 pb-2">
+                                <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                                  <?php
+                                  $post_id = $row['id'];
+                                  $user_id = $_SESSION['user']['id'];
+                                  $Checklike = $like->checklike($user_id, $post_id);
+                                  if (!$Checklike) {
+                                    echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                                  } else {
+                                    echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                                  }
+                                  ?>
+                                  <p class="m-0">Yêu thích</p>
+                                </button>
+                                <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                                  <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                                  <p class="m-0">Bình luận</p>
+                                </div>
+                                <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                                  <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                                  <p class="m-0">Chia sẻ</p>
+                                </button>
+                              </div>
+                              <!-- comment model -->
+                              <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                                <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                                <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                                </div>
+                                <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                                  <div class="d-flex" style="margin-top: 18px;">
+                                    <?php
+                                    if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                      <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                    <?php } else { ?>
+                                      <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                    <?php }
+                                    ?>
+                                    <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                      <input type="hidden" name="parentId" value="0">
+                                      <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                      <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                      <button type="submit" class="border-0 bg-transparent ms-1">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                          <!-- end -->
                         </div>
-                        <hr class="mt-0 mb-2 mx-3" />
-                        <!-- comment & like bar -->
-                        <div class="d-flex justify-content-around px-3 pb-2">
-                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <?php
-                            $post_id = $row['id'];
-                            $user_id = $_SESSION['user']['id'];
-                            $Checklike = $like->checklike($user_id, $post_id);
-                            if (!$Checklike) {
-                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
-                            } else {
-                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
-                            }
-                            ?>
-                            <p class="m-0">Yêu thích</p>
-                          </button>
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
-                            <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
-                            <p class="m-0">Bình luận</p>
-                          </div>
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                            <p class="m-0">Chia sẻ</p>
-                          </div>
-                        </div>
-                        <!-- comment model -->
-                        <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
-                          <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
-                          <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" data-post-id="<?= $row['id'] ?>" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
-                          </div>
-                          <div class="position-absolute bottom-0 bg-white w-100 px-3" data-post-id="<?= $row['id'] ?>" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
-                            <div class="d-flex" style="margin-top: 18px;">
+                      <?php break;
+                    case 3: ?>
+                        <!-- post-layout-3 -->
+                        <div class="bg-white rounded shadow-sm mt-3">
+                          <!-- author -->
+                          <div class="d-flex justify-content-between p-3 pb-0">
+                            <!-- avatar -->
+                            <div class="d-flex align-items-center">
                               <?php
                               if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
-                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
                               <?php } else { ?>
-                                <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
                               <?php }
                               ?>
-                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
-                                <input type="hidden" name="parentId" value="0">
-                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
-                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
-                                <button type="submit" class="border-0 bg-transparent ms-1">
-                                  <i class="fa-solid fa-paper-plane text-primary"></i>
-                                </button>
-                              </form>
+                              <div>
+                                <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                                <span class="text-muted fs-7">18 giờ</span>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- end -->
-                  </div>
-                <?php break;
-                case 3: ?>
-                  <!-- post-layout-3 -->
-                  <div class="bg-white rounded shadow-sm mt-3">
-                    <!-- author -->
-                    <div class="d-flex justify-content-between p-3 pb-0">
-                      <!-- avatar -->
-                      <div class="d-flex align-items-center">
-                        <?php
-                        if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
-                          <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                        <?php } else { ?>
-                          <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                        <?php }
-                        ?>
-                        <div>
-                          <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
-                          <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
-                        </div>
-                      </div>
-                      <!-- edit -->
-                      <?php
-                      if ($user_id === $row['user_id']) { ?>
-                        <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                        <!-- edit menu -->
-                        <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
-                          <li class="d-flex align-items-center">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
-                              Chỉnh sửa bài viết</a>
-                          </li>
-                          <li class="d-flex align-items-center btn-delete-post">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
-                              Xóa bài viết</a>
-                          </li>
-                          <?php
-                          if (isset($_GET['id'])) {
-                            $id = $_GET['id'];
-                            $delete = $post->deletePost($id);
-                            if ($delete) {
-                              header('location: ./index.php');
-                            }
-                          }
-                          ?>
-                        </ul>
-                      <?php }
-                      ?>
-                    </div>
-                    <!-- post content -->
-                    <div class="mt-3">
-                      <!-- content -->
-                      <?php
-                      if ($row['content'] !== null || $row['content'] !== '') {
-                        echo '<div class="post-content">
-                                <p class="px-3">' . $row['content'] . '</p>
-                              </div>';
-                      }
-                      ?>
-                      <div class="container m-0 g-0" style="width: 100%;">
-                        <div class="row g-1">
-                          <?php
-                          $image = $photo->getPhotoByPost($row['id']);
-                          $imageUrls = [];
-                          foreach ($image as $img) {
-                            $imageUrls[] = $img['image_url'];
-                          }
-                          ?>
-                          <div class="col-8">
-                            <img src="./Public/upload/<?= $imageUrls[0] ?>" alt="post image" class="img-fluid" style="width: 100%; height: 604px" />
-                          </div>
-                          <div class="col-4">
+                            <!-- edit -->
                             <?php
-                            for ($i = 1; $i <= 2; $i++) {
-                              echo '<img src="./Public/upload/' . $imageUrls[$i] . '" alt="post image" class="img-fluid mb-1" style="height: 300px;" />';
-                            }
+                            if ($user_id === $row['user_id']) { ?>
+                              <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                              <!-- edit menu -->
+                              <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                                <li class="d-flex align-items-center">
+                                  <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                                    Chỉnh sửa bài viết</a>
+                                </li>
+                                <li class="d-flex align-items-center btn-delete-post">
+                                  <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                    Xóa bài viết</a>
+                                </li>
+                                <?php
+                                if (isset($_GET['id'])) {
+                                  $id = $_GET['id'];
+                                  $delete = $post->deletePost($id);
+                                  if ($delete) {
+                                    header('location: ./index.php');
+                                  }
+                                }
+                                ?>
+                              </ul>
+                            <?php }
                             ?>
                           </div>
-                        </div>
-                      </div>
-                      <!-- likes & comments -->
-                      <div class="post__comment position-relative pt-0">
-                        <!-- likes-comment -->
-                        <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
-                          <!-- like -->
-                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                          <!-- post content -->
+                          <form method="POST" class="mt-3">
+                            <!-- content -->
                             <?php
-                            $post_id = $row['id'];
-                            $response = $like->countPhotoByLike($post_id);
-                            if ($response) {
-                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
-                            } else {
-                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
-                            }
-
-                            ?>
-                          </button>
-                          <!-- comment -->
-                          <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
-                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
-                          </div>
-                        </div>
-                        <hr class="mt-0 mb-2 mx-3" />
-                        <!-- comment & like bar -->
-                        <div class="d-flex justify-content-around px-3 pb-2">
-                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <?php
-                            $post_id = $row['id'];
-                            $user_id = $_SESSION['user']['id'];
-                            $Checklike = $like->checklike($user_id, $post_id);
-                            if (!$Checklike) {
-                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
-                            } else {
-                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            if ($row['content'] !== null || $row['content'] !== '') {
+                              echo '<div class="post-content">
+                                  <p class="px-3">' . $row['content'] . '</p>
+                                </div>';
+                              echo '<input type="hidden" name="content-post-share" value="' . $row['content'] . '">';
                             }
                             ?>
-                            <p class="m-0">Yêu thích</p>
-                          </button>
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
-                            <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
-                            <p class="m-0">Bình luận</p>
-                          </div>
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                            <p class="m-0">Chia sẻ</p>
-                          </div>
+                            <div class="container m-0 g-0" style="width: 100%;">
+                              <div class="row g-1">
+                                <?php
+                                $image = $photo->getPhotoByPost($row['id']);
+                                $imageUrls = [];
+                                foreach ($image as $img) {
+                                  $imageUrls[] = $img['image_url'];
+                                }
+                                ?>
+                                <div class="col-8">
+                                  <img src="./Public/upload/<?= $imageUrls[0] ?>" alt="post image" class="img-fluid" style="width: 100%; height: 604px" />
+                                </div>
+                                <div class="col-4">
+                                  <?php
+                                  for ($i = 1; $i <= 2; $i++) {
+                                    echo '<img src="./Public/upload/' . $imageUrls[$i] . '" alt="post image" class="img-fluid mb-1" style="height: 300px;" />';
+                                  }
+                                  ?>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- likes & comments -->
+                            <div class="post__comment position-relative pt-0">
+                              <!-- likes-comment -->
+                              <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
+                                <!-- like -->
+                                <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                                  <?php
+                                  $post_id = $row['id'];
+                                  $response = $like->countPhotoByLike($post_id);
+                                  if ($response) {
+                                    echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                                  } else {
+                                    echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                                  }
+                                  ?>
+                                </button>
+                                <!-- comment -->
+                                <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                                  <p class="m-0">2 bình luận</p>
+                                  <p class="m-0">4 lượt chia sẻ</p>
+                                </div>
+                              </div>
+                              <hr class="mt-0 mb-2 mx-3" />
+                              <!-- comment & like bar -->
+                              <div class="d-flex justify-content-around px-3 pb-2">
+                                <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                                  <?php
+                                  $post_id = $row['id'];
+                                  $user_id = $_SESSION['user']['id'];
+                                  $Checklike = $like->checklike($user_id, $post_id);
+                                  if (!$Checklike) {
+                                    echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                                  } else {
+                                    echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                                  }
+                                  ?>
+                                  <p class="m-0">Yêu thích</p>
+                                </button>
+                                <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                                  <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                                  <p class="m-0">Bình luận</p>
+                                </div>
+                                <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                                  <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                                  <p class="m-0">Chia sẻ</p>
+                                </button>
+                              </div>
+                              <!-- comment model -->
+                              <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                                <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                                <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                                </div>
+                                <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                                  <div class="d-flex" style="margin-top: 18px;">
+                                    <?php
+                                    if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                      <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                    <?php } else { ?>
+                                      <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                    <?php }
+                                    ?>
+                                    <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                      <input type="hidden" name="parentId" value="0">
+                                      <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                      <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                      <button type="submit" class="border-0 bg-transparent ms-1">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                          <!-- end -->
                         </div>
-                        <!-- comment model -->
-                        <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
-                          <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
-                          <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" data-post-id="<?= $row['id'] ?>" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
-                          </div>
-                          <div class="position-absolute bottom-0 bg-white w-100 px-3" data-post-id="<?= $row['id'] ?>" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
-                            <div class="d-flex" style="margin-top: 18px;">
+                      <?php break;
+                    case 4: ?>
+                        <!-- post-layout-4 -->
+                        <div class="bg-white rounded shadow-sm mt-3">
+                          <!-- author -->
+                          <div class="d-flex justify-content-between p-3 pb-0">
+                            <!-- avatar -->
+                            <div class="d-flex align-items-center">
                               <?php
                               if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
-                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
                               <?php } else { ?>
-                                <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
                               <?php }
                               ?>
-                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
-                                <input type="hidden" name="parentId" value="0">
-                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
-                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
-                                <button type="submit" class="border-0 bg-transparent ms-1">
-                                  <i class="fa-solid fa-paper-plane text-primary"></i>
-                                </button>
-                              </form>
+                              <div>
+                                <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                                <span class="text-muted fs-7">18 giờ</span>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- end -->
-                  </div>
-                <?php break;
-                case 4: ?>
-                  <!-- post-layout-4 -->
-                  <div class="bg-white rounded shadow-sm mt-3">
-                    <!-- author -->
-                    <div class="d-flex justify-content-between p-3 pb-0">
-                      <!-- avatar -->
-                      <div class="d-flex align-items-center">
-                        <?php
-                        if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
-                          <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                        <?php } else { ?>
-                          <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                        <?php }
-                        ?>
-                        <div>
-                          <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
-                          <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
-                        </div>
-                      </div>
-                      <!-- edit -->
-                      <?php
-                      if ($user_id === $row['user_id']) { ?>
-                        <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                        <!-- edit menu -->
-                        <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
-                          <li class="d-flex align-items-center">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
-                              Chỉnh sửa bài viết</a>
-                          </li>
-                          <li class="d-flex align-items-center btn-delete-post">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
-                              Xóa bài viết</a>
-                          </li>
-                          <?php
-                          if (isset($_GET['id'])) {
-                            $id = $_GET['id'];
-                            $delete = $post->deletePost($id);
-                            if ($delete) {
-                              header('location: ./index.php');
-                            }
-                          }
-                          ?>
-                        </ul>
-                      <?php }
-                      ?>
-                    </div>
-                    <!-- post content -->
-                    <div class="mt-3">
-                      <!-- content -->
-                      <?php
-                      if ($row['content'] !== null || $row['content'] !== '') {
-                        echo '<div class="post-content">
-                                <p class="px-3">' . $row['content'] . '</p>
-                              </div>';
-                      }
-                      ?>
-                      <div class="container m-0 g-0 mb-1" style="width: 100%;">
-                        <div class="row g-1">
-                          <?php
-                          $images = $photo->getPhotoByPost($row['id']);
-                          $photoUrl = [];
-                          foreach ($images as $img) {
-                            $photoUrl[] = $img['image_url'];
-                          }
-                          ?>
-                          <div class="col">
-                            <img src="./Public/upload/<?= $photoUrl[0] ?>" alt="post image" class="img-fluid mb-1 object-fit-cover" style="height: 50%;" />
-                            <img src="./Public/upload/<?= $photoUrl[1] ?>" alt="post image" class="img-fluid w-100 object-fit-cover" style="height: 50%;" />
-                          </div>
-                          <div class="col">
-                            <img src="./Public/upload/<?= $photoUrl[2] ?>" alt="post image" class="img-fluid mb-1 object-fit-cover" style="height: 50%;" />
-                            <img src="./Public/upload/<?= $photoUrl[3] ?>" alt="post image" class="img-fluid w-100 object-fit-cover" style="height: 50%;" />
-                          </div>
-                        </div>
-                      </div>
-                      <!-- likes & comments -->
-                      <div class="post__comment position-relative pt-0">
-                        <!-- likes-comment -->
-                        <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
-                          <!-- like -->
-                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <!-- edit -->
                             <?php
-                            $post_id = $row['id'];
-                            $response = $like->countPhotoByLike($post_id);
-                            if ($response) {
-                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
-                            } else {
-                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                            if ($user_id === $row['user_id']) { ?>
+                              <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                              <!-- edit menu -->
+                              <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                                <li class="d-flex align-items-center">
+                                  <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                                    Chỉnh sửa bài viết</a>
+                                </li>
+                                <li class="d-flex align-items-center btn-delete-post">
+                                  <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                    Xóa bài viết</a>
+                                </li>
+                                <?php
+                                if (isset($_GET['id'])) {
+                                  $id = $_GET['id'];
+                                  $delete = $post->deletePost($id);
+                                  if ($delete) {
+                                    header('location: ./index.php');
+                                  }
+                                }
+                                ?>
+                              </ul>
+                            <?php }
+                            ?>
+                          </div>
+                          <!-- post content -->
+                          <form method="POST" class="mt-3">
+                            <!-- content -->
+                            <?php
+                            if ($row['content'] !== null || $row['content'] !== '') {
+                              echo '<div class="post-content">
+                                  <p class="px-3">' . $row['content'] . '</p>
+                                </div>';
+                              echo '<input type="hidden" name="content-post-share" value="' . $row['content'] . '">';
                             }
+                            ?>
+                            <div class="container m-0 g-0 mb-1" style="width: 100%;">
+                              <div class="row g-1">
+                                <?php
+                                $images = $photo->getPhotoByPost($row['id']);
+                                $photoUrl = [];
+                                foreach ($images as $img) {
+                                  $photoUrl[] = $img['image_url'];
+                                }
+                                ?>
+                                <div class="col">
+                                  <img src="./Public/upload/<?= $photoUrl[0] ?>" alt="post image" class="img-fluid mb-1 object-fit-cover" style="height: 50%;" />
+                                  <img src="./Public/upload/<?= $photoUrl[1] ?>" alt="post image" class="img-fluid w-100 object-fit-cover" style="height: 50%;" />
+                                </div>
+                                <div class="col">
+                                  <img src="./Public/upload/<?= $photoUrl[2] ?>" alt="post image" class="img-fluid mb-1 object-fit-cover" style="height: 50%;" />
+                                  <img src="./Public/upload/<?= $photoUrl[3] ?>" alt="post image" class="img-fluid w-100 object-fit-cover" style="height: 50%;" />
+                                </div>
+                              </div>
+                            </div>
+                            <!-- likes & comments -->
+                            <div class="post__comment position-relative pt-0">
+                              <!-- likes-comment -->
+                              <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
+                                <!-- like -->
+                                <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                                  <?php
+                                  $post_id = $row['id'];
+                                  $response = $like->countPhotoByLike($post_id);
+                                  if ($response) {
+                                    echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                                  } else {
+                                    echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                                  }
 
-                            ?>
-                          </button>
-                          <!-- comment -->
-                          <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
-                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
-                          </div>
+                                  ?>
+                                </button>
+                                <!-- comment -->
+                                <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                                  <p class="m-0">2 bình luận</p>
+                                  <p class="m-0">4 lượt chia sẻ</p>
+                                </div>
+                              </div>
+                              <hr class="mt-0 mb-2 mx-3" />
+                              <!-- comment & like bar -->
+                              <div class="d-flex justify-content-around px-3 pb-2">
+                                <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                                  <?php
+                                  $post_id = $row['id'];
+                                  $user_id = $_SESSION['user']['id'];
+                                  $Checklike = $like->checklike($user_id, $post_id);
+                                  if (!$Checklike) {
+                                    echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                                  } else {
+                                    echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                                  }
+                                  ?>
+                                  <p class="m-0">Yêu thích</p>
+                                </button>
+                                <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                                  <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                                  <p class="m-0">Bình luận</p>
+                                </div>
+                                <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                                  <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                                  <p class="m-0">Chia sẻ</p>
+                                </button>
+                              </div>
+                              <!-- comment model -->
+                              <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                                <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                                <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                                </div>
+                                <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                                  <div class="d-flex" style="margin-top: 18px;">
+                                    <?php
+                                    if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                      <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                    <?php } else { ?>
+                                      <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                    <?php }
+                                    ?>
+                                    <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                      <input type="hidden" name="parentId" value="0">
+                                      <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                      <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                      <button type="submit" class="border-0 bg-transparent ms-1">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                          <!-- end -->
                         </div>
-                        <hr class="mt-0 mb-2 mx-3" />
-                        <!-- comment & like bar -->
-                        <div class="d-flex justify-content-around px-3 pb-2">
-                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <?php
-                            $post_id = $row['id'];
-                            $user_id = $_SESSION['user']['id'];
-                            $Checklike = $like->checklike($user_id, $post_id);
-                            if (!$Checklike) {
-                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
-                            } else {
-                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
-                            }
-                            ?>
-                            <p class="m-0">Yêu thích</p>
-                          </button>
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
-                            <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
-                            <p class="m-0">Bình luận</p>
-                          </div>
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                            <p class="m-0">Chia sẻ</p>
-                          </div>
-                        </div>
-                        <!-- comment model -->
-                        <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
-                          <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
-                          <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" data-post-id="<?= $row['id'] ?>" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
-                          </div>
-                          <div class="position-absolute bottom-0 bg-white w-100 px-3" data-post-id="<?= $row['id'] ?>" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
-                            <div class="d-flex" style="margin-top: 18px;">
+                      <?php break;
+                    default: ?>
+                        <!-- post-layout-5 -->
+                        <div class="bg-white rounded shadow-sm mt-3">
+                          <!-- author -->
+                          <div class="d-flex justify-content-between p-3 pb-0">
+                            <!-- avatar -->
+                            <div class="d-flex align-items-center">
                               <?php
                               if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
-                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
                               <?php } else { ?>
-                                <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
                               <?php }
                               ?>
-                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
-                                <input type="hidden" name="parentId" value="0">
-                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
-                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
-                                <button type="submit" class="border-0 bg-transparent ms-1">
-                                  <i class="fa-solid fa-paper-plane text-primary"></i>
-                                </button>
-                              </form>
+                              <div>
+                                <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
+                                <span class="text-muted fs-7">18 giờ</span>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- end -->
-                  </div>
-                <?php break;
-                default: ?>
-                  <!-- post-layout-5 -->
-                  <div class="bg-white rounded shadow-sm mt-3">
-                    <!-- author -->
-                    <div class="d-flex justify-content-between p-3 pb-0">
-                      <!-- avatar -->
-                      <div class="d-flex align-items-center">
-                        <?php
-                        if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
-                          <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                        <?php } else { ?>
-                          <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                        <?php }
-                        ?>
-                        <div>
-                          <p class="m-0 fw-bold"><?= $user->getFullnameByUser($row['user_id']) ?></p>
-                          <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
-                        </div>
-                      </div>
-                      <!-- edit -->
-                      <?php
-                      if ($user_id === $row['user_id']) { ?>
-                        <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                        <!-- edit menu -->
-                        <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
-                          <li class="d-flex align-items-center">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
-                              Chỉnh sửa bài viết</a>
-                          </li>
-                          <li class="d-flex align-items-center btn-delete-post">
-                            <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
-                              Xóa bài viết</a>
-                          </li>
-                          <?php
-                          if (isset($_GET['id'])) {
-                            $id = $_GET['id'];
-                            $delete = $post->deletePost($id);
-                            if ($delete) {
-                              header('location: ./index.php');
-                            }
-                          }
-                          ?>
-                        </ul>
-                      <?php }
-                      ?>
-                    </div>
-                    <!-- post content -->
-                    <div class="mt-3">
-                      <!-- content -->
-                      <?php
-                      if ($row['content'] !== null || $row['content'] !== '') {
-                        echo '<div class="post-content">
-                                <p class="px-3">' . $row['content'] . '</p>
-                              </div>';
-                      }
-                      ?>
-                      <div class="container m-0 g-0 position-relative" style="width: 100%;">
-                        <div class="row g-1">
-                          <?php
-                          $images = $photo->getPhotoByPost($row['id']);
-                          $imageUrls = [];
-                          foreach ($images as $img) {
-                            $imageUrls[] = $img['image_url'];
-                          }
-                          // Biến đếm số lượng ảnh đã hiển thị
-                          $displayedCount = 0;
-                          $i = 0;
-                          $j = 0;
-                          while ($i < 2) {
-                            echo '<div class="col">';
-                            echo '<img src="./Public/upload/' . $imageUrls[$j] . '" alt="post image" class="img-fluid mb-1" style="height: 50%;" />';
-                            $j++;
-                            echo '<img src="./Public/upload/' . $imageUrls[$j] . '" alt="post image" class="img-fluid" style="height: 50%;" />';
-                            echo '</div>';
-                            $j++;
-                            $i++;
-                          }
-                          ?>
-                        </div>
-                        <div class="h-50 w-50 position-absolute bottom-0 end-0 d-flex align-items-center">
-                          <div class="overlay">
-                          </div>
-                          <p class="w-100 text-white text-center text-center fs-3 z-3">+ <?= $check_photo - 3 ?></p>
-                        </div>
-                      </div>
-                      <!-- likes & comments -->
-                      <div class="post__comment position-relative pt-0">
-                        <!-- likes-comment -->
-                        <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
-                          <!-- like -->
-                          <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                            <!-- edit -->
                             <?php
-                            $post_id = $row['id'];
-                            $response = $like->countPhotoByLike($post_id);
-                            if ($response) {
-                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
-                            } else {
-                              echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
-                            }
-
+                            if ($user_id === $row['user_id']) { ?>
+                              <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                              <!-- edit menu -->
+                              <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
+                                <li class="d-flex align-items-center">
+                                  <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
+                                    Chỉnh sửa bài viết</a>
+                                </li>
+                                <li class="d-flex align-items-center btn-delete-post">
+                                  <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=home&id=<?php echo $row['id'] ?>" onclick="confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                    Xóa bài viết</a>
+                                </li>
+                                <?php
+                                if (isset($_GET['id'])) {
+                                  $id = $_GET['id'];
+                                  $delete = $post->deletePost($id);
+                                  if ($delete) {
+                                    header('location: ./index.php');
+                                  }
+                                }
+                                ?>
+                              </ul>
+                            <?php }
                             ?>
-                          </button>
-                          <!-- comment -->
-                          <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
-                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
-                        </div>
-                        <hr class="mt-0 mb-2 mx-3" />
-                        <!-- comment & like bar -->
-                        <div class="d-flex justify-content-around px-3 pb-2">
-                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                          <!-- post content -->
+                          <form method="POST" class="mt-3">
+                            <!-- content -->
                             <?php
-                            $post_id = $row['id'];
-                            $user_id = $_SESSION['user']['id'];
-                            $Checklike = $like->checklike($user_id, $post_id);
-                            if (!$Checklike) {
-                              echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
-                            } else {
-                              echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                            if ($row['content'] !== null || $row['content'] !== '') {
+                              echo '<div class="post-content">
+                                  <p class="px-3">' . $row['content'] . '</p>
+                                </div>';
+                              echo '<input type="hidden" name="content-post-share" value="' . $row['content'] . '">';
                             }
                             ?>
-                            <p class="m-0">Yêu thích</p>
-                          </button>
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
-                            <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
-                            <p class="m-0">Bình luận</p>
-                          </div>
-                          <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                            <p class="m-0">Chia sẻ</p>
-                          </div>
-                        </div>
-                        <!-- comment model -->
-                        <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
-                          <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
-                          <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" data-post-id="<?= $row['id'] ?>" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
-                          </div>
-                          <div class="position-absolute bottom-0 bg-white w-100 px-3" data-post-id="<?= $row['id'] ?>" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
-                            <div class="d-flex" style="margin-top: 18px;">
-                              <?php
-                              if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
-                                <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
-                              <?php } else { ?>
-                                <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
-                              <?php }
-                              ?>
-                              <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
-                                <input type="hidden" name="parentId" value="0">
-                                <input type="hidden" name="postId" value="<?= $row['id'] ?>">
-                                <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
-                                <button type="submit" class="border-0 bg-transparent ms-1">
-                                  <i class="fa-solid fa-paper-plane text-primary"></i>
-                                </button>
-                              </form>
+                            <div class="container m-0 g-0 position-relative" style="width: 100%;">
+                              <div class="row g-1">
+                                <?php
+                                $images = $photo->getPhotoByPost($row['id']);
+                                $imageUrls = [];
+                                foreach ($images as $img) {
+                                  $imageUrls[] = $img['image_url'];
+                                }
+                                // Biến đếm số lượng ảnh đã hiển thị
+                                $displayedCount = 0;
+                                $i = 0;
+                                $j = 0;
+                                while ($i < 2) {
+                                  echo '<div class="col">';
+                                  echo '<img src="./Public/upload/' . $imageUrls[$j] . '" alt="post image" class="img-fluid mb-1" style="height: 50%;" />';
+                                  $j++;
+                                  echo '<img src="./Public/upload/' . $imageUrls[$j] . '" alt="post image" class="img-fluid" style="height: 50%;" />';
+                                  echo '</div>';
+                                  $j++;
+                                  $i++;
+                                }
+                                ?>
+                              </div>
+                              <div class="h-50 w-50 position-absolute bottom-0 end-0 d-flex align-items-center">
+                                <div class="overlay">
+                                </div>
+                                <p class="w-100 text-white text-center text-center fs-3 z-3">+ <?= $check_photo - 3 ?></p>
+                              </div>
                             </div>
-                          </div>
+                            <!-- likes & comments -->
+                            <div class="post__comment position-relative pt-0">
+                              <!-- likes-comment -->
+                              <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
+                                <!-- like -->
+                                <button class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>">
+                                  <?php
+                                  $post_id = $row['id'];
+                                  $response = $like->countPhotoByLike($post_id);
+                                  if ($response) {
+                                    echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
+                                  } else {
+                                    echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">0 lượt thích</p>';
+                                  }
+                                  ?>
+                                </button>
+                                <!-- comment -->
+                                <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
+                                  <p class="m-0">2 bình luận</p>
+                                  <p class="m-0">4 lượt chia sẻ</p>
+                                </div>
+                              </div>
+                              <hr class="mt-0 mb-2 mx-3" />
+                              <!-- comment & like bar -->
+                              <div class="d-flex justify-content-around px-3 pb-2">
+                                <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                                  <?php
+                                  $post_id = $row['id'];
+                                  $user_id = $_SESSION['user']['id'];
+                                  $Checklike = $like->checklike($user_id, $post_id);
+                                  if (!$Checklike) {
+                                    echo '<i class="fa-regular fa-heart me-3" style="color: #000000;"></i>';
+                                  } else {
+                                    echo '<i class="fa-solid fa-heart me-3" style="color: #ff0000;"></i>';
+                                  }
+                                  ?>
+                                  <p class="m-0">Yêu thích</p>
+                                </button>
+                                <div class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2 toggle-comment">
+                                  <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
+                                  <p class="m-0">Bình luận</p>
+                                </div>
+                                <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                                  <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                                  <p class="m-0">Chia sẻ</p>
+                                </button>
+                              </div>
+                              <!-- comment model -->
+                              <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
+                                <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
+                                <div class="comment-list mt-3 p-3 h-100 overflow-y-auto srollbar" style="height: 400px;max-height: 500px; padding-bottom: 115px !important; order: 2;">
+                                </div>
+                                <div class="position-absolute bottom-0 bg-white w-100 px-3" style="z-index: 10; height: 110px; box-shadow: 0px -6px 4px -6px rgba(0, 0, 0, 0.2); order: 3;">
+                                  <div class="d-flex" style="margin-top: 18px;">
+                                    <?php
+                                    if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                                      <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                    <?php } else { ?>
+                                      <img src="./Public/images/avt_default.png" alt="" class="rounded-circle object-fit-cover me-2" style="width: 32px; height: 32px;" />
+                                    <?php }
+                                    ?>
+                                    <form action="" method="post" class="cmt-form flex-grow-1 position-relative d-flex">
+                                      <input type="hidden" name="parentId" value="0">
+                                      <input type="hidden" name="postId" value="<?= $row['id'] ?>">
+                                      <textarea name="content" id="form-reply" cols="30" rows="10" class="form-control"></textarea>
+                                      <button type="submit" class="border-0 bg-transparent ms-1">
+                                        <i class="fa-solid fa-paper-plane text-primary"></i>
+                                      </button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                          <!-- end -->
                         </div>
-                      </div>
-                    </div>
-                    <!-- end -->
-                  </div>
-          <?php break;
+              <?php break;
+                  }
+                }
               }
             }
-          }
-          ?>
+              ?>
+              <?php
+              // Xử lý share bài post              
+              if (isset($_POST['sharePost'])) {
+                $content = "";
+                $post_id = $row['id'];
+                $user_id = $_SESSION['user']['id'];
+                $result = $post->insertPost($content, $user_id);
+                if ($result[0]) {
+                  $post_share_id = $result[1];
+                  $share = $share->insertShare($user_id, $post_id, $post_share_id);
+
+                  header('location: index.php');
+                }
+              }
+              ?>
+                      </div>
+                      <!-- ================= Chatbar ================= -->
+                      <div class="col-12 col-lg-3">
+                        <div class="d-none d-xxl-block h-100 fixed-top end-0 overflow-hidden scrollbar" style=" max-width: 360px; width: 100%; z-index: 4; padding-top: 56px; left: initial !important;">
+                          <div class="p-3 mt-4">
+                            <!-- contacts -->
+                            <hr class="m-0" />
+                            <div class="my-3 d-flex justify-content-between align-items-center">
+                              <p class="text-muted fs-5 m-0">Người liên hệ</p>
+                            </div>
+                            <!-- friend 1 -->
+                            <li class="dropdown-item rounded my-2 px-0" type="button" data-bs-toggle="modal" data-bs-target="#singleChat1">
+                              <!-- avatar -->
+                              <div class="d-flex align-items-center mx-2 chat-avatar">
+                                <div class="position-relative">
+                                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                                  <span class="position-absolute bottom-0 translate-middle border border-light rounded-circle bg-success p-1" style="left: 75%">
+                                    <span class="visually-hidden"></span>
+                                  </span>
+                                </div>
+                                <p class="m-0">Võ Khánh Duy</p>
+                              </div>
+                            </li>
+                            <!-- friend 2 -->
+                            <li class="dropdown-item rounded my-2 px-0" type="button" data-bs-toggle="modal" data-bs-target="#singleChat3">
+                              <!-- avatar -->
+                              <div class="d-flex align-items-center mx-2 chat-avatar">
+                                <div class="position-relative">
+                                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
+                                  <span class="position-absolute bottom-0 translate-middle border border-light rounded-circle bg-success p-1" style="left: 75%">
+                                    <span class="visually-hidden"></span>
+                                  </span>
+                                </div>
+                                <p class="m-0">Hồ Dư Mai Trân</p>
+                              </div>
+                            </li>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
         </div>
-      </div>
-      <!-- ================= Chatbar ================= -->
-      <div class="col-12 col-lg-3">
-        <div class="d-none d-xxl-block h-100 fixed-top end-0 overflow-hidden scrollbar" style=" max-width: 360px; width: 100%; z-index: 4; padding-top: 56px; left: initial !important;">
-          <div class="p-3 mt-4">
-            <!-- contacts -->
-            <hr class="m-0" />
-            <div class="my-3 d-flex justify-content-between align-items-center">
-              <p class="text-muted fs-5 m-0">Người liên hệ</p>
-            </div>
-            <!-- friend 1 -->
-            <li class="dropdown-item rounded my-2 px-0" type="button" data-bs-toggle="modal" data-bs-target="#singleChat1">
-              <!-- avatar -->
-              <div class="d-flex align-items-center mx-2 chat-avatar">
-                <div class="position-relative">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                  <span class="position-absolute bottom-0 translate-middle border border-light rounded-circle bg-success p-1" style="left: 75%">
-                    <span class="visually-hidden"></span>
-                  </span>
-                </div>
-                <p class="m-0">Võ Khánh Duy</p>
-              </div>
-            </li>
-            <!-- friend 2 -->
-            <li class="dropdown-item rounded my-2 px-0" type="button" data-bs-toggle="modal" data-bs-target="#singleChat3">
-              <!-- avatar -->
-              <div class="d-flex align-items-center mx-2 chat-avatar">
-                <div class="position-relative">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                  <span class="position-absolute bottom-0 translate-middle border border-light rounded-circle bg-success p-1" style="left: 75%">
-                    <span class="visually-hidden"></span>
-                  </span>
-                </div>
-                <p class="m-0">Hồ Dư Mai Trân</p>
-              </div>
-            </li>
-          </div>
+        <!-- ================= Chat Icon ================= -->
+        <div class="fixed-bottom right-100 p-3" style="z-index: 6; left: initial" type="button" data-bs-toggle="modal" data-bs-target="#newChat">
+          <i class="fas fa-edit bg-white rounded-circle p-3 shadow"></i>
         </div>
-      </div>
-    </div>
-  </div>
-  <!-- ================= Chat Icon ================= -->
-  <div class="fixed-bottom right-100 p-3" style="z-index: 6; left: initial" type="button" data-bs-toggle="modal" data-bs-target="#newChat">
-    <i class="fas fa-edit bg-white rounded-circle p-3 shadow"></i>
-  </div>
 </main>
 <script>
   //toggle comment and reply form
