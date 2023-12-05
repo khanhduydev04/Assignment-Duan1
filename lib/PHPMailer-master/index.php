@@ -13,18 +13,20 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 
-class Mailer{
-    public function sendMail($title, $content, $addressMail){
+class Mailer
+{
+    public function sendMail($title, $content, $addressMail)
+    {
 
-    
+
         //Create an instance; passing `true` enables exceptions
         $mail = new PHPMailer(true);
 
         try {
             //Server settings
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-            $mail->isSMTP();      
-            $mail ->Charset = 'utf-8';                                    //Send using SMTP
+            $mail->isSMTP();
+            $mail->CharSet = 'utf-8';                                    //Send using SMTP
             $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
             $mail->Username   = 'tranhdmpc06159@fpt.edu.vn';                     //SMTP username
@@ -33,7 +35,7 @@ class Mailer{
             $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
             //Recipients
-            $mail->setFrom('tranhdmpc06159@fpt.edu.vn', 'Beebook');
+            $mail->setFrom('tranhdmpc06159@fpt.edu.vn', 'BeeSocial');
             $mail->addAddress($addressMail);     //Add a recipient
             // $mail->addAddress('ellen@example.com');               //Name is optional
             // $mail->addReplyTo('info@example.com', 'Information');
@@ -55,8 +57,5 @@ class Mailer{
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
-
     }
 }
-
-?>
