@@ -34,8 +34,8 @@ class Stories
     public function getUserIdByStory($id)
     {
         $db = new connect();
-        $query = "SELECT user_id.stories FROM stories WHERE id ='$id'";
-        $result = $db->pdo_query_one($query);
+        $query = "SELECT user_id FROM stories WHERE id ='$id'";
+        $result = $db->pdo_query_value($query);
         return $result;
     }
 

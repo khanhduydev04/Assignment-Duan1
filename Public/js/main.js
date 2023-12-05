@@ -84,6 +84,7 @@ function resetDetailModalWrapper(id) {
   var modal = document.getElementById(id); // Lấy ra phần tử modal cụ thể
   resetModal(modal);
 }
+
 //popover
 const popoverTriggerList = document.querySelectorAll(
   '[data-bs-toggle="popover"]'
@@ -324,4 +325,169 @@ function previewImage(input) {
     form.classList.add("hidden"); // Ẩn form nếu không có tệp nào được chọn
     imageNameInput.value = ""; // Xóa tên file nếu không có tệp nào được chọn
   }
+}
+
+//Check creat post
+function toggleSubmitButton() {
+  // textarea và input file
+  let contentTextarea = document.getElementById("content-post");
+  let photoInput = document.getElementById("postImage");
+
+  // button post
+  let submitButton = document.getElementById("submitPost");
+  let contentValue = contentTextarea.value.trim();
+  let photoValue = photoInput.files.length;
+
+  // Nếu một trong hai có dữ liệu, kích hoạt nút "Đăng" và thêm class "btn-primary"
+  if (contentValue !== "" || photoValue > 0) {
+    submitButton.disabled = false;
+    submitButton.classList.remove("btn-secondary");
+    submitButton.classList.add("btn-primary");
+  } else {
+    submitButton.disabled = true;
+    submitButton.classList.remove("btn-primary");
+    submitButton.classList.add("btn-secondary");
+  }
+}
+
+function checkFilePostAvatar(fileInputId, submitButtonId) {
+  // input file
+  let photoInput = document.getElementById(fileInputId);
+  let photoValue = photoInput.files.length;
+  // button post
+  let submitButton = document.getElementById(submitButtonId);
+  // Nếu một trong hai có dữ liệu, kích hoạt nút "Đăng" và thêm class "btn-primary"
+  if (photoValue > 0) {
+    submitButton.disabled = false;
+    submitButton.classList.remove("btn-secondary");
+    submitButton.classList.add("btn-primary");
+  } else {
+    submitButton.disabled = true;
+    submitButton.classList.remove("btn-primary");
+    submitButton.classList.add("btn-secondary");
+  }
+}
+
+//show preview post image
+function showPreviewPostImage() {
+  // Kiểm tra và cập nhật trạng thái nút đăng
+  toggleSubmitButton();
+
+  let postImageInput = document.getElementById("postImage");
+  let postPreview = document.querySelector(".post-preview");
+
+  // Xóa tất cả các thẻ img hiện tại trong post-preview
+  postPreview.innerHTML = "";
+
+  // Hiển thị ảnh và thêm nút xóa chung
+  let row; // Khởi tạo biến row ở đây
+  let deleteAllButtonAdded = false; // Biến kiểm tra xem nút xóa chung đã được thêm vào hay chưa
+
+  if (postImageInput.files && postImageInput.files.length > 0) {
+    for (let i = 0; i < postImageInput.files.length; i++) {
+      // Tạo một dòng mới cho ảnh đầu tiên của mỗi cặp ảnh
+      if (i % 2 === 0) {
+        row = document.createElement("div");
+        row.classList.add("row", "mb-2");
+        postPreview.appendChild(row);
+      }
+
+      createImage(postImageInput.files[i], i, postImageInput.files);
+
+      // Thêm nút xóa chung nếu chưa thêm
+      if (!deleteAllButtonAdded) {
+        addDeleteAllButton();
+        deleteAllButtonAdded = true;
+      }
+    }
+  }
+
+  function createImage(file, index, filesArray) {
+    let imgContainer = document.createElement("div");
+    if (index === 0 && postImageInput.files.length === 1) {
+      imgContainer.classList.add("col-md-12");
+    } else {
+      imgContainer.classList.add("col-md-6");
+    }
+    imgContainer.classList.add("position-relative");
+
+    let img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.classList.add("img-fluid", "rounded", "mb-2");
+    img.style.aspectRatio = "1/1";
+    img.style.width = "100%";
+    img.style.objectFit = "cover";
+    imgContainer.appendChild(img);
+
+    row.appendChild(imgContainer);
+  }
+
+  function addDeleteAllButton() {
+    let deleteAllButton = document.createElement("button");
+    deleteAllButton.type = "button";
+    deleteAllButton.classList.add(
+      "btn",
+      "btn-danger",
+      "btn-sm",
+      "position-absolute",
+      "top-0",
+      "end-0",
+      "btn-close-image"
+    );
+    deleteAllButton.innerHTML = '<i class="fas fa-times"></i>';
+    deleteAllButton.addEventListener("click", function () {
+      // Xóa tất cả ảnh và reset input file
+      postPreview.innerHTML = "";
+      postImageInput.value = ""; // Reset input file
+      console.log(postImageInput);
+      // Kiểm tra và cập nhật trạng thái nút đăng
+      toggleSubmitButton();
+    });
+
+    // Thêm nút xóa chung vào postPreview
+    postPreview.appendChild(deleteAllButton);
+  }
+}
+
+function validateForm() {
+  let password = document.getElementById("password").value.trim();
+  let newPassword = document.getElementById("newpassword").value.trim();
+  let rePassword = document.getElementById("repassword").value.trim();
+
+  let passwordError = document.getElementById("passwordError");
+  let newPasswordError = document.getElementById("newpasswordError");
+  let rePasswordError = document.getElementById("repasswordError");
+
+  let isValid = true;
+
+  // Kiểm tra mật khẩu hiện tại không được để trống
+  if (password === "") {
+    passwordError.style.display = "block";
+    isValid = false;
+  } else {
+    passwordError.style.display = "none";
+  }
+
+  // Kiểm tra mật khẩu mới không được để trống
+  if (newPassword === "") {
+    newPasswordError.style.display = "block";
+    isValid = false;
+  } else {
+    newPasswordError.style.display = "none";
+  }
+
+  // Kiểm tra mật khẩu nhập lại không được để trống và phải trùng với mật khẩu mới
+  if (rePassword === "") {
+    rePasswordError.style.display = "block";
+    isValid = false;
+  } else if (rePassword !== newPassword) {
+    rePasswordError.innerHTML =
+      "Mật khẩu nhập lại không khớp với mật khẩu mới.";
+    rePasswordError.style.display = "block";
+    isValid = false;
+  } else {
+    rePasswordError.style.display = "none";
+  }
+
+  return isValid;
 }
