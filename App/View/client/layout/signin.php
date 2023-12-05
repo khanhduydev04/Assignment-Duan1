@@ -42,7 +42,7 @@ if (isset($_POST['register']) && ($_POST['register'])) {
             $error_phone['register'] = '';
         }
     } else {
-        // $password = password_hash($password, PASSWORD_DEFAULT);
+        $password = password_hash($password, PASSWORD_DEFAULT);
         if ($register->addUser($first_name, $last_name, $email, $phone, $password, $gender)) {
             echo ("Thành công");
             header("Location: index.php");
@@ -56,16 +56,18 @@ if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    if ($check = $register->checkUser($email, $password)) {
-        $id = $register->getIdUser($email, $password);
-        $_SESSION['user'] = $id;
-        header('Location: index.php');
-    } elseif ($check = $register->checkAdmin($email, $password)) {
-        $id = $register->getIdUser($email, $password);
-        $_SESSION['user'] = $id;
-        header('Location: index.php');
-    } else {
-        $error['login'] = 'Email hoặc mật khẩu không chính xác !';
+    if (!empty($email) && !empty($password)) {
+        if ($check = $register->checkUser($email, $password)) {
+            $id = $register->getIdUser($email, $password);
+            $_SESSION['user'] = $id;
+            header('Location: index.php');
+        } elseif ($check = $register->checkAdmin($email, $password)) {
+            $id = $register->getIdUser($email, $password);
+            $_SESSION['user'] = $id;
+            header('Location: index.php');
+        } else {
+            $error['login'] = 'Email hoặc mật khẩu không chính xác !';
+        }
     }
 }
 ?>
@@ -84,15 +86,17 @@ if (isset($_POST['login'])) {
             </div>
             <!--form-->
             <div style="max-width: 28rem; width: 100%">
-                <form class="bg-white shadow rounded p-3 input-group-lg" method="POST" id="form-login">
+                <form class="bg-white shadow rounded p-3 input-group-lg" method="POST" id="form-login" onsubmit="LoginFormSubmit(event)">
                     <input type="email" name="email" id="email1" class="form-control my-3" placeholder="Email">
                     <span class="text-danger" id="email_Span"></span>
                     <input type="password" name="password" id="password1" class="form-control my-3" placeholder="Mật khẩu">
                     <span class="text-danger mt-2" id="password_Span"></span><br>
                     <span class="text-danger">
                         <?php
-                        if (isset($error['login'])) {
+                        if (!empty($error['login'])) {
                             echo $error['login'];
+                        } else {
+                            echo '';
                         }
                         ?>
                     </span>
@@ -233,4 +237,3 @@ if (isset($_POST['login'])) {
         </div>
     </footer>
 </div>
-<script src="./Public/js/validation.js?v=<?php echo time(); ?>"></script>

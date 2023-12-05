@@ -11,6 +11,7 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 @include_once './App/Models/ShareModel.php';
 @include_once './App/Models/CommentModel.php';
 @include_once './App/Models/PostModel.php';
+@include_once './App/Models/LikeModel.php';
 
 $user = new User();
 $friend = new Friend();
@@ -19,6 +20,7 @@ $photo = new Photo();
 $share = new Share();
 $cmt = new Comment();
 $post = new Post();
+$like = new Likes();
 
 //handle live search
 if (isset($_POST['search']) && $_POST['search'] != '') {

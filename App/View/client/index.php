@@ -7,6 +7,7 @@
 @include_once './App/Models/PostModel.php';
 @include_once './App/Models/StoryModel.php';
 @include_once './App/Models/CommentModel.php';
+@include_once './App/Models/LikeModel.php';
 
 @include_once './App/View/client/layout/header.php';
 

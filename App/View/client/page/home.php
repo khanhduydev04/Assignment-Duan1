@@ -3,6 +3,7 @@ $post = new Post();
 $photo = new Photo();
 $user = new User();
 $comment = new Comment();
+$like = new Likes();
 
 $uploadDir = './Public/upload/';
 $allowedExtensions = ['png', 'jpg', 'jpeg'];
