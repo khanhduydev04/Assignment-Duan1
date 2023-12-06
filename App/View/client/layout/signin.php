@@ -51,7 +51,6 @@ if (isset($_POST['register']) && ($_POST['register'])) {
         }
     }
 }
-
 if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];

@@ -75,6 +75,7 @@ if (isset($_POST['post']) && $_POST['post']) {
   }
 }
 ?>
+<h1>a</h1>
 <main class="bg-gray postion-relative">
   <!-- ================= Main ================= -->
   <div class="container-fluid">

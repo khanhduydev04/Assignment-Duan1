@@ -786,7 +786,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
             </div>
           <?php }
           ?>
-
           <?php
           $all_post = $post->getAllPostByUser($id);
           if ($all_post && $all_post !== null) {

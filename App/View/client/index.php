@@ -16,27 +16,10 @@ if (isset($_GET['ctrl']))
   $controller = $_GET['ctrl'];
 
 switch ($controller) {
-  case "share":
-    include_once './App/Models/UserModel.php';
-    include_once './App/Models/PostModel.php';
-    include_once './App/Models/StoryModel.php';
-    include_once './App/Models/LikeModel.php';
-    include_once './App/Models/PhotoModel.php';
-    include_once './App/Models/ShareModel.php';
-    include_once './App/View/client/page/share.php';
-    break;
   case "home":
-    include_once './App/Models/UserModel.php';
-    include_once './App/Models/PostModel.php';
-    include_once './App/Models/StoryModel.php';
-    include_once './App/Models/LikeModel.php';
-    include_once './App/Models/ShareModel.php';
-    include_once './App/Models/PhotoModel.php';
     include_once './App/View/client/page/home.php';
     break;
   case "stories":
-    include_once './App/Models/UserModel.php';
-    include_once './App/Models/StoryModel.php';
     include_once './App/View/client/page/stories.php';
     break;
   case "friends":
@@ -46,7 +29,6 @@ switch ($controller) {
     include_once './App/View/client/page/profile.php';
     break;
   case "setting":
-    include_once './App/Models/UserModel.php';
     include_once './App/View/client/page/setting.php';
     break;
   case "logout":
