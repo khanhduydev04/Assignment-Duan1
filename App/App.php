@@ -35,8 +35,7 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
       @include_once './App/View/admin/index.php';
     } else {
       include_once './App/Models/UserModel.php';
-      include_once './App/View/client/index.php';
-      // include_once './App/View/client/layout/signin.php';
+      include_once './App/View/client/layout/signin.php';
     }
   }
   ?>

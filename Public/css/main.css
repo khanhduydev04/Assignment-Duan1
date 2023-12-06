@@ -152,23 +152,23 @@
 
 
 /*upload_story*/
-.image-form{
-  position:absolute;
+.image-form {
+  position: absolute;
   bottom: 0;
 }
 
-.container_story{
-  position:relative;
+.container_story {
+  position: relative;
 }
 
-.preview-container{
-  position:absolute;
+.preview-container {
+  position: absolute;
   top: 0;
   width: 80%;
   height: 95%;
 }
 
-.hidden{
+.hidden {
   display: none;
 }
 
@@ -350,7 +350,7 @@
 .stories-full-view {
   position: fixed;
   inset: 0;
-  z-index: 5;
+  z-index: 9999;
   background: rgba(0, 0, 0, 0.9);
   display: none;
   place-items: center;

@@ -123,6 +123,23 @@ class User
     }
   }
 
+  public function checkPass($password, $id)
+  {
+    $db = new connect();
+    $sql = "SELECT * FROM users WHERE id ='$id'";
+    $userData = $db->pdo_query_one($sql);
+    if ($userData != null) {
+      $hashedPassword = $userData['password'];
+      if (password_verify($password, $hashedPassword)) {
+        return true; // Mật khẩu hợp lệ
+      } else {
+        return false; // Mật khẩu không hợp lệ
+      }
+    } else {
+      return false; // Người dùng không tồn tại
+    }
+  }
+
   public function getIdUser($email, $password)
   {
     $db = new connect();

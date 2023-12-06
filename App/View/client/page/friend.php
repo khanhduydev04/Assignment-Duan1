@@ -2,8 +2,52 @@
 $user =  new User();
 $friend = new Friend();
 $photo = new Photo();
+$follow = new Follow();
 
 $user_id = $_SESSION['user']['id'];
+$user_id2 = $_POST['user_id2'];
+
+// add friend
+if (isset($_POST["send_request"])) {
+    if ($friend->addFriend($user_id, $user_id2)) {
+        if ($follow->insertFollow($user_id, $user_id2)) {
+            header("Location: index.php?ctrl=friends");
+        }
+    }
+}
+//accept request
+if (isset($_POST["accept_request"])) {
+    $friend_id = $friend->getFriendID($user_id, $user_id2);
+    $follow_id = $follow->getFollowID($user_id, $user_id2);
+    if ($friend->acceptRequest($friend_id)) {
+        if ($follow->insertFollow($user_id, $user_id2)) {
+            header("Location: index.php?ctrl=friends");
+        }
+    }
+}
+//cancel request && delete friend
+if (isset($_POST["cancel_request"]) || isset($_POST["delete_friend"])) {
+    $friend_id = $friend->getFriendID($user_id, $user_id2);
+    $follow_id = $follow->getFollowID($user_id, $user_id2);
+    if ($friend->deleteFriend($friend_id)) {
+        if ($follow->deleteFollow($follow_id)) {
+            header("Location: index.php?ctrl=friends");
+        }
+    }
+}
+//cancel_follow
+if (isset($_POST["cancel_follow"])) {
+    $follow_id = $follow->getFollowID($user_id, $user_id2);
+    if ($follow->deleteFollow($follow_id)) {
+        header("Location: index.php?ctrl=friends");
+    }
+}
+//add_follow
+if (isset($_POST["add_follow"])) {
+    if ($follow->insertFollow($user_id, $user_id2)) {
+        header("Location: index.php?ctrl=friends");
+    }
+}
 ?>
 <div class="container-fluid bg-gray">
     <div class="row justify-content-evenly">
@@ -83,8 +127,9 @@ $user_id = $_SESSION['user']['id'];
                                                             <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;"><?= $user->getFullnameByUser($row['id']) ?></p>
                                                         </a>
                                                         <div class="d-grid gap-2 mx-auto mt-3">
-                                                            <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                            <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                            <input type="hidden" value="<?= $row['id'] ?>" name="user_id2">
+                                                            <input type="submit" class="btn btn-primary" value="Xác nhận" name="accept_request" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                            <input type="submit" class="btn btn-delete" value="Xoá bỏ" name="cancel_request" style="width: 90%; margin-left: 11px; font-weight: 500;">
                                                         </div>
                                                     </div>
                                                 </form>
@@ -132,8 +177,15 @@ $user_id = $_SESSION['user']['id'];
                                                             <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;"><?= $user->getFullnameByUser($row['id']) ?></p>
                                                         </a>
                                                         <div class="d-grid gap-2 mx-auto mt-3">
-                                                            <input type="button" class="btn btn-primary" value="Hủy bạn" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                            <input type="button" class="btn btn-delete" value="Bỏ theo dõi" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                            <input type="hidden" value="<?= $row['id'] ?>" name="user_id2">
+                                                            <button type="submit" class="btn btn-primary" name="delete_friend" style="width: 90%; margin-left: 11px; font-weight: 500;">Hủy bạn</button>
+                                                            <?php
+                                                            if (!$follow->getFollowID($user_id, $row['id'])) {
+                                                                echo '<button type="submit" class="btn btn-delete" name="add_follow" style="width: 90%; margin-left: 11px; font-weight: 500;">Theo dõi</button>';
+                                                            } else {
+                                                                echo '<button type="submit" class="btn btn-delete" name="cancel_follow" style="width: 90%; margin-left: 11px; font-weight: 500;">Bỏ theo dõi</button>';
+                                                            }
+                                                            ?>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -179,8 +231,9 @@ $user_id = $_SESSION['user']['id'];
                                                     <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;"><?= $user->getFullnameByUser($row['id']) ?></p>
                                                 </a>
                                                 <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="button" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
-                                                    <input type="button" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                    <input type="submit" name="accept_request" class="btn btn-primary" value="Xác nhận" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                    <input type="hidden" value="<?= $row['id'] ?>" name="user_id2">
+                                                    <input type="submit" name="cancel_request" class="btn btn-delete" value="Xoá bỏ" style="width: 90%; margin-left: 11px; font-weight: 500;">
                                                 </div>
                                             </div>
                                         </form>
@@ -222,7 +275,8 @@ $user_id = $_SESSION['user']['id'];
                                                     <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;"><?= $row['first_name'] . ' ' . $row['last_name'] ?></p>
                                                 </a>
                                                 <div class="d-grid gap-2 mx-auto mt-3">
-                                                    <input type="submit" class="btn btn-greenest" value="Thêm bạn bè" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                    <input type="submit" name="send_request" class="btn btn-greenest" value="Thêm bạn bè" style="width: 90%; margin-left: 11px; font-weight: 500;">
+                                                    <input type="hidden" value="<?= $row['id'] ?>" name="user_id2">
                                                     <input type="submit" class="btn btn-delete" value="Xoá,gỡ" style="width: 90%; margin-left: 11px; font-weight: 500;">
                                                 </div>
                                             </div>

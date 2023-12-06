@@ -4,6 +4,8 @@ $friend = new Friend();
 $photo = new Photo();
 $follow = new Follow();
 $post = new Post();
+$comment = new Comment();
+$share = new Share();
 
 $uploadDir = './Public/upload/';
 $allowedExtensions = ['png', 'jpg', 'jpeg'];
@@ -31,7 +33,7 @@ function calculateTimeAgo($time)
   } elseif ($timeDifference < 604800) {
     return floor($timeDifference / 86400) . " ngày trước";
   } else {
-    return date("d/m/Y H:i:s", $timestamp);
+    return date("d/m/Y", $timestamp);
   }
 }
 
@@ -626,7 +628,7 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
           <div class="profile-photos bg-white rounded-3 p-3 shadow-sm">
             <div class="pb-3 d-flex justify-content-between align-items-center">
               <h5><a href="index.php?ctrl=profile&act=photos&id=<?= $id ?>" class="fs-4 fw-bold text-dark text-decoration-none">Ảnh</a></h5>
-              <a href="index.php?ctrl=profile&act=photos" class="text-decoration-none">Xem tất cả ảnh</a>
+              <a href="index.php?ctrl=profile&act=photos&id=<?= $id ?>" class="text-decoration-none">Xem tất cả ảnh</a>
             </div>
             <div class="rounded-3 overflow-hidden d-flex flex-wrap" style="gap: 4px;">
               <?php
@@ -680,14 +682,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                   }
                 }
               } ?>
-              <!-- <div class="friend-item mb-2">
-                <a href="#">
-                  <img src="./Public/images/banner-men.png" alt="" class="friend-image w-100 object-fit-cover rounded-2">
-                </a>
-                <a href="#" class="mt-1 d-flex flex-column text-decoration-none text-dark fw-semibold">
-                  <span>Khánh Duy</span>
-                </a>
-              </div> -->
             </div>
           </div>
         </div>
@@ -862,8 +856,8 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
@@ -976,8 +970,8 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
@@ -1096,8 +1090,8 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
@@ -1225,8 +1219,8 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
@@ -1352,8 +1346,8 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
@@ -1489,8 +1483,8 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />

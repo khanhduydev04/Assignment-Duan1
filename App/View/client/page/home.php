@@ -339,7 +339,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                             </li>
                           </ul>
                         <?php
-
                         }
                         ?>
                       </div>
@@ -373,8 +372,8 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
@@ -514,8 +513,8 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
@@ -660,8 +659,8 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
@@ -815,8 +814,8 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
@@ -968,8 +967,8 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
@@ -1131,8 +1130,8 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </button>
                           <!-- comment -->
                           <div class="d-flex gap-2 fw-normal fs-6 align-items-center" id="headingOne">
-                            <p class="m-0">2 bình luận</p>
-                            <p class="m-0">4 lượt chia sẻ</p>
+                            <p class="m-0 text-secondary"><?= $comment->countCommentByPost($row['id']) ?> bình luận</p>
+                            <p class="m-0 text-secondary"><?= $share->countShareByPost($row['id']) ?> chia sẻ</p>
                           </div>
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />

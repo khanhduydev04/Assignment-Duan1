@@ -13,6 +13,13 @@ class Comment
     return $db->pdo_query($sql);
   }
 
+  public function countCommentByPost($id)
+  {
+    $db = new connect();
+    $sql = "SELECT COUNT(*) FROM comments WHERE post_id = '$id'";
+    return $db->pdo_query_value($sql);
+  }
+
   public function insertComment($content, $parent_id, $user_id, $post_id)
   {
     $db = new connect();
