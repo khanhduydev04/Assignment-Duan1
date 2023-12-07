@@ -184,3 +184,46 @@ function UpdateFormSubmit(e) {
     e.preventDefault(); // Ngăn form được gửi đi nếu thông tin không hợp lệ
   }
 }
+
+function validateForm() {
+  let password = document.getElementById("password").value.trim();
+  let newPassword = document.getElementById("newpassword").value.trim();
+  let rePassword = document.getElementById("repassword").value.trim();
+
+  let passwordError = document.getElementById("passwordError");
+  let newPasswordError = document.getElementById("newpasswordError");
+  let rePasswordError = document.getElementById("repasswordError");
+
+  let isValid = true;
+
+  // Kiểm tra mật khẩu hiện tại không được để trống
+  if (password === "") {
+    passwordError.style.display = "block";
+    isValid = false;
+  } else {
+    passwordError.style.display = "none";
+  }
+
+  // Kiểm tra mật khẩu mới không được để trống
+  if (newPassword === "") {
+    newPasswordError.style.display = "block";
+    isValid = false;
+  } else {
+    newPasswordError.style.display = "none";
+  }
+
+  // Kiểm tra mật khẩu nhập lại không được để trống và phải trùng với mật khẩu mới
+  if (rePassword === "") {
+    rePasswordError.style.display = "block";
+    isValid = false;
+  } else if (rePassword !== newPassword) {
+    rePasswordError.innerHTML =
+      "Mật khẩu nhập lại không khớp với mật khẩu mới.";
+    rePasswordError.style.display = "block";
+    isValid = false;
+  } else {
+    rePasswordError.style.display = "none";
+  }
+
+  return isValid;
+}

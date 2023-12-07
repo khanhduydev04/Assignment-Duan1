@@ -22,6 +22,7 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 </head>
 
 <body>
+
   <?php
   if (isset($_GET['ctrl']) && $_GET['ctrl'] == 'forgetpassword') {
     include_once './App/Models/UserModel.php';

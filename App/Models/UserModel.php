@@ -67,13 +67,6 @@ class User
     return $db->pdo_query_one($sql);
   }
 
-  public function checkPass($password)
-  {
-    $db = new connect();
-    $sql = "SELECT * FROM users WHERE password = '$password'";
-    return $db->pdo_query_one($sql);
-  }
-
   public function checkUser($email, $password)
   {
     $db = new connect();

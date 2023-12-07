@@ -12,9 +12,9 @@ class Stories
     {
         $db = new connect(); // Kết nối cơ sở dữ liệu
         $query = "SELECT stories.*, users.first_name, users.last_name 
-                  FROM stories 
-                  LEFT JOIN users ON stories.user_id = users.id 
-                  WHERE stories.user_id = $user_id AND stories.show = 1";
+                    FROM stories 
+                    LEFT JOIN users ON stories.user_id = users.id 
+                    WHERE stories.user_id = $user_id AND stories.show = 1";
         $result = $db->pdo_query($query);
         return $result;
     }
@@ -23,9 +23,9 @@ class Stories
     {
         $db = new connect();
         $query = "SELECT s.*, u.first_name, u.last_name 
-                  FROM stories s
-                  INNER JOIN users u ON s.user_id = u.id
-                  WHERE s.`show` = 1";
+                    FROM stories s
+                    INNER JOIN users u ON s.user_id = u.id
+                    WHERE s.`show` = 1";
 
         $result = $db->pdo_query($query);
         return $result;
