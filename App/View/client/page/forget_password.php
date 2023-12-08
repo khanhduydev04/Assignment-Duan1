@@ -3,7 +3,7 @@
     <div class="container-fluid d-flex">
         <div class="col">
             <h1 class="text-primary fw-bold fs-2">
-                Facebook
+                BeeSocial
             </h1>
         </div>
     </div>
@@ -69,9 +69,14 @@
                                 $user = new User();
                                 $email = $_SESSION['mail'];
                                 $user_id = $user->getIdByEmail($email);
+                                $newPass = password_hash($newPass, PASSWORD_DEFAULT);
                                 $user->updatePassword($user_id['id'], $newPass);
-                                echo "<p class='text-success'>Đổi mật khẩu thành công!</p>";
-                                header('refresh:3s; index.php?ctrl=forgetpassword');
+                                echo "<script>
+                                    alert('Đổi mật khẩu thành công !');
+                                    setTimeout(function() {
+                                        window.location.href = 'index.php?ctrl=signin';
+                                    }, 3000);
+                                </script>";
                             }
                         }
                     }
@@ -87,27 +92,50 @@
                 <p class="">Vui lòng nhập email tài khoản của bạn.</p>
                 <input type="email" name="email" class="form-control p-3" placeholder="Email" required>
                 <?php
-                $error = []; // Tạo một mảng để lưu các thông báo lỗi
+                    $error = []; // Tạo một mảng để lưu các thông báo lỗi
 
-                if (isset($_POST['check_mail'])) {
-                    $email = $_POST['email'];
+                    if (isset($_POST['check_mail'])) {
+                        $email = $_POST['email'];
 
-                    if ($email === '') {
-                        $error['email'] = 'Vui lòng nhập email';
-                    } else {
-                        if ($newPass !== $rePass) {
-                            echo "<p class='text-danger'>Nhập lại mật khẩu không khớp!</p>";
+                        if ($email === '') {
+                            $error['email'] = 'Vui lòng nhập email';
                         } else {
+                            // Kiểm tra xem email đã tồn tại trong cơ sở dữ liệu hay không
                             $user = new User();
-                            $email = $_SESSION['mail'];
-                            $user_id = $user->getIdByEmail($email);
-                            $user->updatePassword($user_id, $newPass);
-                            echo "<p class='text-success'>Đổi mật khẩu thành công!</p>";
-                            header('refresh:3s; index.php?ctrl=forgetpassword');
+                            if (!$user->checkUserByEmail($email)) {
+                                $error['email'] = 'Email không tồn tại';
+                            }
+                        }
+
+                        if (empty($error)) {
+                            // Tiến hành gửi email và chuyển hướng
+                            $code = substr(rand(0,999999),0,6);
+                            $title = "Quên mật khẩu";
+                            $content = "Mã xác nhận của bạn là: <span style='color:blue'>" . $code . "</span>";
+                            $mail = new Mailer();
+                            $mail->sendMail($title, $content, $email);
+
+                            $_SESSION['mail'] = $email;
+                            $_SESSION['code'] = $code;
+                            header("location: index.php?ctrl=forgetpassword&act=xacnhan");
                         }
                     }
-                }
-                ?>
+                    ?>
+
+
+                    <!-- Trường hợp hiển thị lỗi -->
+                    <?php if (!empty($error)){
+                      
+                        foreach($error as $message){
+                            echo '<div class="text-danger mt-3 me-3" role="alert">'.$message.'</div>';
+                        }
+                    
+                        } ?>              
+                <hr>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end p-2">
+                    <button type="button" class="btn btn-secondary">Hủy</button>
+                    <button type="submit" class="btn btn-primary" name="check_mail">Gửi mã</button>
+                </div>
             </form>
         </div>
     <?php } ?>

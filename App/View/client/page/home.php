@@ -144,51 +144,210 @@ if (isset($_POST['post']) && $_POST['post']) {
           <div class="stories-container">
             <div class="content">
               <div class="previous-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15.75 19.5L8.25 12l7.5-7.5"
+                  />
                 </svg>
               </div>
+             
               <div class="stories">
                 <a href="index.php?ctrl=stories" class="story">
+                  <?php
+                  if (($photo->getNewAvatarByUser($user_id) != null)) { ?>
+                    <img src="./Public/upload/<?= $photo->getNewAvatarByUser($user_id) ?>" alt="avatar " class="position-relative" />
+                  <?php } else { ?>
+                    <img src="./Public/images/avt_default.png" alt="avatar" class="position-relative"/>
+                  <?php }
+                  ?>
                   <img src="./Public/images/avt.jpg" alt="" class="position-relative">
-                  <div class="author_add">Thêm tin</div>
+                  <div class="author_add" >Thêm tin</div>
                   <h3 class=" author_plus">
-                    <i class="fa-solid fa-plus hdh"></i>
+                      <i class="fa-solid fa-plus hdh"></i>
                   </h3>
                 </a>
+                
+                <?php
+                $user_id = $_SESSION['user']['id']; //id của user hiện tại     
+                $getStory = $story->getStoriesWithUsers($user_id);
+                foreach($getStory as $row){
+                ?>
+
+                  <?php
+                    if (isset($_GET['id'])) {
+                      $id = $_GET['id'];
+                      $delete = $story->hideStory($id);
+                      if($delete){
+                        header('location: ./index.php');
+                      }
+                    }
+                  ?>
+
+                  <div class="story">
+                    <div class="story" onclick="showFullView(event)">
+                      <img src="./Public/upload/<?php echo $row['image_url'];?>" alt="" >
+                      <div class="author"><?php echo $row['last_name'] .' '. $row['first_name'];?></div>
+                      <?php
+                      if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                        <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2 avatar_story" style="width: 38px; height: 38px; object-fit: cover;">
+                      <?php } else { ?>
+                        <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2 avatar_story" style="width: 38px; height: 38px; object-fit: cover;">
+                      <?php }
+                      ?>
+                    
+                    </div>
+                    <?php 
+                    $user_id_story = $story->getUserIdByStory($row['id']);
+                    if($user_id === $user_id_story){
+                    ?>
+                    <a class="delete_id_story" href="index.php?ctrl=home&id=<?php echo $row['id']?>">
+                      <i class="fa-solid fa-delete-left" style="color: #ffffff;"></i>
+                    </a>
+                    <?php } ?>
+                  </div>       
+
+                <?php
+                 }
+                ?>       
+  
+                <?php
+                $user_id = $_SESSION['user']['id']; //id của user hiện tại     
+                $getStory = $story->getStoriesNotWithUsers($user_id);
+                foreach($getStory as $row){
+                ?>
+
+                  <?php
+                    if (isset($_GET['id'])) {
+                      $id = $_GET['id'];
+                      $delete = $story->hideStory($id);
+                      if($delete){
+                        header('location: ./index.php');
+                      }
+                    }
+                  ?>
+
+                  <div class="story" >
+                    <div class="story" onclick="showFullView(event)"/>
+                      <img src="./Public/upload/<?php echo $row['image_url'];?>" alt="" >
+                      <div class="author"><?php echo $row['last_name'] .' '. $row['first_name'];?></div>
+                      <?php
+                      if (($photo->getNewAvatarByUser($row['user_id']) != null)) { ?>
+                        <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['user_id']) ?>" alt="avatar" class="rounded-circle me-2 avatar_story" style="width: 38px; height: 38px; object-fit: cover;">
+                      <?php } else { ?>
+                        <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2 avatar_story" style="width: 38px; height: 38px; object-fit: cover;">
+                      <?php }
+                      ?>
+                    
+                    </div>
+                    <?php 
+                    $user_id_story = $story->getUserIdByStory($row['id']);
+                    if($user_id === $user_id_story){
+                    ?>
+                    <a class="delete_id_story" href="index.php?ctrl=home&id=<?php echo $row['id']?>">
+                      <i class="fa-solid fa-delete-left" style="color: #ffffff;"></i>
+                    </a>
+                    <?php } ?>
+                  </div>       
+
+                <?php
+                 }
+                ?>       
+
+
               </div>
+
               <div class="next-btn active">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
                 </svg>
               </div>
             </div>
           </div>
+
           <div class="stories-full-view">
             <div class="close-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </div>
 
             <div class="content">
               <div class="previous-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15.75 19.5L8.25 12l7.5-7.5"
+                  />
                 </svg>
               </div>
-              <div class="story">
-                <img src="./Public/images/avt.jpg" alt="" class="mx-auto" />
-                <div class="author">Author</div>
+
+             
+
+              <div class="story d-flex justify-content-center">
+                <img src="" alt="" />
+                <div class="author"></div>
+                <img class="avatar_story_view" src="" style="width: 38px; height: 38px; border-radius: 50%;">
               </div>
 
+
               <div class="next-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
                 </svg>
               </div>
             </div>
           </div>
+
           <!-- create post -->
           <div class="bg-white p-3 mt-3 rounded border shadow-sm">
             <!-- avatar -->
@@ -285,6 +444,7 @@ if (isset($_POST['post']) && $_POST['post']) {
               </div>
             </div>
           </div>
+
           <?php
           $all_post = $post->getAllPost($user_id);
           if ($all_post && $all_post !== null) {
@@ -398,7 +558,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
-                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                        <div class="d-flex justify-content-around px-3 pb-2">
                           <button type="button" name="post_id" value="<?php echo $post_data['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                             <?php
                             $post_id = $post_data['id'];
@@ -415,11 +575,14 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
                           </div>
-                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                            <p class="m-0">Chia sẻ</p>
-                          </button>
-                        </form>
+                          <form method="POST" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
+                            <button type="submit" name="sharePost" class="d-flex justify-content-center align-items-center">
+                              <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                              <p class="m-0">Chia sẻ</p>
+                            </button>
+                          </form>
+                        </div>
                         <!-- comment model -->
                         <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
                           <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
@@ -551,7 +714,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
-                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                        <div class="d-flex justify-content-around px-3 pb-2">
                           <button type="button" name="post_id" value="<?php echo $post_data['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                             <?php
                             $post_id = $post_data['id'];
@@ -568,11 +731,14 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
                           </div>
-                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                            <p class="m-0">Chia sẻ</p>
-                          </button>
-                        </form>
+                          <form method="POST" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
+                            <button type="submit" name="sharePost" class="d-flex justify-content-center align-items-center">
+                              <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                              <p class="m-0">Chia sẻ</p>
+                            </button>
+                          </form>
+                        </div>
                         <!-- comment model -->
                         <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
                           <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
@@ -716,7 +882,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
-                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                        <div class="d-flex justify-content-around px-3 pb-2">
                           <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                             <?php
                             $post_id = $row['id'];
@@ -734,11 +900,14 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
                           </div>
-                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                            <p class="m-0">Chia sẻ</p>
-                          </button>
-                        </form>
+                          <form method="POST" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
+                            <button type="submit" name="sharePost" class="d-flex justify-content-center align-items-center">
+                              <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                              <p class="m-0">Chia sẻ</p>
+                            </button>
+                          </form>
+                        </div>
                         <!-- comment model -->
                         <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
                           <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
@@ -896,7 +1065,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
-                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                        <div class="d-flex justify-content-around px-3 pb-2">
                           <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                             <?php
                             $post_id = $row['id'];
@@ -914,11 +1083,14 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
                           </div>
-                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                            <p class="m-0">Chia sẻ</p>
-                          </button>
-                        </form>
+                          <form method="POST" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
+                            <button type="submit" name="sharePost" class="d-flex justify-content-center align-items-center">
+                              <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                              <p class="m-0">Chia sẻ</p>
+                            </button>
+                          </form>
+                        </div>
                         <!-- comment model -->
                         <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
                           <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
@@ -1066,7 +1238,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
-                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                        <div class="d-flex justify-content-around px-3 pb-2">
                           <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                             <?php
                             $post_id = $row['id'];
@@ -1084,11 +1256,14 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
                           </div>
-                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                            <p class="m-0">Chia sẻ</p>
-                          </button>
-                        </form>
+                          <form method="POST" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
+                            <button type="submit" name="sharePost" class="d-flex justify-content-center align-items-center">
+                              <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                              <p class="m-0">Chia sẻ</p>
+                            </button>
+                          </form>
+                        </div>
                         <!-- comment model -->
                         <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
                           <hr class="mt-0 mb-2 mx-3" style="order: 1;" />
@@ -1250,7 +1425,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                         </div>
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
-                        <form method="POST" class="d-flex justify-content-around px-3 pb-2">
+                        <div class="d-flex justify-content-around px-3 pb-2">
                           <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                             <?php
                             $post_id = $row['id'];
@@ -1268,10 +1443,13 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                             <p class="m-0">Bình luận</p>
                           </div>
-                          <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                            <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                            <p class="m-0">Chia sẻ</p>
-                          </button>
+                          <form method="POST" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                            <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
+                            <button type="submit" name="sharePost" class="d-flex justify-content-center align-items-center">
+                              <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                              <p class="m-0">Chia sẻ</p>
+                            </button>
+                          </form>
                         </form>
                         <!-- comment model -->
                         <div class="comment-modal flex-column position-relative w-100 h-100" style="max-height: 600px;">
@@ -1410,10 +1588,13 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                                 <p class="m-0">Bình luận</p>
                               </div>
-                              <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
-                                <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                                <p class="m-0">Chia sẻ</p>
-                              </button>
+                              <form method="POST" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                                <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
+                                <button type="submit" name="sharePost" class="d-flex justify-content-center align-items-center">
+                                  <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
+                                  <p class="m-0">Chia sẻ</p>
+                                </button>
+                              </form>
                             </div>
                           </form>
                           <!-- comment model -->
@@ -1551,11 +1732,13 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                                 <p class="m-0">Bình luận</p>
                               </div>
-                              <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+
+                              <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
+                              <button type="submit" name="sharePost"  class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                                 <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
-                                <input type="hidden" name="post_id" value="<?php $row['id']; ?>"> <!-- ID của bài viết -->
                                 <p class="m-0">Chia sẻ</p>
                               </button>
+                             
                             </div>
                           </form>
                           <!-- comment model -->
@@ -1700,6 +1883,8 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                                 <p class="m-0">Bình luận</p>
                               </div>
+
+                              <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
                               <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                                 <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
                                 <p class="m-0">Chia sẻ</p>
@@ -1858,7 +2043,9 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                                 <p class="m-0">Bình luận</p>
                               </div>
-                              <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+
+                              <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
+                              <button type="submit" name="sharePost"  class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                                 <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
                                 <p class="m-0">Chia sẻ</p>
                               </button>
@@ -2013,6 +2200,8 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                                 <p class="m-0">Bình luận</p>
                               </div>
+
+                              <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
                               <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                                 <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
                                 <p class="m-0">Chia sẻ</p>
@@ -2178,6 +2367,8 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 <i class="fa-regular fa-comment me-3" style="color: #000000;"></i>
                                 <p class="m-0">Bình luận</p>
                               </div>
+
+                              <input type="hidden" name="sharePostId" value="<?php echo $row['id']?>">
                               <button type="submit" name="sharePost" class="dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                                 <i class="fa-solid fa-share me-3" style="color: #000000;"></i>
                                 <p class="m-0">Chia sẻ</p>
@@ -2221,7 +2412,7 @@ if (isset($_POST['post']) && $_POST['post']) {
           // Xử lý share bài post              
           if (isset($_POST['sharePost'])) {
             $content = "";
-            $post_id = $row['id'];
+            $post_id = $_POST['sharePostId'];
             $result = $post->insertPost($content, $user_id);
             if ($result[0]) {
               $post_share_id = $result[1];
