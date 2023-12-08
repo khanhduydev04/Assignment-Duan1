@@ -1,58 +1,3 @@
-const allStories = [
-  {
-    id: 0,
-    author: "Cục Pepsi",
-    imageUrl: "./Public/images/avt.jpg",
-  },
-
-  {
-    id: 1,
-    author: "Cục Nhỏ",
-    imageUrl: "./Public/images/avt.jpg",
-  },
-
-  {
-    id: 2,
-    author: "Emma Smith",
-    imageUrl: "./Public/images/avt.jpg",
-  },
-
-  {
-    id: 3,
-    author: "Cục Pepsi",
-    imageUrl: "./Public/images/avt.jpg",
-  },
-
-  {
-    id: 4,
-    author: "Cục Nhỏ",
-    imageUrl: "./Public/images/avt.jpg",
-  },
-
-  {
-    id: 5,
-    author: "Cục Bông",
-    imageUrl: "./Public/images/avt.jpg",
-  },
-
-  {
-    id: 6,
-    author: "Cục Pepsi",
-    imageUrl: "./Public/images/avt.jpg",
-  },
-
-  {
-    id: 7,
-    author: "Cục Nhỏ",
-    imageUrl: "./Public/images/avt.jpg",
-  },
-
-  {
-    id: 8,
-    author: "Cục Bông",
-    imageUrl: "./Public/images/avt.jpg",
-  },
-];
 
 const stories = document.querySelector(".stories");
 const storiesFullView = document.querySelector(".stories-full-view");
@@ -69,46 +14,31 @@ const previousBtnFull = document.querySelector(
   ".stories-full-view .previous-btn"
 );
 
-let currentActive = 0;
 
-const createStories = () => {
-  allStories.forEach((s, i) => {
-    const story = document.createElement("div");
-    story.classList.add("story");
-    const img = document.createElement("img");
-    img.src = s.imageUrl;
-    const author = document.createElement("div");
-    author.classList.add("author");
-    author.innerHTML = s.author;
+const showFullView = (event) => {
+  const selectedStory = event.currentTarget;
+  const imageUrl = selectedStory.querySelector('img').src;
+  const author = selectedStory.querySelector('.author').textContent;
+  const avatarSrc = selectedStory.querySelector('.avatar_story').src;
 
-    story.appendChild(img);
-    story.appendChild(author);
-
-    stories.appendChild(story);
-
-    story.addEventListener("click", () => {
-      showFullView(i);
-    });
-  });
-};
-
-createStories();
-
-const showFullView = (index) => {
-  currentActive = index;
-  updateFullView();
+  storyImageFull.src = imageUrl;
+  storyAuthorFull.innerHTML = author;
   storiesFullView.classList.add("active");
+
+  const avatarStoryView = document.querySelector('.avatar_story_view');
+  const deleteStory = document.querySelector('.delete_story');
+
+  // Hiển thị avatar_story_view và giá trị của delete_id_story trong stories-full-view
+  avatarStoryView.src = avatarSrc;
 };
 
+
+//close view full story
 closeBtn.addEventListener("click", () => {
   storiesFullView.classList.remove("active");
 });
 
-const updateFullView = () => {
-  storyImageFull.src = allStories[currentActive].imageUrl;
-  storyAuthorFull.innerHTML = allStories[currentActive].author;
-};
-
+// chuyển slider story
 nextBtn.addEventListener("click", () => {
   storiesContent.scrollLeft += 300;
 });
@@ -134,15 +64,40 @@ storiesContent.addEventListener("scroll", () => {
   }
 });
 
-nextBtnFull.addEventListener("click", () => {
-  if (currentActive >= allStories.length - 1) {
+
+let currentActive = 0;
+// Trong phần khai báo biến
+const fullViewContent = document.querySelector('.stories-full-view .content .story');
+
+const updateFullView = () => {
+  const selectedStory = document.querySelectorAll('.stories .story')[currentActive];
+  const imageUrl = selectedStory.querySelector('img').src;
+  const author = selectedStory.querySelector('.author').textContent;
+  const avatar = selectedStory.querySelector('.avatar_story').src;
+  
+  storyImageFull.src = imageUrl;
+  storyAuthorFull.innerHTML = author;
+  avatarStoryView.src = avatar;
+
+  // Cập nhật slider cho chi tiết story
+  fullViewContent.scrollTo({
+    left: currentActive * fullViewContent.offsetWidth,
+    behavior: 'smooth'
+  });
+}
+
+// Gán sự kiện click cho nút next trong chi tiết story
+nextBtnFull.addEventListener('click', () => {
+  const totalStories = document.querySelectorAll('.story').length;
+  if (currentActive >= totalStories - 1) {
     return;
   }
   currentActive++;
   updateFullView();
 });
 
-previousBtnFull.addEventListener("click", () => {
+// Gán sự kiện click cho nút previous trong chi tiết story
+previousBtnFull.addEventListener('click', () => {
   if (currentActive <= 0) {
     return;
   }

@@ -19,6 +19,18 @@ class Stories
         return $result;
     }
 
+    // Hiện danh sách stories với thông tin người dùng
+    public function getStoriesNotWithUsers($user_id)
+    {
+        $db = new connect(); // Kết nối cơ sở dữ liệu
+        $query = "SELECT stories.*, users.first_name, users.last_name 
+                    FROM stories 
+                    LEFT JOIN users ON stories.user_id = users.id 
+                    WHERE stories.user_id != $user_id AND stories.show = 1";
+        $result = $db->pdo_query($query);
+        return $result;
+    }
+
     public function getStoriesByUserIdWithUserInfo($user_id)
     {
         $db = new connect();

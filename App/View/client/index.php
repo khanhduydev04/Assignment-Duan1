@@ -31,6 +31,9 @@ switch ($controller) {
   case "setting":
     include_once './App/View/client/page/setting.php';
     break;
+  case "signin":
+    include_once './App/View/client/layout/signin.php';
+    break;
   case "logout":
     unset($_SESSION['user']);
     header("location: index.php");
