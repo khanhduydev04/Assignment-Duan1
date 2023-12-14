@@ -325,3 +325,134 @@ function previewImage(input) {
     imageNameInput.value = ""; // Xóa tên file nếu không có tệp nào được chọn
   }
 }
+
+
+
+
+
+
+
+
+
+//Check creat post
+function toggleSubmitButtonUpdate() {
+  // textarea và input file
+  let contentTextarea = document.getElementById("content-post-update");
+  let photoInputUpdate = document.getElementById("postImageUpdate");
+
+  // button post
+  let submitButton = document.getElementById("submitPostUpdate");
+  let contentValue = contentTextarea.value.trim();
+  let photoValue = photoInputUpdate.files.length;
+
+  // Nếu một trong hai có dữ liệu, kích hoạt nút "Đăng" và thêm class "btn-primary"
+  if (contentValue !== "" || photoValue > 0) {
+    submitButton.disabled = false;
+    submitButton.classList.remove("btn-secondary");
+    submitButton.classList.add("btn-primary");
+  } else {
+    submitButton.disabled = true;
+    submitButton.classList.remove("btn-primary");
+    submitButton.classList.add("btn-secondary");
+  }
+}
+
+function checkFilePostAvatar(fileInputId, submitButtonId) {
+  // input file
+  let photoInputUpdate = document.getElementById(fileInputId);
+  let photoValue = photoInputUpdate.files.length;
+  // button post
+  let submitButton = document.getElementById(submitButtonId);
+  // Nếu một trong hai có dữ liệu, kích hoạt nút "Đăng" và thêm class "btn-primary"
+  if (photoValue > 0) {
+    submitButton.disabled = false;
+    submitButton.classList.remove("btn-secondary");
+    submitButton.classList.add("btn-primary");
+  } else {
+    submitButton.disabled = true;
+    submitButton.classList.remove("btn-primary");
+    submitButton.classList.add("btn-secondary");
+  }
+}
+
+//show preview post image
+function showPreviewPostImageUpdate() {
+  // Kiểm tra và cập nhật trạng thái nút đăng
+  toggleSubmitButtonUpdate();
+
+  let postImageInputUpdate = document.getElementById("postImageUpdate");
+  let postPreviewUpdate = document.querySelector(".post-preview-update");
+
+  // Xóa tất cả các thẻ img hiện tại trong post-preview
+  postPreviewUpdate.innerHTML = "";
+
+  // Hiển thị ảnh và thêm nút xóa chung
+  let row; // Khởi tạo biến row ở đây
+  let deleteAllButtonAdded = false; // Biến kiểm tra xem nút xóa chung đã được thêm vào hay chưa
+
+  if (postImageInputUpdate.files && postImageInputUpdate.files.length > 0) {
+    for (let i = 0; i < postImageInputUpdate.files.length; i++) {
+      // Tạo một dòng mới cho ảnh đầu tiên của mỗi cặp ảnh
+      if (i % 2 === 0) {
+        row = document.createElement("div");
+        row.classList.add("row", "mb-2");
+        postPreviewUpdate.appendChild(row);
+      }
+
+      createImageUpdate(postImageInputUpdate.files[i], i, postImageInputUpdate.files);
+
+      // Thêm nút xóa chung nếu chưa thêm
+      if (!deleteAllButtonAdded) {
+        addDeleteAllButton();
+        deleteAllButtonAdded = true;
+      }
+    }
+  }
+
+  function createImageUpdate(file, index, filesArray) {
+    let imgContainer = document.createElement("div");
+    if (index === 0 && postImageInputUpdate.files.length === 1) {
+      imgContainer.classList.add("col-md-12");
+    } else {
+      imgContainer.classList.add("col-md-6");
+    }
+    imgContainer.classList.add("position-relative");
+
+    let img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.classList.add("img-fluid", "rounded", "mb-2");
+    img.style.aspectRatio = "1/1";
+    img.style.width = "100%";
+    img.style.objectFit = "cover";
+    imgContainer.appendChild(img);
+
+    row.appendChild(imgContainer);
+  }
+
+  function addDeleteAllButton() {
+    let deleteAllButton = document.createElement("button");
+    deleteAllButton.type = "button";
+    deleteAllButton.classList.add(
+      "btn",
+      "btn-danger",
+      "btn-sm",
+      "position-absolute",
+      "top-0",
+      "end-0",
+      "btn-close-image"
+    );
+    deleteAllButton.innerHTML = '<i class="fas fa-times"></i>';
+    deleteAllButton.addEventListener("click", function () {
+      // Xóa tất cả ảnh và reset input file
+      postPreviewUpdate.innerHTML = "";
+      postImageInputUpdate.value = ""; // Reset input file
+      console.log(postImageInputUpdate);
+      // Kiểm tra và cập nhật trạng thái nút đăng
+      toggleSubmitButtonUpdate();
+    });
+
+    // Thêm nút xóa chung vào postPreviewUpdate
+    postPreviewUpdate.appendChild(deleteAllButton);
+  }
+}
+

@@ -37,5 +37,12 @@ class Likes
         WHERE post_id = '$post_id'";
         return $db->pdo_query_value($sql);
     }
+
+    public function getIdUserByIdLike($post_id)
+    {
+        $db = new connect();
+        $sql = "SELECT user_id FROM likes WHERE post_id = '$post_id'";
+        return $db->pdo_query($sql);
+    }
 }
 ?>
