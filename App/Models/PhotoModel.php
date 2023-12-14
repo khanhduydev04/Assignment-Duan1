@@ -69,7 +69,10 @@ class Photo
   public function deletePhoto($id)
   {
     $db = new connect();
-    $sql = "DELETE FROM photos WHERE id = '$id'";
+    $sql = "DELETE FROM photos WHERE post_id = '$id'";
     return $db->pdo_execute($sql);
   }
+
+
 }
+  
