@@ -85,7 +85,7 @@ if (isset($_POST['login'])) {
                     BeeSocial
                 </h1>
                 <p class="w-75 mx-auto mx-lg-0 fs-4">
-                    BeeSocial nơi kết nối nhưng chú ong tại FPT Polytechnic
+                    BeeSocial nơi kết nối những chú ong nhà FPT Polytechnic
                 </p>
             </div>
             <!--form-->

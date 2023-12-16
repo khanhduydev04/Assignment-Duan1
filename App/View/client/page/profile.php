@@ -2671,12 +2671,10 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                               }
                             }
                             ?>
-
                           </ul>
                         <?php }
                         ?>
                       </div>
-
                       <!-- update post modal -->
                       <div class="modal fade" id="updatePost_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="updatePost_<?php echo $row['id']; ?>Label" aria-hidden="true" data-bs-backdrop="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -2729,7 +2727,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                         <i class="fa-solid fa-xmark"></i>
                                       </button>
                                       <?php
-
                                       ?>
                                       <div class="row">
                                         <?php
@@ -2742,8 +2739,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                         ?>
                                       </div>
                                     </div>
-
-
                                   </div>
                                 </div>
                                 <!-- end -->
@@ -3802,8 +3797,14 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
             $result = $post->insertPost($content, $user_id);
             if ($result[0]) {
               $post_share_id = $result[1];
-              $share = $share->insertShare($user_id, $post_id, $post_share_id);
-              header('location: index.php');
+              if ($share = $share->insertShare($user_id, $post_id, $post_share_id)) {
+                $noti_name = $user->getFullnameByUser($user_id);
+                $noti_content = "$noti_name đã chia sẻ bài viết của bạn";
+                $noti_href = "index.php?ctrl=post&post_id=$post_share_id";
+                $noti_user_id = $post->getPostById($post_id);
+                $notification->insertNotification($noti_content, $noti_href, $noti_user_id['user_id']);
+                header('location: index.php');
+              }
             }
           }
           ?>

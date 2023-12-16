@@ -3429,8 +3429,14 @@ if (isset($_POST['post']) && $_POST['post']) {
             $result = $post->insertPost($content, $user_id);
             if ($result[0]) {
               $post_share_id = $result[1];
-              $share = $share->insertShare($user_id, $post_id, $post_share_id);
-              header('location: index.php');
+              if ($share = $share->insertShare($user_id, $post_id, $post_share_id)) {
+                $noti_name = $user->getFullnameByUser($user_id);
+                $noti_content = "$noti_name đã chia sẻ bài viết của bạn";
+                $noti_href = "index.php?ctrl=post&post_id=$post_share_id";
+                $noti_user_id = $post->getPostById($post_id);
+                $notification->insertNotification($noti_content, $noti_href, $noti_user_id['user_id']);
+                header('location: index.php');
+              }
             }
           }
           ?>
@@ -3438,41 +3444,7 @@ if (isset($_POST['post']) && $_POST['post']) {
       </div>
       <!-- ================= Chatbar ================= -->
       <div class="col-12 col-lg-3">
-        <div class="d-none d-xxl-block h-100 fixed-top end-0 overflow-hidden scrollbar" style=" max-width: 360px; width: 100%; z-index: 4; padding-top: 56px; left: initial !important;">
-          <div class="p-3 mt-4">
-            <!-- contacts -->
-            <hr class="m-0" />
-            <div class="my-3 d-flex justify-content-between align-items-center">
-              <p class="text-muted fs-5 m-0">Người liên hệ</p>
-            </div>
-            <!-- friend 1 -->
-            <li class="dropdown-item rounded my-2 px-0" type="button" data-bs-toggle="modal" data-bs-target="#singleChat1">
-              <!-- avatar -->
-              <div class="d-flex align-items-center mx-2 chat-avatar">
-                <div class="position-relative">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                  <span class="position-absolute bottom-0 translate-middle border border-light rounded-circle bg-success p-1" style="left: 75%">
-                    <span class="visually-hidden"></span>
-                  </span>
-                </div>
-                <p class="m-0">Võ Khánh Duy</p>
-              </div>
-            </li>
-            <!-- friend 2 -->
-            <li class="dropdown-item rounded my-2 px-0" type="button" data-bs-toggle="modal" data-bs-target="#singleChat3">
-              <!-- avatar -->
-              <div class="d-flex align-items-center mx-2 chat-avatar">
-                <div class="position-relative">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 38px; height: 38px; object-fit: cover" />
-                  <span class="position-absolute bottom-0 translate-middle border border-light rounded-circle bg-success p-1" style="left: 75%">
-                    <span class="visually-hidden"></span>
-                  </span>
-                </div>
-                <p class="m-0">Hồ Dư Mai Trân</p>
-              </div>
-            </li>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>
