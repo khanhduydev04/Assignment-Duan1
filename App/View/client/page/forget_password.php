@@ -75,7 +75,7 @@
                                     alert('Đổi mật khẩu thành công !');
                                     setTimeout(function() {
                                         window.location.href = 'index.php?ctrl=signin';
-                                    }, 3000);
+                                    });
                                 </script>";
                             }
                         }

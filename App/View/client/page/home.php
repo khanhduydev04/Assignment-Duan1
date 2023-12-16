@@ -751,12 +751,12 @@ if (isset($_POST['post']) && $_POST['post']) {
                       <!-- post content -->
                       <div class="border rounded-4 m-4">
                         <!--image-->
-                        <div id="post-images">
+                        <a href="./index.php?ctrl=slider&id_post=<?php echo $row['id'] ?>"  id="post-images">
                           <?php
                           $image = $photo->getPhotoByPost($row['id']);
                           echo '<img src="./Public/upload/' . $image[0]['image_url'] . '" alt="post image" class="img-fluid " style="width: 100%; border-radius: 15px 15px 0px 0px;"  />';
                           ?>
-                        </div>
+                        </a>
                         <!--avatar-->
                         <div class="d-flex align-items-center mt-2 ms-3 mb-3">
                           <?php
@@ -946,7 +946,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                       <!-- post content -->
                       <div class="border rounded-4 m-4">
                         <!--image-->
-                        <div class="container m-0 g-0">
+                        <a href="./index.php?ctrl=slider&id_post=<?php echo $row['id'] ?>"  class="container m-0 g-0">
                           <div class="row g-1" id="post-images">
                             <?php
                             $image = $photo->getPhotoByPost($row['id']);
@@ -957,7 +957,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                             }
                             ?>
                           </div>
-                        </div>
+                        </a>
                         <!--avatar-->
                         <div class="d-flex align-items-center mt-2 ms-3 mb-3">
                           <?php
@@ -1154,7 +1154,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                       <!-- post content -->
                       <div class="border rounded-4 m-4">
                         <!--image-->
-                        <div class="container m-0 g-0" style="width: 100%;">
+                        <a href="./index.php?ctrl=slider&id_post=<?php echo $row['id'] ?>"  class="container m-0 g-0" style="width: 100%;">
                           <div class="row g-1">
                             <?php
                             $image = $photo->getPhotoByPost($row['id']);
@@ -1177,7 +1177,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                               ?>
                             </div>
                           </div>
-                        </div>
+                        </a>
 
                         <!--avatar-->
                         <div class="d-flex align-items-center mt-2 ms-3 mb-3">
@@ -1375,7 +1375,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                       <!-- post content -->
                       <div class="border rounded-4 m-4">
                         <!--image-->
-                        <div class="container m-0 g-0 mb-1" style="width: 100%;">
+                        <a href="./index.php?ctrl=slider&id_post=<?php echo $row['id'] ?>"  class="container m-0 g-0 mb-1" style="width: 100%;">
                           <div class="row g-1">
                             <?php
                             $images = $photo->getPhotoByPost($row['id']);
@@ -1393,7 +1393,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                               <img src="./Public/upload/<?= $photoUrl[3] ?>" alt="post image" class="img-fluid w-100 object-fit-cover" style="height: 50%;" />
                             </div>
                           </div>
-                        </div>
+                        </a>
                         <!--avatar-->
                         <div class="d-flex align-items-center mt-2 ms-3 mb-3">
                           <?php
@@ -1586,7 +1586,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                       <!-- post content -->
                       <div class="border rounded-4 m-4">
                         <!--image-->
-                        <div class="container m-0 g-0 position-relative" style="width: 100%;">
+                        <a href="./index.php?ctrl=slider&id_post=<?php echo $row['id'] ?>"  class="container m-0 g-0 position-relative" style="width: 100%;">
                           <div class="row g-1">
                             <?php
                             $images = $photo->getPhotoByPost($row['id']);
@@ -1614,7 +1614,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                             </div>
                             <p class="w-100 text-white text-center text-center fs-3 z-3">+ <?= $check_photo - 3 ?></p>
                           </div>
-                        </div>
+                        </a>
                         <!--avatar-->
                         <div class="d-flex align-items-center mt-2 ms-3 mb-3">
                           <?php
@@ -1794,7 +1794,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <!-- edit menu -->
                             <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
                               <li class="d-flex align-items-center">
-                                <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#"  data-bs-toggle="modal" data-bs-target="#updatePost">
+                                <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="./index.php?ctrl=slider&id_post=<?php echo $row['id'] ?>"  data-bs-toggle="modal" data-bs-target="#updatePost_<?php echo $row['id']; ?>">
                                   Chỉnh sửa bài viết</a>
                               </li>
                               <li class="d-flex align-items-center btn-delete-post">
@@ -1819,7 +1819,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                       </div>
 
                       <!-- update post modal -->
-                      <div class="modal fade" id="updatePost" tabindex="-1" aria-labelledby="updatePostLabel" aria-hidden="true" data-bs-backdrop="true">
+                      <div class="modal fade" id="updatePost_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="updatePost_<?php echo $row['id']; ?>Label" aria-hidden="true" data-bs-backdrop="true">
                         <div class="modal-dialog modal-dialog-centered">
                           <div class=" modal-content">
                             <form action="" method="post" id="form-post" enctype="multipart/form-data">
@@ -2072,7 +2072,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <!-- edit menu -->
                             <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
                               <li class="d-flex align-items-center">
-                                <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#" data-bs-toggle="modal" data-bs-target="#updatePost">
+                                <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#" data-bs-toggle="modal" data-bs-target="#updatePost_<?php echo $row['id']; ?>">
                                   Chỉnh sửa bài viết</a>
                               </li>
                               <li class="d-flex align-items-center btn-delete-post">
@@ -2097,7 +2097,7 @@ if (isset($_POST['post']) && $_POST['post']) {
 
                       </div>
                         <!-- update post modal -->
-                        <div class="modal fade" id="updatePost" tabindex="-1" aria-labelledby="updatePostLabel" aria-hidden="true" data-bs-backdrop="true">
+                        <div class="modal fade" id="updatePost_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="updatePostLabel" aria-hidden="true" data-bs-backdrop="true">
                         <div class="modal-dialog modal-dialog-centered">
                           <div class=" modal-content">
                             <form action="" method="post" id="form-post" enctype="multipart/form-data">
@@ -2183,6 +2183,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </div>
                         </div>
                       </div>
+
                       <!-- post content -->
                       <div class="mt-3">
                         <!-- content -->
@@ -2194,11 +2195,11 @@ if (isset($_POST['post']) && $_POST['post']) {
                           echo '<input type="hidden" name="content-post-share" value="' . $row['content'] . '">';
                         }
                         ?>
-                        <div id="post-images">
+                        <a href="./index.php?ctrl=slider&id_post=<?php echo $row['id'] ?>" id="post-images">
                           <?php
                           $image = $photo->getPhotoByPost($row['id']);
                           echo '<img src="./Public/upload/' . $image[0]['image_url'] . '" alt="post image" class="img-fluid" name="postImageShare" style="width: 100%;" />';                        ?>
-                        </div>
+                        </a>
                         <!-- likes & comments -->
                         <div class="post__comment position-relative pt-0">
                           <!-- likes-comment -->
@@ -2350,7 +2351,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           <i class="fas fa-ellipsis-h" type="button" id="post1Menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
                           <!-- edit menu -->
                           <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
-                            <li class="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#updatePost">
+                            <li class="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#updatePost_<?php echo $row['id']; ?>">
                               <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#">
                                 Chỉnh sửa bài viết</a>
                             </li>
@@ -2374,7 +2375,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                       </div>
 
                       <!-- update post modal -->
-                      <div class="modal fade" id="updatePost" tabindex="-1" aria-labelledby="updatePostLabel" aria-hidden="true" data-bs-backdrop="true">
+                      <div class="modal fade" id="updatePost_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="updatePost_<?php echo $row['id']; ?>Label" aria-hidden="true" data-bs-backdrop="true">
                         <div class="modal-dialog modal-dialog-centered">
                           <div class=" modal-content">
                             <form action="" method="post" id="form-post" enctype="multipart/form-data">
@@ -2474,7 +2475,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           echo '<input type="hidden" name="content-post-share" value="' . $row['content'] . '">';
                         }
                         ?>
-                        <div class="container m-0 g-0">
+                        <a href="./index.php?ctrl=slider&id_post=<?php echo $row['id'] ?>" class="container m-0 g-0">
                           <div class="row g-1" id="post-images">
                             <?php
                             $image = $photo->getPhotoByPost($row['id']);
@@ -2485,7 +2486,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                             }
                             ?>
                           </div>
-                        </div>
+                        </a>
                         <!-- likes & comments -->
                         <div class="post__comment position-relative pt-0">
                           <!-- likes-comment -->
@@ -2638,7 +2639,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           <!-- edit menu -->
                           <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
                             <li class="d-flex align-items-center">
-                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#" data-bs-toggle="modal" data-bs-target="#updatePost">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#" data-bs-toggle="modal" data-bs-target="#updatePost_<?php echo $row['id']; ?>">
                                 Chỉnh sửa bài viết</a>
                             </li>
                             <li class="d-flex align-items-center btn-delete-post">
@@ -2660,7 +2661,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                       </div>
 
                       <!-- update post modal -->
-                      <div class="modal fade" id="updatePost" tabindex="-1" aria-labelledby="updatePostLabel" aria-hidden="true" data-bs-backdrop="true">
+                      <div class="modal fade" id="updatePost_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="updatePost_<?php echo $row['id']; ?>Label" aria-hidden="true" data-bs-backdrop="true">
                         <div class="modal-dialog modal-dialog-centered">
                           <div class=" modal-content">
                             <form action="" method="post" id="form-post" enctype="multipart/form-data">
@@ -2757,7 +2758,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           echo '<input type="hidden" name="content-post-share" value="' . $row['content'] . '">';
                         }
                         ?>
-                        <div class="container m-0 g-0" style="width: 100%;">
+                        <a href="./index.php?ctrl=slider&id_post=<?php echo $row['id'] ?>" class="container m-0 g-0" style="width: 100%;">
                           <div class="row g-1">
                             <?php
                             $image = $photo->getPhotoByPost($row['id']);
@@ -2777,7 +2778,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                               ?>
                             </div>
                           </div>
-                        </div>
+                        </a>
                         <!-- likes & comments -->
                         <div class="post__comment position-relative pt-0">
                           <!-- likes-comment -->
@@ -2906,7 +2907,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                     <!-- post-layout-4 -->
                     <div class="bg-white rounded shadow-sm mt-3">
                       <!-- author -->
-                      <div class="d-flex justify-content-between p-3 pb-0">
+                       <div class="d-flex justify-content-between p-3 pb-0">
                         <!-- avatar -->
                         <div class="d-flex align-items-center">
                           <?php
@@ -2928,7 +2929,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           <!-- edit menu -->
                           <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
                             <li class="d-flex align-items-center">
-                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#" data-bs-toggle="modal" data-bs-target="#updatePost">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#" data-bs-toggle="modal" data-bs-target="#updatePost_<?php echo $row['id']; ?>">
                                 Chỉnh sửa bài viết</a>
                             </li>
                             <li class="d-flex align-items-center btn-delete-post">
@@ -2950,7 +2951,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                       </div>
 
                       <!-- update post modal -->
-                      <div class="modal fade" id="updatePost" tabindex="-1" aria-labelledby="updatePostLabel" aria-hidden="true" data-bs-backdrop="true">
+                      <div class="modal fade" id="updatePost_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="updatePost_<?php echo $row['id']; ?>Label" aria-hidden="true" data-bs-backdrop="true">
                         <div class="modal-dialog modal-dialog-centered">
                           <div class=" modal-content">
                             <form action="" method="post" id="form-post" enctype="multipart/form-data">
@@ -2992,7 +2993,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                                         }
                                       ?>
                                     </div>
-                                    <input type="hidden" name="post_id" value="<?php echo $row['id']?>">
+                                    <input type="hidden" name="post-preview-update" value="<?php echo $row['id']?>">
                                     <!-- images preview -->
                                     <div class="post-preview-update w-100 bolder-1 rounded p-1 mt-2 position-relative"></div>
 
@@ -3047,7 +3048,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           echo '<input type="hidden" name="content-post-share" value="' . $row['content'] . '">';
                         }
                         ?>
-                        <div class="container m-0 g-0 mb-1" style="width: 100%;">
+                        <a href="./index.php?ctrl=slider&id_post=<?php echo $row['id'] ?>" class="container m-0 g-0 mb-1" style="width: 100%;">
                           <div class="row g-1">
                             <?php
                             $images = $photo->getPhotoByPost($row['id']);
@@ -3065,7 +3066,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                               <img src="./Public/upload/<?= $photoUrl[3] ?>" alt="post image" class="img-fluid w-100 object-fit-cover" style="height: 50%;" />
                             </div>
                           </div>
-                        </div>
+                        </a>
                         <!-- likes & comments -->
                         <div class="post__comment position-relative pt-0">
                           <!-- likes-comment -->
@@ -3218,7 +3219,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           <!-- edit menu -->
                           <ul class="dropdown-menu border-0 shadow" aria-labelledby="post1Menu">
                             <li class="d-flex align-items-center">
-                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#" data-bs-toggle="modal" data-bs-target="#updatePost">
+                              <a class="dropdown-item d-flex justify-content-around align-items-center fs-7" href="#" data-bs-toggle="modal" data-bs-target="#updatePost_<?php echo $row['id']; ?>">
                                 Chỉnh sửa bài viết</a>
                             </li>
                             <li class="d-flex align-items-center btn-delete-post">
@@ -3240,7 +3241,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                       </div>
 
                       <!-- update post modal -->
-                      <div class="modal fade" id="updatePost" tabindex="-1" aria-labelledby="updatePostLabel" aria-hidden="true" data-bs-backdrop="true">
+                      <div class="modal fade" id="updatePost_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="updatePost_<?php echo $row['id']; ?>Label" aria-hidden="true" data-bs-backdrop="true">
                         <div class="modal-dialog modal-dialog-centered">
                           <div class=" modal-content">
                             <form action="" method="post" id="form-post" enctype="multipart/form-data">
@@ -3282,7 +3283,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                                         }
                                       ?>
                                     </div>
-                                    <input type="hidden" name="post_id" value="<?php echo $row['id']?>">
+                                    <input type="hidden" name="post-preview-update" value="<?php echo $row['id']?>">
                                     <!-- images preview -->
                                     <div class="post-preview-update w-100 bolder-1 rounded p-1 mt-2 position-relative"></div>
 
@@ -3318,9 +3319,9 @@ if (isset($_POST['post']) && $_POST['post']) {
                                     <p class="m-0">Thêm hình ảnh vào bài viết</p>
                                     <i class="fas fa-images fs-5 text-success pointer mx-1"></i>
                                   </label>
-                                  <input type="file" name="photoUpdate[]" id="postImageUpdate" multiple hidden onchange="showPreviewPostImageUpdate()">
+                                  <input type="file" name="photoUpdate[]" id="postImageUpdate<?php echo $row['id']; ?>" multiple hidden onchange="showPreviewPostImageUpdate(postImageUpdate<?php echo $row['id']; ?>)">
                                 </div>
-                                <input type="submit" name="update-post" id="submitPostUpdate" class="btn btn-secondary w-100" value="Cập nhật" disabled>
+                                <input type="submit" name="update-post" id="submitPostUpdate<?php echo $row['id']; ?>" class="btn btn-secondary w-100" value="Cập nhật" disabled>
                               </div>
                             </form>
                           </div>
@@ -3338,7 +3339,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           echo '<input type="hidden" name="content-post-share" value="' . $row['content'] . '">';
                         }
                         ?>
-                        <div class="container m-0 g-0 position-relative" style="width: 100%;">
+                        <a href="./index.php?ctrl=slider&id_post=<?php echo $row['id'] ?>" class="container m-0 g-0 position-relative" style="width: 100%;">
                           <div class="row g-1">
                             <?php
                             $images = $photo->getPhotoByPost($row['id']);
@@ -3366,7 +3367,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                             </div>
                             <p class="w-100 text-white text-center text-center fs-3 z-3">+ <?= $check_photo - 3 ?></p>
                           </div>
-                        </div>
+                        </a>
                         <!-- likes & comments -->
                         <div class="post__comment position-relative pt-0">
                           <!-- likes-comment -->
