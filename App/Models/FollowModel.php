@@ -15,8 +15,7 @@ class Follow
   public function getFollowID($user_id, $user_id2)
   {
     $db = new connect();
-    $sql = "SELECT id FROM follows WHERE (user_id1 = '$user_id' AND user_id2 = '$user_id2') OR 
-    (user_id1 = '$user_id2' AND user_id2 = '$user_id')";
+    $sql = "SELECT id FROM follows WHERE (user_id1 = '$user_id' AND user_id2 = '$user_id2')";
     return $db->pdo_query_value($sql);
   }
 

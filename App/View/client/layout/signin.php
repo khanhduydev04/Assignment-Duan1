@@ -58,12 +58,16 @@ if (isset($_POST['login'])) {
 
     if (!empty($email) && !empty($password)) {
         if ($check = $register->checkUser($email, $password)) {
-            $id = $register->getIdUser($email, $password);
-            $_SESSION['user'] = $id;
-            header('Location: index.php');
+            $user_token = md5(uniqid());
+            $id = $register->getIdByEmail($email);
+            if ($update = $register->updateUserToken($user_token, $id['id'])) {
+                $user_data = $register->getIdUser($email, $password);
+                $_SESSION['user'] = $user_data;
+                header('Location: index.php');
+            }
         } elseif ($check = $register->checkAdmin($email, $password)) {
-            $id = $register->getIdUser($email, $password);
-            $_SESSION['user'] = $id;
+            $user_data = $register->getIdUser($email, $password);
+            $_SESSION['user'] = $user_data;
             header('Location: index.php');
         } else {
             $error['login'] = 'Email hoặc mật khẩu không chính xác !';

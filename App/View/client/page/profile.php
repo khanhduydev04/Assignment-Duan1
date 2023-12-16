@@ -7,6 +7,8 @@ $comment = new Comment();
 $like = new Likes();
 $share = new Share();
 $story = new Stories();
+$follow = new Follow();
+$notification = new Notification();
 
 $uploadDir = './Public/upload/';
 $allowedExtensions = ['png', 'jpg', 'jpeg'];
@@ -19,6 +21,10 @@ $user_id2 = null;
 if (isset($_GET['id'])) {
   $id = $_GET['id']; //Lấy id các user khác
   $user_id2 = $_GET['id']; //Lấy id các user khác
+
+  if ($id == $user_id && !isset($_GET['act'])) {
+    header('Location: index.php?ctrl=profile');
+  }
 }
 
 function calculateTimeAgo($time)
@@ -42,7 +48,11 @@ function calculateTimeAgo($time)
 if (isset($_POST["send_request"])) {
   if ($friend->addFriend($user_id, $user_id2)) {
     if ($follow->insertFollow($user_id, $user_id2)) {
-      header("Location: index.php?ctrl=profile&id=$user_id2");
+      $noti_content = 'Bạn có 1 lời mời kết bạn mới';
+      $noti_href = 'index.php?ctrl=friends&act=requests';
+      if ($notification->insertNotification($noti_content, $noti_href, $user_id2)) {
+        header("Location: index.php?ctrl=profile&id=$user_id2");
+      }
     }
   }
 }
@@ -52,7 +62,12 @@ if (isset($_POST["accept_request"])) {
   $follow_id = $follow->getFollowID($user_id, $user_id2);
   if ($friend->acceptRequest($friend_id)) {
     if ($follow->insertFollow($user_id, $user_id2)) {
-      header("Location: index.php?ctrl=profile&id=$user_id2");
+      $noti_name = $user->getFullnameByUser($user_id);
+      $noti_content = "$noti_name đã chấp nhận lời mời kết bạn";
+      $noti_href = 'index.php?ctrl=friends&act=list';
+      if ($notification->insertNotification($noti_content, $noti_href, $user_id2)) {
+        header("Location: index.php?ctrl=profile&id=$user_id2");
+      }
     }
   }
 }

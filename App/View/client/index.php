@@ -8,6 +8,7 @@
 @include_once './App/Models/StoryModel.php';
 @include_once './App/Models/CommentModel.php';
 @include_once './App/Models/LikeModel.php';
+@include_once './App/Models/NotificationModel.php';
 
 @include_once './App/View/client/layout/header.php';
 
@@ -30,6 +31,12 @@ switch ($controller) {
     break;
   case "setting":
     include_once './App/View/client/page/setting.php';
+    break;
+  case "messages":
+    include_once './App/View/client/page/message.php';
+    break;
+  case "post":
+    include_once './App/View/client/page/post.php';
     break;
   case "logout":
     unset($_SESSION['user']);

@@ -2300,10 +2300,7 @@ if (isset($_POST['post']) && $_POST['post']) {
         $(".reply-form").eq(index).css("display", "block");
       }
     });
-  });
-
-  //Xử lý ajax comment
-  $(document).ready(function() {
+    //Xử lý ajax comment
     $(".comment-list").each(function() {
       var $commentList = $(this);
       var postId = $commentList.data("post-id");
@@ -2349,9 +2346,7 @@ if (isset($_POST['post']) && $_POST['post']) {
         }
       });
     };
-  })
 
-  $(document).ready(function() {
     let userId = <?php echo $user_id ?>; // Lấy user_id từ PHP
 
     $(document).on("click", ".btn-like-post", function() {

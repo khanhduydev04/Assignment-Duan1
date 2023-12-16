@@ -20,6 +20,13 @@ class Comment
     return $db->pdo_query_value($sql);
   }
 
+  public function getUserCommentId($id)
+  {
+    $db = new connect();
+    $sql = "SELECT comments.user_id FROM comments WHERE id = '$id'";
+    return $db->pdo_query_value($sql);
+  }
+
   public function insertComment($content, $parent_id, $user_id, $post_id)
   {
     $db = new connect();

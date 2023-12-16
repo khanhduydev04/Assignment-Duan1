@@ -3,6 +3,7 @@ $user =  new User();
 $friend = new Friend();
 $photo = new Photo();
 $follow = new Follow();
+$notification = new Notification();
 
 $user_id = $_SESSION['user']['id'];
 $user_id2 = $_POST['user_id2'];
@@ -11,7 +12,11 @@ $user_id2 = $_POST['user_id2'];
 if (isset($_POST["send_request"])) {
     if ($friend->addFriend($user_id, $user_id2)) {
         if ($follow->insertFollow($user_id, $user_id2)) {
-            header("Location: index.php?ctrl=friends");
+            $noti_content = 'Bạn có 1 lời mời kết bạn mới';
+            $noti_href = 'index.php?ctrl=friends&act=requests';
+            if ($notification->insertNotification($noti_content, $noti_href, $user_id2)) {
+                header("Location: index.php?ctrl=friends");
+            }
         }
     }
 }
@@ -21,7 +26,12 @@ if (isset($_POST["accept_request"])) {
     $follow_id = $follow->getFollowID($user_id, $user_id2);
     if ($friend->acceptRequest($friend_id)) {
         if ($follow->insertFollow($user_id, $user_id2)) {
-            header("Location: index.php?ctrl=friends");
+            $noti_name = $user->getFullnameByUser($user_id);
+            $noti_content = "$noti_name đã chấp nhận lời mời kết bạn";
+            $noti_href = 'index.php?ctrl=friends&act=list';
+            if ($notification->insertNotification($noti_content, $noti_href, $user_id2)) {
+                header("Location: index.php?ctrl=friends");
+            }
         }
     }
 }

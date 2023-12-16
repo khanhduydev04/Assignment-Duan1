@@ -12,6 +12,8 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 @include_once './App/Models/CommentModel.php';
 @include_once './App/Models/PostModel.php';
 @include_once './App/Models/LikeModel.php';
+@include_once './App/Models/MessageModel.php';
+@include_once './App/Models/NotificationModel.php';
 
 $user = new User();
 $friend = new Friend();
@@ -21,6 +23,9 @@ $share = new Share();
 $cmt = new Comment();
 $post = new Post();
 $like = new Likes();
+$message = new Message();
+$notification = new Notification();
+
 
 //handle live search
 if (isset($_POST['search']) && $_POST['search'] != '') {
@@ -70,6 +75,12 @@ function calculateTimeAgo($time)
   }
 }
 
+$all_post = $post->getAllPostByUser($_SESSION['user']['id']);
+$user_post_id = [];
+foreach ($all_post as $user_post) {
+  $user_post_id[] = $user_post['id'];
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Xử lý thêm bình luận vào cơ sở dữ liệu
   if (isset($_POST['parentId']) && isset($_POST['postId']) && isset($_POST['content'])) {
@@ -82,7 +93,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $cmt->insertComment($content, $parent_id, $user_id, $post_id);
     if (!$result) {
       echo 'Không thể thêm mới comment';
-    };
+    } else {
+      if (!in_array($post_id, $user_post_id)) {
+        $noti_name = $user->getFullnameByUser($user_id);
+        $noti_content = "$noti_name đã bình luận về bài viết của bạn";
+        $noti_href = "index.php?ctrl=post&post_id=$post_id";
+        $noti_user_id = $post->getPostById($post_id);
+        $notification->insertNotification($noti_content, $noti_href, $noti_user_id['user_id']);
+      }
+      if ($parent_id !== 0) {
+        $noti_name = $user->getFullnameByUser($user_id);
+        $noti_content = "$noti_name đã trả lời bình luận của bạn";
+        $noti_href = "index.php?ctrl=post&post_id=$post_id";
+        $noti_user_id = $comment->getUserCommentId($result[1]);
+        $notification->insertNotification($noti_content, $noti_href, $noti_user_id['user_id']);
+      }
+    }
   }
 }
 
@@ -196,6 +222,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Tiến hành xử lý yêu cầu thích hoặc bỏ thích dựa trên action gửi từ client
     if ($action === 'like') {
       $response = $like->like($user_id, $post_id);
+      if ($response[0]) {
+        if (!in_array($post_id, $user_post_id)) {
+          $noti_name = $user->getFullnameByUser($user_id);
+          $noti_content = "$noti_name đã yêu thích bài viết của bạn";
+          $noti_href = "index.php?ctrl=post&post_id=$post_id";
+          $noti_user_id = $post->getPostById($post_id);
+          $notification->insertNotification($noti_content, $noti_href, $noti_user_id['user_id']);
+        }
+      }
     } else {
       $response = $like->unlike($user_id, $post_id);
     }
@@ -204,5 +239,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $updated_likes = $like->countPhotoByLike($post_id);
     echo $updated_likes ? $updated_likes . ' lượt thích' : '0 lượt thích';
   }
+}
+?>
+
+<?php
+if (isset($_POST['action']) && $_POST['action'] == 'fetch_chat') {
+  $user_id1 = $_POST['form_user_id'];
+  $user_id2 = $_POST['to_user_id'];
+
+  echo json_encode($message->getChat($user_id1, $user_id2));
 }
 ?>

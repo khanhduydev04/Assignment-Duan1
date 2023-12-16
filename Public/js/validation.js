@@ -13,8 +13,7 @@ function isPhoneNumberValid(phone) {
 
 function isPasswordValid(pass) {
   // Kiểm tra xem mật khẩu có ít nhất 8 ký tự không
-  ///^(?=.*[A-Za-z])(?=.*\d)[^\w\s][A-Za-z\d]{8,}$/
-  const passPattern = /^(?=[A-Za-z0-9])(?=.*[^\w\s])(?!.*\s).{1,8}$/;
+  const passPattern = /^(?=[A-Za-z0-9])(?=.*[^\w\s])(?!.*\s).{8,}$/;
   return passPattern.test(pass);
 }
 

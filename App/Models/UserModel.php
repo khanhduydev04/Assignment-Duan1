@@ -49,7 +49,8 @@ class User
   {
     $db = new connect();
     $sql = "SELECT * FROM users WHERE users.show = 1 AND first_name LIKE '%$keyword%' 
-    OR last_name LIKE '%$keyword%' OR CONCAT(first_name, ' ', last_name) LIKE '%$keyword%'";
+    OR last_name LIKE '%$keyword%' OR CONCAT(first_name, ' ', last_name) LIKE '%$keyword%'
+    OR CONCAT(last_name, ' ', first_name) LIKE '%$keyword%'";
     return $db->pdo_query($sql);
   }
 
@@ -143,13 +144,16 @@ class User
   public function getIdUser($email, $password)
   {
     $db = new connect();
-    $sql = "SELECT id, role, password FROM users WHERE email='$email'";
+    $sql = "SELECT id, role, user_token, password FROM users WHERE email='$email'";
     $userData = $db->pdo_query_one($sql);
     if ($userData != null) {
       $hashedPassword = $userData['password'];
       if (password_verify($password, $hashedPassword)) {
         // Mật khẩu hợp lệ, trả về id và vai trò (role) của người dùng
-        return array('id' => $userData['id'], 'role' => $userData['role']);
+        return array(
+          'id' => $userData['id'], 'role' => $userData['role'],
+          'token' => $userData['user_token']
+        );
       } else {
         // Mật khẩu không hợp lệ
         return null;
@@ -197,6 +201,20 @@ class User
   {
     $db = new connect();
     $sql = "DELETE FROM users WHERE id = '$id'";
+    return $db->pdo_execute($sql);
+  }
+
+  public function updatetUserConnectionId($user_connection_id, $user_token)
+  {
+    $db = new connect();
+    $sql = "UPDATE users SET connection_id = '$user_connection_id' WHERE user_token = '$user_token'";
+    return $db->pdo_execute($sql);
+  }
+
+  public function updateUserToken($user_token, $id)
+  {
+    $db = new connect();
+    $sql = "UPDATE users SET user_token = '$user_token' WHERE id = '$id'";
     return $db->pdo_execute($sql);
   }
 }

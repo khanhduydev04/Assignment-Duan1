@@ -1,5 +1,7 @@
 <?php
 $photo = new Photo();
+$user = new User();
+$notification = new Notification();
 ?>
 <!-- header -->
 <header class="header bg-white d-flex align-items-center fixed-top shadow-sm" style="min-height: 56px; z-index: 999">
@@ -24,7 +26,7 @@ $photo = new Photo();
             <div class="d-lg-flex align-items-center bg-gray ps-3">
               <i class="fas fa-search"></i>
             </div>
-            <input type="text" class="form-control search-input bg-gray rounded-pill border-0 h-100" placeholder="Tìm kiếm Beebook" id="search-input">
+            <input type="text" class="form-control search-input bg-gray rounded-pill border-0 h-100" placeholder="Tìm kiếm BeeSocial" id="search-input">
           </span>
           <!-- search menu -->
           <ul class="dropdown-menu overflow-auto border-0 shadow p-3" aria-labelledby="searchMenu" style="width: 18em; max-height: 400px">
@@ -68,203 +70,27 @@ $photo = new Photo();
       <!-- menus -->
       <div class="col d-flex align-items-center justify-content-end">
         <!-- chat -->
-        <div class="rounded-circle p-1 bg-gray d-flex align-items-center justify-content-center mx-2" style="width: 38px; height: 38px" type="button" id="chatMenu" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-          <i class="fas fa-comment"></i>
-        </div>
-        <!-- chat  dd -->
-        <ul class="dropdown-menu border-0 shadow p-3 overflow-auto" aria-labelledby="chatMenu" style="width: 21em; max-height: 600px">
-          <!-- header -->
-          <li class="p-1">
-            <div class="d-flex justify-content-between">
-              <h2 class="fs-4">Tin nhắn</h2>
-            </div>
-          </li>
-          <!-- search -->
-          <li class="p-1">
-            <div class="input-group-text bg-gray border-0 rounded-pill" style="min-height: 40px; min-width: 230px">
-              <i class="fas fa-search me-2 text-muted"></i>
-              <input type="text" class="form-control rounded-pill border-0 bg-gray" placeholder="Tìm tin nhắn" />
-            </div>
-          </li>
-          <!-- message 1 -->
-          <li class="my-2 p-1" type="button" data-bs-toggle="modal" data-bs-target="#singleChat1">
-            <div class="d-flex align-items-center justify-content-between">
-              <!-- big avatar -->
-              <div class="d-flex align-items-center justify-content-evenly">
-                <div class="p-2">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
-                </div>
-                <div>
-                  <p class="fs-7 m-0">Mike</p>
-                  <span class="fs-7 text-muted">Lorem ipsum &#8226; 7d</span>
-                </div>
-              </div>
-            </div>
-          </li>
-          <!-- message 2 -->
-          <li class="my-2 p-1" type="button" data-bs-toggle="modal" data-bs-target="#singleChat2">
-            <div class="d-flex align-items-center justify-content-between">
-              <!-- big avatar -->
-              <div class="d-flex align-items-center justify-content-evenly">
-                <div class="p-2">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
-                </div>
-                <div>
-                  <p class="fs-7 m-0">
-                    Tuan
-                    <span class="fs-7 text-muted">Lorem ipsum &#8226; 7d</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </li>
-          <!-- message 3 -->
-          <li class="my-2 p-1" type="button" data-bs-toggle="modal" data-bs-target="#singleChat3">
-            <div class="d-flex align-items-center justify-content-between">
-              <!-- big avatar -->
-              <div class="d-flex align-items-center justify-content-evenly">
-                <div class="p-2">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
-                </div>
-                <div>
-                  <p class="fs-7 m-0">Jerry</p>
-                  <span class="fs-7 text-muted">Lorem ipsum &#8226; 7d</span>
-                </div>
-              </div>
-            </div>
-          </li>
-          <!-- message 4 -->
-          <li class="my-2 p-1" type="button" data-bs-toggle="modal" data-bs-target="#singleChat4">
-            <div class="d-flex align-items-center justify-content-between">
-              <!-- big avatar -->
-              <div class="d-flex align-items-center justify-content-evenly">
-                <div class="p-2">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
-                </div>
-                <div>
-                  <p class="fs-7 m-0">Tony</p>
-                  <span class="fs-7 text-muted">Lorem ipsum &#8226; 7d</span>
-                </div>
-              </div>
-            </div>
-          </li>
-          <!-- message 5 -->
-          <li class="my-2 p-1" type="button" data-bs-toggle="modal" data-bs-target="#singleChat5">
-            <div class="d-flex align-items-center justify-content-between">
-              <!-- big avatar -->
-              <div class="d-flex align-items-center justify-content-evenly">
-                <div class="p-2">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
-                </div>
-                <div>
-                  <p class="fs-7 m-0">Phu</p>
-                  <span class="fs-7 text-muted">Lorem ipsum &#8226; 7d</span>
-                </div>
-              </div>
-            </div>
-          </li>
-          <hr class="m-0" />
-          <a href="#" class="text-decoration-none">
-            <p class="fw-bold text-center pt-3 m-0">See All in Messenger</p>
-          </a>
-        </ul>
+        <a class="rounded-circle p-1 bg-gray d-flex align-items-center justify-content-center mx-2" style="width: 38px; height: 38px" type="button" id="chatMenu" href="index.php?ctrl=messages">
+          <i class="fas fa-comment text-dark"></i>
+        </a>
         <!-- notifications -->
         <div class=" rounded-circle p-1 bg-gray d-flex align-items-center justify-content-center mx-2" style="width: 38px; height: 38px" type="button" id="notMenu" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
           <i class="fas fa-bell"></i>
         </div>
         <!-- notifications dd -->
-        <ul class="dropdown-menu border-0 shadow p-3" aria-labelledby="notMenu" style="width: 21em; max-height: 600px; overflow-y: auto">
+        <ul class="dropdown-menu border-0 shadow p-3" id="notification" aria-labelledby="notMenu" style="width: 21em; max-height: 500px; overflow-y: auto">
           <!-- header -->
           <li class="p-1">
             <div class="d-flex justify-content-between">
               <h2 class="fs-4">Thông báo</h2>
             </div>
           </li>
-          <!-- news 1 -->
-          <li class="my-2 p-1">
-            <a href="#" class="d-flex align-items-center justify-content-evenly text-decoration-none text-dark">
-              <div class="d-flex align-items-center justify-content-evenly">
-                <div class="p-2">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
-                </div>
-                <div>
-                  <p class="fs-7 m-0">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum unde amet at nulla quae porro.
-                  </p>
-                  <span class="fs-7 text-primary">about an hour ago</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <!-- news 2 -->
-          <li class="my-2 p-1">
-            <a href="#" class="d-flex align-items-center justify-content-evenly text-decoration-none text-dark">
-              <div class="d-flex align-items-center justify-content-evenly">
-                <div class="p-2">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
-                </div>
-                <div>
-                  <p class="fs-7 m-0">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum unde amet at nulla quae porro.
-                  </p>
-                  <span class="fs-7 text-primary">about an hour ago</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <!-- news 3 -->
-          <li class="my-2 p-1">
-            <a href="#" class="d-flex align-items-center justify-content-evenly text-decoration-none text-dark">
-              <div class="d-flex align-items-center justify-content-evenly">
-                <div class="p-2">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
-                </div>
-                <div>
-                  <p class="fs-7 m-0">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum unde amet at nulla quae porro.
-                  </p>
-                  <span class="fs-7 text-primary">about an hour ago</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <!-- news 4 -->
-          <li class="my-2 p-1">
-            <a href="#" class="d-flex align-items-center justify-content-evenly text-decoration-none text-dark">
-              <div class="d-flex align-items-center justify-content-evenly">
-                <div class="p-2">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
-                </div>
-                <div>
-                  <p class="fs-7 m-0">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum unde amet at nulla quae porro.
-                  </p>
-                  <span class="fs-7 text-primary">about an hour ago</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <!-- news 5 -->
-          <li class="my-2 p-1">
-            <a href="#" class="d-flex align-items-center justify-content-evenly text-decoration-none text-dark">
-              <div class="d-flex align-items-center justify-content-evenly">
-                <div class="p-2">
-                  <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle" style="width: 58px; height: 58px; object-fit: cover" />
-                </div>
-                <div>
-                  <p class="fs-7 m-0">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum unde amet at nulla quae porro.
-                  </p>
-                  <span class="fs-7 text-primary">about an hour ago</span>
-                </div>
-              </div>
-            </a>
-          </li>
+          <?php
+          $user_noti = $notification->getNotifications($_SESSION['user']['id']);
+          foreach ($user_noti as $noti_item) { ?>
+            <li class="px-2 py-3 rounded-2 noti-item"><a href="<?= $noti_item['href'] ?>" class="text-dark"><?= $noti_item['content'] ?></a></li>
+          <?php }
+          ?>
         </ul>
         <!-- secondary menu -->
         <div class="align-items-center justify-content-center d-xl-flex mx-2" type="button" id="secondMenu" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
@@ -288,7 +114,7 @@ $photo = new Photo();
                 <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 45px; height: 45px; object-fit: cover" />
               <?php }
               ?>
-              <p class="m-0 fw-semibold">Khánh Duy</p>
+              <p class="m-0 fw-semibold"><?= $user->getFullnameByUser($_SESSION['user']['id']) ?></p>
             </a>
           </li>
           <hr>
