@@ -11,10 +11,14 @@ class Stories
     public function getStoriesWithUsers($user_id)
     {
         $db = new connect(); // Kết nối cơ sở dữ liệu
+        // Tính thời điểm 24 giờ trước đây từ thời điểm hiện tại
+        $twentyFourHoursAgo = date('Y-m-d H:i:s', strtotime('-24 hours'));
         $query = "SELECT stories.*, users.first_name, users.last_name 
-                    FROM stories 
-                    LEFT JOIN users ON stories.user_id = users.id 
-                    WHERE stories.user_id = $user_id AND stories.show = 1";
+                FROM stories 
+                LEFT JOIN users ON stories.user_id = users.id 
+                WHERE stories.user_id = $user_id 
+                    AND stories.show = 1 
+                    AND stories.created_at >= '$twentyFourHoursAgo'";
         $result = $db->pdo_query($query);
         return $result;
     }
@@ -23,25 +27,29 @@ class Stories
     public function getStoriesNotWithUsers($user_id)
     {
         $db = new connect(); // Kết nối cơ sở dữ liệu
+        // Tính thời điểm 24 giờ trước đây từ thời điểm hiện tại
+        $twentyFourHoursAgo = date('Y-m-d H:i:s', strtotime('-24 hours'));
         $query = "SELECT stories.*, users.first_name, users.last_name 
-                    FROM stories 
-                    LEFT JOIN users ON stories.user_id = users.id 
-                    WHERE stories.user_id != $user_id AND stories.show = 1";
+                FROM stories 
+                LEFT JOIN users ON stories.user_id = users.id 
+                WHERE stories.user_id != $user_id 
+                    AND stories.show = 1 
+                    AND stories.created_at >= '$twentyFourHoursAgo'";
         $result = $db->pdo_query($query);
         return $result;
     }
 
-    public function getStoriesByUserIdWithUserInfo($user_id)
-    {
-        $db = new connect();
-        $query = "SELECT s.*, u.first_name, u.last_name 
-                    FROM stories s
-                    INNER JOIN users u ON s.user_id = u.id
-                    WHERE s.`show` = 1";
+    // public function getStoriesByUserIdWithUserInfo($user_id)
+    // {
+    //     $db = new connect();
+    //     $query = "SELECT s.*, u.first_name, u.last_name 
+    //                 FROM stories s
+    //                 INNER JOIN users u ON s.user_id = u.id
+    //                 WHERE s.`show` = 1";
 
-        $result = $db->pdo_query($query);
-        return $result;
-    }
+    //     $result = $db->pdo_query($query);
+    //     return $result;
+    // }
 
     public function getUserIdByStory($id)
     {
