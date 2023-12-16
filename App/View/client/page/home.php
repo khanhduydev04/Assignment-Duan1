@@ -3218,13 +3218,11 @@ if (isset($_POST['post']) && $_POST['post']) {
                                     <input type="hidden" name="post-preview-update" value="<?php echo $row['id'] ?>">
                                     <!-- images preview -->
                                     <div class="post-preview-update w-100 bolder-1 rounded p-1 mt-2 position-relative"></div>
-
                                     <div class="container position-relative delete-image-update">
                                       <button type="button" class="btn btn-danger btn-sm delete-update-post" name="delete_image">
                                         <i class="fa-solid fa-xmark"></i>
                                       </button>
                                       <?php
-
                                       ?>
                                       <div class="row">
                                         <?php
@@ -3237,8 +3235,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                                         ?>
                                       </div>
                                     </div>
-
-
                                   </div>
                                 </div>
                                 <!-- end -->
@@ -3259,7 +3255,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </div>
                         </div>
                       </div>
-
                       <!-- post content -->
                       <div class="mt-3">
                         <!-- content -->

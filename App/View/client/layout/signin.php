@@ -82,10 +82,10 @@ if (isset($_POST['login'])) {
             <!--heading-->
             <div class="text-center text-lg-start mt-lg-5 pt-lg-5">
                 <h1 class="text-primary fw-bold fs-0">
-                    Beebook
+                    BeeSocial
                 </h1>
                 <p class="w-75 mx-auto mx-lg-0 fs-4">
-                    Beebook giúp bạn kết nối và chia sẻ với mọi người trong cuộc sống của bạn
+                    BeeSocial nơi kết nối nhưng chú ong tại FPT Polytechnic
                 </p>
             </div>
             <!--form-->
@@ -199,13 +199,6 @@ if (isset($_POST['login'])) {
                                             <span class="text-danger" id="genderSpan"></span>
                                         </div>
                                     </div>
-                                    <!--disclaimer-->
-                                    <div class="">
-                                        <span class="text-muted fs-7 mt-3">
-                                            Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin liên hệ
-                                            của bạn lên Facebook. Tìm hiểu thêm.
-                                        </span>
-                                    </div>
                                     <!--btn-->
                                     <div class="text-center my-4">
                                         <input type="submit" class="btn btn-success btn-lg" name="register" value="Đăng ký">
@@ -237,7 +230,7 @@ if (isset($_POST['login'])) {
         </div>
         <!--copy-->
         <div class="mt-4 mx-2 text-center">
-            <p class="fs-7">Beebook</p>
+            <p class="fs-7">BeeSocial</p>
         </div>
     </footer>
 </div>

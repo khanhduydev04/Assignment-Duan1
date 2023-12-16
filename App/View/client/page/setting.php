@@ -72,7 +72,7 @@ if (isset($_POST['update']) && ($_POST['update'])) {
               <?php } ?>
               <div class="justify-content-center align-content-center pe-4" style="margin-right: 50px;">
                 <p class="m-0 mb-1" style="font-size: 17px; font-weight: bold;"><?= $user->getFullnameByUser($user_id) ?></p>
-                <p class="m-0">Người dùng Beebook</p>
+                <p class="m-0">Người dùng BeeSocial</p>
               </div>
             </div>
             <hr>

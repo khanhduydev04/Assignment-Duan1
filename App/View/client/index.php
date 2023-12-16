@@ -38,6 +38,9 @@ switch ($controller) {
   case "post":
     include_once './App/View/client/page/post.php';
     break;
+  case "slider":
+    include_once './App/View/client/page/slider_post.php';
+    break;
   case "logout":
     unset($_SESSION['user']);
     header("location: index.php");
