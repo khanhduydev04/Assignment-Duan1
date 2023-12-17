@@ -533,9 +533,9 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $row['id']; ?>">
+                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $post_data['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $post_data['id']; ?>">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $response = $like->countPhotoByLike($post_id);
                             if ($response) {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
@@ -546,7 +546,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </button>
 
                           <!-- Modal like-->
-                          <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
+                          <div class="modal fade" id="exampleModalToggle_<?php echo $post_data['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $post_data['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -558,7 +558,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 </div>
                                 <div class="modal-body">
                                   <?php
-                                  $userIds = $like->getIdUserByIdLike($row['id']);
+                                  $userIds = $like->getIdUserByIdLike($post_data['id']);
                                   foreach ($userIds as $userId) {
                                     $user_id = $userId['user_id'];
                                   ?>
@@ -581,8 +581,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>
@@ -728,9 +726,9 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $row['id']; ?>">
+                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $post_data['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $post_data['id']; ?>">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $response = $like->countPhotoByLike($post_id);
                             if ($response) {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
@@ -741,7 +739,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </button>
 
                           <!-- Modal like-->
-                          <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
+                          <div class="modal fade" id="exampleModalToggle_<?php echo $post_data['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $post_data['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -753,7 +751,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 </div>
                                 <div class="modal-body">
                                   <?php
-                                  $userIds = $like->getIdUserByIdLike($row['id']);
+                                  $userIds = $like->getIdUserByIdLike($post_data['id']);
                                   foreach ($userIds as $userId) {
                                     $user_id = $userId['user_id'];
                                   ?>
@@ -776,8 +774,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>
@@ -915,7 +911,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
                           </div>
                         </div>
-
                         <!-- content -->
                         <?php
                         if ($row['content'] !== null || $row['content'] !== '') {
@@ -924,19 +919,15 @@ if (isset($_POST['post']) && $_POST['post']) {
                                     </div>';
                         }
                         ?>
-
-
-
                       </div>
-
                       <!-- likes & comments -->
                       <div class="post__comment position-relative pt-0">
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $row['id']; ?>">
+                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $post_data['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $post_data['id']; ?>">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $response = $like->countPhotoByLike($post_id);
                             if ($response) {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
@@ -947,7 +938,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </button>
 
                           <!-- Modal like-->
-                          <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
+                          <div class="modal fade" id="exampleModalToggle_<?php echo $post_data['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $post_data['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -959,7 +950,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 </div>
                                 <div class="modal-body">
                                   <?php
-                                  $userIds = $like->getIdUserByIdLike($row['id']);
+                                  $userIds = $like->getIdUserByIdLike($post_data['id']);
                                   foreach ($userIds as $userId) {
                                     $user_id = $userId['user_id'];
                                   ?>
@@ -982,8 +973,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>
@@ -1048,7 +1037,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </div>
                         </div>
                       </div>
-
                       <!-- end -->
                     </div>
                   <?php break;
@@ -1114,14 +1102,12 @@ if (isset($_POST['post']) && $_POST['post']) {
                               for ($i = 1; $i <= 2; $i++) {
                                 $imageSrc = "./Public/upload/" . $imageUrls[$i];
                                 $borderStyle = ($i === 1) ? 'border-radius: 0 15px 0 0' : ''; // Thêm border cho ảnh đầu tiên
-
                                 echo '<img src="' . $imageSrc . '" alt="post image" class="img-fluid mb-1" style="height: 300px; width: 100%; ' . $borderStyle . '" />';
                               }
                               ?>
                             </div>
                           </div>
                         </a>
-
                         <!--avatar-->
                         <div class="d-flex align-items-center mt-2 ms-3 mb-3">
                           <?php
@@ -1136,7 +1122,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
                           </div>
                         </div>
-
                         <!-- content -->
                         <?php
                         if ($row['content'] !== null || $row['content'] !== '') {
@@ -1146,15 +1131,14 @@ if (isset($_POST['post']) && $_POST['post']) {
                         }
                         ?>
                       </div>
-
                       <!-- likes & comments -->
                       <div class="post__comment position-relative pt-0">
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $row['id']; ?>">
+                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $post_data['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $post_data['id']; ?>">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $response = $like->countPhotoByLike($post_id);
                             if ($response) {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
@@ -1165,7 +1149,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </button>
 
                           <!-- Modal like-->
-                          <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
+                          <div class="modal fade" id="exampleModalToggle_<?php echo $post_data['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $post_data['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -1177,7 +1161,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 </div>
                                 <div class="modal-body">
                                   <?php
-                                  $userIds = $like->getIdUserByIdLike($row['id']);
+                                  $userIds = $like->getIdUserByIdLike($post_data['id']);
                                   foreach ($userIds as $userId) {
                                     $user_id = $userId['user_id'];
                                   ?>
@@ -1200,8 +1184,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>
@@ -1266,7 +1248,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </div>
                         </div>
                       </div>
-
                       <!-- end -->
                     </div>
                   <?php break;
@@ -1348,7 +1329,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
                           </div>
                         </div>
-
                         <!-- content -->
                         <?php
                         if ($row['content'] !== null || $row['content'] !== '') {
@@ -1363,9 +1343,9 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $row['id']; ?>">
+                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $post_data['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $post_data['id']; ?>">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $response = $like->countPhotoByLike($post_id);
                             if ($response) {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
@@ -1374,9 +1354,8 @@ if (isset($_POST['post']) && $_POST['post']) {
                             }
                             ?>
                           </button>
-
                           <!-- Modal like-->
-                          <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
+                          <div class="modal fade" id="exampleModalToggle_<?php echo $post_data['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $post_data['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -1388,7 +1367,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 </div>
                                 <div class="modal-body">
                                   <?php
-                                  $userIds = $like->getIdUserByIdLike($row['id']);
+                                  $userIds = $like->getIdUserByIdLike($post_data['id']);
                                   foreach ($userIds as $userId) {
                                     $user_id = $userId['user_id'];
                                   ?>
@@ -1411,8 +1390,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>
@@ -1477,7 +1454,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </div>
                         </div>
                       </div>
-
                       <!-- end -->
                     </div>
                   <?php break;
@@ -1569,7 +1545,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                             <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
                           </div>
                         </div>
-
                         <!-- content -->
                         <?php
                         if ($row['content'] !== null || $row['content'] !== '') {
@@ -1584,9 +1559,9 @@ if (isset($_POST['post']) && $_POST['post']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $row['id']; ?>">
+                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $post_data['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $post_data['id']; ?>">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $response = $like->countPhotoByLike($post_id);
                             if ($response) {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
@@ -1597,7 +1572,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                           </button>
 
                           <!-- Modal like-->
-                          <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
+                          <div class="modal fade" id="exampleModalToggle_<?php echo $post_data['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $post_data['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -1609,7 +1584,7 @@ if (isset($_POST['post']) && $_POST['post']) {
                                 </div>
                                 <div class="modal-body">
                                   <?php
-                                  $userIds = $like->getIdUserByIdLike($row['id']);
+                                  $userIds = $like->getIdUserByIdLike($post_data['id']);
                                   foreach ($userIds as $userId) {
                                     $user_id = $userId['user_id'];
                                   ?>
@@ -1632,8 +1607,6 @@ if (isset($_POST['post']) && $_POST['post']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>

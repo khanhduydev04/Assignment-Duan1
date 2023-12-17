@@ -36,7 +36,7 @@ if (isset($_POST['search']) && $_POST['search'] != '') {
   if ($result && $result !== null) {
     foreach ($result as $row) {
       $output .= '<li class="my-3">
-      <a href="index.php?ctrl=profile&id=' . $row['id'] . '" class="text-decoration-none text-dark">
+      <a href="index.php?ctrl=profile&user_id=' . $row['id'] . '" class="text-decoration-none text-dark">
           <div class="alert fade show dropdown-item p-1 m-0 d-flex align-items-center justify-content-between" role="alert">
               <div class="d-flex align-items-center">';
       // Kiểm tra avatar user

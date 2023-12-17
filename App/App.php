@@ -18,7 +18,7 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <link rel="stylesheet" href="./Public/css/global.css?v=<?php echo time(); ?>">
   <link rel="stylesheet" href="./Public/css/main.css?v=<?php echo time(); ?>">
-  <title>Beebook</title>
+  <title>BeeSocial</title>
 </head>
 
 <body>

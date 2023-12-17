@@ -27,10 +27,16 @@ $photo = new Photo();
                 </div>
                 <div class="d-flex flex-row mb-3">
                     <div class="p-2">
-                        <img src="./Public/images/avt.jpg" alt="avatar" class="rounded-circle me-2" style="width: 60px; height: 60px; object-fit: cover" />
+                        <?php
+                        if (($photo->getNewAvatarByUser($user_id) != null)) { ?>
+                            <img src="./Public/upload/<?= $photo->getNewAvatarByUser($user_id) ?>" alt="avatar" class="rounded-circle me-2" style="width: 60px; height: 60px; object-fit: cover" />
+                        <?php } else { ?>
+                            <img src="./Public/images/avt_default.png" alt="avatar" class="rounded-circle me-2" style="width: 60px; height: 60px; object-fit: cover" />
+                        <?php }
+                        ?>
                     </div>
                     <div class="p-2 d-flex align-items-center">
-                        <p class="m-0 fw-bold">Hồ Dư Mai Trân</p>
+                        <p class="m-0 fw-bold"><?= $user->getFullnameByUser($user_id) ?></p>
                     </div>
                 </div>
                 <?php

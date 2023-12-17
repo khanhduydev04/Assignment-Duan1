@@ -123,7 +123,7 @@ if (isset($_POST["add_follow"])) {
                                             $row = $user->getUserById($row['user_id1']); ?>
                                             <div class="px-1" style="width: calc(100% / 5)">
                                                 <form action="" method="post">
-                                                    <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>">
+                                                    <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>">
                                                         <?php
                                                         if (($photo->getNewAvatarByUser($row['id']) != null)) { ?>
                                                             <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['id']) ?>" alt="" class="img" style="width: 100%;" />
@@ -133,7 +133,7 @@ if (isset($_POST["add_follow"])) {
                                                         ?>
                                                     </a>
                                                     <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                                        <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>" class="text-black">
+                                                        <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>" class="text-black">
                                                             <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;"><?= $user->getFullnameByUser($row['id']) ?></p>
                                                         </a>
                                                         <div class="d-grid gap-2 mx-auto mt-3">
@@ -173,7 +173,7 @@ if (isset($_POST["add_follow"])) {
                                             } ?>
                                             <div class="px-1" style="width: calc(100% / 5)">
                                                 <form action="" method="post">
-                                                    <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>">
+                                                    <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>">
                                                         <?php
                                                         if (($photo->getNewAvatarByUser($row['id']) != null)) { ?>
                                                             <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['id']) ?>" alt="" class="img" style="width: 100%;" />
@@ -183,7 +183,7 @@ if (isset($_POST["add_follow"])) {
                                                         ?>
                                                     </a>
                                                     <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                                        <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>" class="text-black">
+                                                        <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>" class="text-black">
                                                             <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;"><?= $user->getFullnameByUser($row['id']) ?></p>
                                                         </a>
                                                         <div class="d-grid gap-2 mx-auto mt-3">
@@ -227,7 +227,7 @@ if (isset($_POST["add_follow"])) {
                                     $row = $user->getUserById($row['user_id1']); ?>
                                     <div class="px-1" style="width: calc(100% / 5)">
                                         <form action="" method="post">
-                                            <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>">
+                                            <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>">
                                                 <?php
                                                 if (($photo->getNewAvatarByUser($row['id']) != null)) { ?>
                                                     <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['id']) ?>" alt="" class="img" style="width: 100%;" />
@@ -237,7 +237,7 @@ if (isset($_POST["add_follow"])) {
                                                 ?>
                                             </a>
                                             <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                                <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>" class="text-black">
+                                                <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>" class="text-black">
                                                     <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;"><?= $user->getFullnameByUser($row['id']) ?></p>
                                                 </a>
                                                 <div class="d-grid gap-2 mx-auto mt-3">
@@ -271,7 +271,7 @@ if (isset($_POST["add_follow"])) {
                                 foreach ($otherUser as $row) { ?>
                                     <div class="px-1" style="width: calc(100% / 5)">
                                         <form action="" method="post">
-                                            <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>">
+                                            <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>">
                                                 <?php
                                                 if (($photo->getNewAvatarByUser($row['id']) != null)) { ?>
                                                     <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['id']) ?>" alt="" class="img" style="width: 100%;" />
@@ -281,7 +281,7 @@ if (isset($_POST["add_follow"])) {
                                                 ?>
                                             </a>
                                             <div class="shadow-sm fb-1" style="padding-top: 1px;">
-                                                <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>" class="text-black">
+                                                <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>" class="text-black">
                                                     <p class="m-0 mt-2 ms-2" style="font-size: 16px; font-weight: 600;"><?= $row['first_name'] . ' ' . $row['last_name'] ?></p>
                                                 </a>
                                                 <div class="d-grid gap-2 mx-auto mt-3">

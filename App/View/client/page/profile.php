@@ -18,9 +18,9 @@ $id = $_SESSION['user']['id']; //Lấy id user mặc định
 $user_id = $_SESSION['user']['id']; //Lấy id user mặc định
 
 $user_id2 = null;
-if (isset($_GET['id'])) {
-  $id = $_GET['id']; //Lấy id các user khác
-  $user_id2 = $_GET['id']; //Lấy id các user khác
+if (isset($_GET['user_id'])) {
+  $id = $_GET['user_id']; //Lấy id các user khác
+  $user_id2 = $_GET['user_id']; //Lấy id các user khác
 
   if ($id == $user_id && !isset($_GET['act'])) {
     header('Location: index.php?ctrl=profile');
@@ -51,7 +51,7 @@ if (isset($_POST["send_request"])) {
       $noti_content = 'Bạn có 1 lời mời kết bạn mới';
       $noti_href = 'index.php?ctrl=friends&act=requests';
       if ($notification->insertNotification($noti_content, $noti_href, $user_id2)) {
-        header("Location: index.php?ctrl=profile&id=$user_id2");
+        header("Location: index.php?ctrl=profile&user_id=$user_id2");
       }
     }
   }
@@ -66,7 +66,7 @@ if (isset($_POST["accept_request"])) {
       $noti_content = "$noti_name đã chấp nhận lời mời kết bạn";
       $noti_href = 'index.php?ctrl=friends&act=list';
       if ($notification->insertNotification($noti_content, $noti_href, $user_id2)) {
-        header("Location: index.php?ctrl=profile&id=$user_id2");
+        header("Location: index.php?ctrl=profile&user_id=$user_id2");
       }
     }
   }
@@ -77,7 +77,7 @@ if (isset($_POST["cancel_request"]) || isset($_POST["delete_friend"])) {
   $follow_id = $follow->getFollowID($user_id, $user_id2);
   if ($friend->deleteFriend($friend_id)) {
     if ($follow->deleteFollow($follow_id)) {
-      header("Location: index.php?ctrl=profile&id=$user_id2");
+      header("Location: index.php?ctrl=profile&user_id=$user_id2");
     }
   }
 }
@@ -365,11 +365,11 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
       </div>
       <div class="main-container w-100%">
         <ul class="m-0 py-2 d-flex align-items-center gap-1 list-unstyled" style="height: 60px;">
-          <li class="nav__btn <?= isset($_GET['act']) ? '' : 'nav__btn-active' ?>"><a href="index.php?ctrl=profile&id=<?= $id ?>" class="btn px-4 py-2 text-decoration-none fw-medium">Bài viết</a>
+          <li class="nav__btn <?= isset($_GET['act']) ? '' : 'nav__btn-active' ?>"><a href="index.php?ctrl=profile&user_id=<?= $id ?>" class="btn px-4 py-2 text-decoration-none fw-medium">Bài viết</a>
           </li>
-          <li class="nav__btn <?= (isset($_GET['act']) && $_GET['act'] == 'friends') ? 'nav__btn-active' : '' ?>"><a href="index.php?ctrl=profile&act=friends&id=<?= $id ?>" class="btn px-4 py-2 text-decoration-none fw-medium">Bạn bè</a>
+          <li class="nav__btn <?= (isset($_GET['act']) && $_GET['act'] == 'friends') ? 'nav__btn-active' : '' ?>"><a href="index.php?ctrl=profile&act=friends&user_id=<?= $id ?>" class="btn px-4 py-2 text-decoration-none fw-medium">Bạn bè</a>
           </li>
-          <li class="nav__btn  <?= (isset($_GET['act']) && $_GET['act'] == 'photos') ? 'nav__btn-active' : '' ?>"><a href="index.php?ctrl=profile&act=photos&id=<?= $id ?>" class="btn px-4 py-2 text-decoration-none fw-medium">Ảnh</a>
+          <li class="nav__btn  <?= (isset($_GET['act']) && $_GET['act'] == 'photos') ? 'nav__btn-active' : '' ?>"><a href="index.php?ctrl=profile&act=photos&user_id=<?= $id ?>" class="btn px-4 py-2 text-decoration-none fw-medium">Ảnh</a>
           </li>
         </ul>
       </div>
@@ -419,7 +419,7 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                         <div class="p-3 border border-light d-flex justify-content-between align-items-center">
                           <!--Avatar-->
                           <div class="d-flex justify-content-center align-items-center">
-                            <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>">
+                            <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>">
                               <?php
                               if ($photo->getNewAvatarByUser($row['id']) !== null) { ?>
                                 <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['id']) ?>" alt="avatar" class="me-2" style="width: 70px; height: 70px; object-fit: cover; border-radius: 10px;" />
@@ -429,12 +429,14 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                               ?>
                             </a>
                             <div class="ms-2 mt-2 text-start">
-                              <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>" class="text-dark">
+                              <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>" class="text-dark">
                                 <h6><?= $row['first_name'] . ' ' . $row['last_name'] ?></h6>
                               </a>
                               <?php
-                              if ($friend->countMatualFriend($user_id, $row['id']) != 0) {
-                                echo '<p class="fs-7 text-secondary">' . $friend->countMatualFriend($user_id, $row['id']) . ' bạn chung</p>';
+                              if ($user_id !== $row['id']) {
+                                if ($friend->countMatualFriend($user_id, $row['id']) != 0) {
+                                  echo '<p class="fs-7 text-secondary">' . $friend->countMatualFriend($user_id, $row['id']) . ' bạn chung</p>';
+                                }
                               }
                               ?>
                             </div>
@@ -472,7 +474,7 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                         <div class="p-3 border border-light d-flex justify-content-between align-items-center">
                           <!--Avatar-->
                           <div class="d-flex justify-content-center align-items-center">
-                            <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>">
+                            <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>">
                               <?php
                               if ($photo->getNewAvatarByUser($row['id']) !== null) { ?>
                                 <img src="./Public/upload/<?= $photo->getNewAvatarByUser($row['id']) ?>" alt="avatar" class="me-2" style="width: 70px; height: 70px; object-fit: cover; border-radius: 10px;" />
@@ -482,12 +484,14 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                               ?>
                             </a>
                             <div class="ms-2 mt-2 text-start">
-                              <a href="index.php?ctrl=profile&id=<?= $row['id'] ?>" class="text-dark">
+                              <a href="index.php?ctrl=profile&user_id=<?= $row['id'] ?>" class="text-dark">
                                 <h6><?= $user->getFullnameByUser($row['id']) ?></h6>
                               </a>
                               <?php
-                              if ($friend->countMatualFriend($user_id, $row['id']) != 0) {
-                                echo '<p class="fs-7 text-secondary">' . $friend->countMatualFriend($user_id, $row['id']) . ' bạn chung</p>';
+                              if ($user_id !== $row['id']) {
+                                if ($friend->countMatualFriend($user_id, $row['id']) != 0) {
+                                  echo '<p class="fs-7 text-secondary">' . $friend->countMatualFriend($user_id, $row['id']) . ' bạn chung</p>';
+                                }
                               }
                               ?>
                             </div>
@@ -643,8 +647,8 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
         <div class="d-none d-lg-flex flex-column gap-3 w-100 position-sticky" style="max-width: 426px; top: 57px;">
           <div class="profile-photos bg-white rounded-3 p-3 shadow-sm">
             <div class="pb-3 d-flex justify-content-between align-items-center">
-              <h5><a href="index.php?ctrl=profile&act=photos&id=<?= $id ?>" class="fs-4 fw-bold text-dark text-decoration-none">Ảnh</a></h5>
-              <a href="index.php?ctrl=profile&act=photos&id=<?= $id ?>" class="text-decoration-none">Xem tất cả ảnh</a>
+              <h5><a href="index.php?ctrl=profile&act=photos&user_id=<?= $id ?>" class="fs-4 fw-bold text-dark text-decoration-none">Ảnh</a></h5>
+              <a href="index.php?ctrl=profile&act=photos&user_id=<?= $id ?>" class="text-decoration-none">Xem tất cả ảnh</a>
             </div>
             <div class="rounded-3 overflow-hidden d-flex flex-wrap" style="gap: 4px;">
               <?php
@@ -664,8 +668,8 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
           </div>
           <div class="profile-friends bg-white rounded-3 p-3 shadow-sm">
             <div class="pb-3 d-flex justify-content-between align-items-center">
-              <h5><a href="index.php?ctrl=profile&act=friends" class="fs-4 fw-bold text-dark text-decoration-none">Bạn bè</a></h5>
-              <a href="index.php?ctrl=profile&act=friends&id=<?= $id ?>" class="text-decoration-none">Xem tất cả bạn bè</a>
+              <h5><a href="index.php?ctrl=profile&act=friends&user_id=<?= $id ?>" class="fs-4 fw-bold text-dark text-decoration-none">Bạn bè</a></h5>
+              <a href="index.php?ctrl=profile&act=friends&user_id=<?= $id ?>" class="text-decoration-none">Xem tất cả bạn bè</a>
             </div>
             <div class="d-flex flex-wrap" style="column-gap: 8px;">
               <?php
@@ -679,7 +683,7 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                     $friend_item = $user->getUserById($friend_item['user_id2']);
                   } ?>
                   <div class="friend-item mb-2">
-                    <a href="index.php?ctrl=profile&id=<?= $friend_item['id'] ?>">
+                    <a href="index.php?ctrl=profile&user_id=<?= $friend_item['id'] ?>">
                       <?php
                       if ($photo->getNewAvatarByUser($friend_item['id']) != null) { ?>
                         <img src="./Public/upload/<?= $photo->getNewAvatarByUser($friend_item['id']) ?>" class="friend-image w-100 object-fit-cover rounded-2" />
@@ -688,7 +692,7 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                       <?php }
                       ?>
                     </a>
-                    <a href="index.php?ctrl=profile&id=<?= $friend_item['id'] ?>" class="mt-1 d-flex flex-column text-decoration-none text-dark fw-semibold">
+                    <a href="index.php?ctrl=profile&user_id=<?= $friend_item['id'] ?>" class="mt-1 d-flex flex-column text-decoration-none text-dark fw-semibold">
                       <span><?= $user->getFullnameByUser($friend_item['id']) ?></span>
                     </a>
                   </div>
@@ -893,9 +897,9 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $row['id']; ?>">
+                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $post_data['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $post_data['id']; ?>">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $response = $like->countPhotoByLike($post_id);
                             if ($response) {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
@@ -904,9 +908,8 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                             }
                             ?>
                           </button>
-
                           <!-- Modal like-->
-                          <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
+                          <div class="modal fade" id="exampleModalToggle_<?php echo $post_data['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $post_data['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -918,7 +921,7 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                 </div>
                                 <div class="modal-body">
                                   <?php
-                                  $userIds = $like->getIdUserByIdLike($row['id']);
+                                  $userIds = $like->getIdUserByIdLike($post_data['id']);
                                   foreach ($userIds as $userId) {
                                     $user_id = $userId['user_id'];
                                   ?>
@@ -941,8 +944,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>
@@ -1088,9 +1089,9 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $row['id']; ?>">
+                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $post_data['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $post_data['id']; ?>">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $response = $like->countPhotoByLike($post_id);
                             if ($response) {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
@@ -1101,7 +1102,7 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </button>
 
                           <!-- Modal like-->
-                          <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
+                          <div class="modal fade" id="exampleModalToggle_<?php echo $post_data['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $post_data['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -1113,7 +1114,7 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                 </div>
                                 <div class="modal-body">
                                   <?php
-                                  $userIds = $like->getIdUserByIdLike($row['id']);
+                                  $userIds = $like->getIdUserByIdLike($post_data['id']);
                                   foreach ($userIds as $userId) {
                                     $user_id = $userId['user_id'];
                                   ?>
@@ -1136,8 +1137,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>
@@ -1275,7 +1274,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                             <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
                           </div>
                         </div>
-
                         <!-- content -->
                         <?php
                         if ($row['content'] !== null || $row['content'] !== '') {
@@ -1284,19 +1282,15 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                     </div>';
                         }
                         ?>
-
-
-
                       </div>
-
                       <!-- likes & comments -->
                       <div class="post__comment position-relative pt-0">
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $row['id']; ?>">
+                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $post_data['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $post_data['id']; ?>">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $response = $like->countPhotoByLike($post_id);
                             if ($response) {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
@@ -1307,7 +1301,7 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </button>
 
                           <!-- Modal like-->
-                          <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
+                          <div class="modal fade" id="exampleModalToggle_<?php echo $post_data['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $post_data['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -1319,7 +1313,7 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                 </div>
                                 <div class="modal-body">
                                   <?php
-                                  $userIds = $like->getIdUserByIdLike($row['id']);
+                                  $userIds = $like->getIdUserByIdLike($post_data['id']);
                                   foreach ($userIds as $userId) {
                                     $user_id = $userId['user_id'];
                                   ?>
@@ -1342,8 +1336,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>
@@ -1408,7 +1400,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </div>
                         </div>
                       </div>
-
                       <!-- end -->
                     </div>
                   <?php break;
@@ -1481,7 +1472,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                             </div>
                           </div>
                         </a>
-
                         <!--avatar-->
                         <div class="d-flex align-items-center mt-2 ms-3 mb-3">
                           <?php
@@ -1505,19 +1495,15 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                     </div>';
                         }
                         ?>
-
-
-
                       </div>
-
                       <!-- likes & comments -->
                       <div class="post__comment position-relative pt-0">
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $row['id']; ?>">
+                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $post_data['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $post_data['id']; ?>">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $response = $like->countPhotoByLike($post_id);
                             if ($response) {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
@@ -1526,9 +1512,8 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                             }
                             ?>
                           </button>
-
                           <!-- Modal like-->
-                          <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
+                          <div class="modal fade" id="exampleModalToggle_<?php echo $post_data['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $post_data['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -1540,7 +1525,7 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                 </div>
                                 <div class="modal-body">
                                   <?php
-                                  $userIds = $like->getIdUserByIdLike($row['id']);
+                                  $userIds = $like->getIdUserByIdLike($post_data['id']);
                                   foreach ($userIds as $userId) {
                                     $user_id = $userId['user_id'];
                                   ?>
@@ -1563,8 +1548,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>
@@ -1629,7 +1612,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </div>
                         </div>
                       </div>
-
                       <!-- end -->
                     </div>
                   <?php break;
@@ -1711,7 +1693,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                             <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
                           </div>
                         </div>
-
                         <!-- content -->
                         <?php
                         if ($row['content'] !== null || $row['content'] !== '') {
@@ -1726,9 +1707,9 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                         <!-- likes-comment -->
                         <div class="d-flex align-items-center justify-content-between px-3" style="height: 50px; z-index: 5">
                           <!-- like -->
-                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $row['id']; ?>">
+                          <button type="button" class="border-0 shadow-none bg-white d-flex gap-2 align-items-center btn-like-button" value="<?php echo $post_data['id'] ?>" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_<?php echo $post_data['id']; ?>">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $response = $like->countPhotoByLike($post_id);
                             if ($response) {
                               echo '<p class="m-0 text-muted fs-6 fw-normal like-count" style="cursor: pointer;">' . $response . ' lượt thích</p>';
@@ -1737,7 +1718,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                             }
                             ?>
                           </button>
-
                           <!-- Modal like-->
                           <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
@@ -1774,8 +1754,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>
@@ -1789,9 +1767,9 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
                         <div class="d-flex justify-content-around px-3 pb-2">
-                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                          <button type="button" name="post_id" value="<?php echo $post_data['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $user_id = $_SESSION['user']['id'];
                             $Checklike = $like->checklike($user_id, $post_id);
                             if (!$Checklike) {
@@ -1840,7 +1818,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </div>
                         </div>
                       </div>
-
                       <!-- end -->
                     </div>
                   <?php break;
@@ -1932,7 +1909,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                             <span class="text-muted fs-7"><?= calculateTimeAgo($row['created_at']) ?></span>
                           </div>
                         </div>
-
                         <!-- content -->
                         <?php
                         if ($row['content'] !== null || $row['content'] !== '') {
@@ -1958,7 +1934,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                             }
                             ?>
                           </button>
-
                           <!-- Modal like-->
                           <div class="modal fade" id="exampleModalToggle_<?php echo $row['id']; ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel_<?php echo $row['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
@@ -1995,8 +1970,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                                   <?php
                                   }
                                   ?>
-
-
                                 </div>
                               </div>
                             </div>
@@ -2010,9 +1983,9 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                         <hr class="mt-0 mb-2 mx-3" />
                         <!-- comment & like bar -->
                         <div class="d-flex justify-content-around px-3 pb-2">
-                          <button type="button" name="post_id" value="<?php echo $row['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
+                          <button type="button" name="post_id" value="<?php echo $post_data['id'] ?>" class="btn-like-post dropdown-item rounded d-flex justify-content-center align-items-center pointer text-muted action-post-item p-2">
                             <?php
-                            $post_id = $row['id'];
+                            $post_id = $post_data['id'];
                             $user_id = $_SESSION['user']['id'];
                             $Checklike = $like->checklike($user_id, $post_id);
                             if (!$Checklike) {
@@ -2061,7 +2034,6 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
                           </div>
                         </div>
                       </div>
-
                       <!-- end -->
                     </div>
                   <?php break;
@@ -3788,22 +3760,28 @@ if (isset($_POST['postCover']) && $_POST['postCover']) {
           <?php break;
                 }
               }
-            }
-          }
-          // Xử lý share bài post              
-          if (isset($_POST['sharePost'])) {
-            $content = "";
-            $post_id = $row['id'];
-            $result = $post->insertPost($content, $user_id);
-            if ($result[0]) {
-              $post_share_id = $result[1];
-              if ($share = $share->insertShare($user_id, $post_id, $post_share_id)) {
-                $noti_name = $user->getFullnameByUser($user_id);
-                $noti_content = "$noti_name đã chia sẻ bài viết của bạn";
-                $noti_href = "index.php?ctrl=post&post_id=$post_share_id";
-                $noti_user_id = $post->getPostById($post_id);
-                $notification->insertNotification($noti_content, $noti_href, $noti_user_id['user_id']);
-                header('location: index.php');
+              // Xử lý share bài post              
+              if (isset($_POST['sharePost'])) {
+                $content = "";
+                $post_id = $row['id'];
+                $result = $post->insertPost($content, $user_id);
+                if ($result[0]) {
+                  $post_share_id = $result[1];
+                  if ($share = $share->insertShare($user_id, $post_id, $post_share_id)) {
+                    $post_user = $post->getPostById($post_id);
+                    $post_user_id = $post_user['user_id'];
+                    if ($user_id != $post_user_id) {
+                      $noti_name = $user->getFullnameByUser($user_id);
+                      $noti_content = "$noti_name đã chia sẻ bài viết của bạn";
+                      $noti_href = "index.php?ctrl=post&post_id=$post_share_id";
+                      $noti_user_id = $post->getPostById($post_id);
+                      $notification->insertNotification($noti_content, $noti_href, $noti_user_id['user_id']);
+                      header('location: index.php');
+                    } else {
+                      header('location: index.php');
+                    }
+                  }
+                }
               }
             }
           }

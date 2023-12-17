@@ -55,7 +55,7 @@ $notification = new Notification();
           </a>
         </div>
         <!-- account -->
-        <div class="mx-1 nav__btn <?= (isset($_GET['ctrl']) && $_GET['ctrl'] == 'profile' && !isset($_GET['id'])) ? 'nav__btn-active' : '' ?>">
+        <div class="mx-1 nav__btn <?= (isset($_GET['ctrl']) && $_GET['ctrl'] == 'profile' && !isset($_GET['user_id'])) ? 'nav__btn-active' : '' ?>">
           <a href="index.php?ctrl=profile" class="btn px-5">
             <i class="fa-solid fa-circle-user text-muted fs-4"></i>
           </a>

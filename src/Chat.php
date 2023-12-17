@@ -61,8 +61,6 @@ class Chat implements MessageComponentInterface
       }
       if ($client->resourceId == $receiver_data['connection_id'] || $from == $client) {
         $client->send(json_encode($data));
-      } else {
-        var_dump($data);
       }
     }
   }
